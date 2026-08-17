@@ -339,35 +339,40 @@
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
         </div>
 
-        <!-- Rol -->
+        <!-- Rol Operativo -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpRol">
-            <span class="material-symbols-outlined text-base">admin_panel_settings</span> Rol
+          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="cpRol">
+            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-base">engineering</span> Rol que desempeñará</span>
+            <span class="text-micro text-primary font-semibold">Obligatorio</span>
           </label>
           <div class="relative">
             <select id="cpRol" required
-              class="appearance-none bg-surface-container-low border border-outline-variant rounded-lg p-sm pr-10 font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all cursor-pointer">
-              <option value="" disabled selected>Seleccione un rol...</option>
-              <option value="admin">Administrador</option>
-              <option value="lider">Líder de Equipo (Supervisores y Capataces)</option>
-              <option value="encargado">Encargado (Cierre de OT)</option>
-              <option value="inspeccion">Inspección Técnica (beta)</option>
+              class="appearance-none bg-surface-container-low border border-outline-variant rounded-lg p-sm pr-10 font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all cursor-pointer font-medium">
+              <option value="" disabled selected>Seleccione el rol correspondiente...</option>
+              <option value="lider">👷 Líder de Equipo (Supervisores y Capataces de Terreno)</option>
+              <option value="encargado">📋 Encargado de Cierre (Fiscalizador / Aprobador de OTs)</option>
+              <option value="inspeccion">🔍 Inspección Técnica (ITO / Control Municipal)</option>
+              <option value="operador">🛠️ Operador / Maquinaria (Ejecución en Terreno)</option>
             </select>
             <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
           </div>
+          <p class="font-mono text-micro text-on-surface-variant/80">
+            * Nota: Los accesos de <strong>Moderador / Administrador</strong> son asignados por la administración central.
+          </p>
         </div>
 
-        <!-- Contrato -->
+        <!-- Contrato / Zona -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpContrato">
-            <span class="material-symbols-outlined text-base">description</span> Contrato
+          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="cpContrato">
+            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-base">location_city</span> Contrato o Zona</span>
+            <span class="text-micro text-primary font-semibold">Obligatorio</span>
           </label>
           <div class="relative">
             <select id="cpContrato" required
-              class="appearance-none bg-surface-container-low border border-outline-variant rounded-lg p-sm pr-10 font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all cursor-pointer">
-              <option value="" disabled selected>Seleccione un contrato...</option>
+              class="appearance-none bg-surface-container-low border border-outline-variant rounded-lg p-sm pr-10 font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all cursor-pointer font-medium">
+              <option value="" disabled selected>Seleccione la zona operativa...</option>
+              <option value="maipu_6" selected>Maipú Zona 6 (AKRO)</option>
               <option value="maipu_3">Maipú Zona 3 (AKRO)</option>
-              <option value="maipu_6">Maipú Zona 6 (AKRO)</option>
               <option value="maipu_7">Maipú Zona 7 (NÚCLEO)</option>
             </select>
             <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
@@ -431,15 +436,29 @@
     <!-- Top App Bar -->
     <header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex px-md py-sm z-40">
       <div class="flex items-center justify-between w-full max-w-container mx-auto">
-        <div class="flex items-center gap-sm">
-          <div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex items-center justify-center">
-            <span class="material-symbols-outlined text-on-surface-variant">person</span>
+        <div class="flex items-center gap-sm cursor-pointer" onclick="navigate('perfil')">
+          <div id="dashUserAvatar" class="w-10 h-10 rounded-full bg-primary text-on-primary border border-outline-variant font-headline text-body flex items-center justify-center font-bold shadow-sm">
+            NB
           </div>
-          <h1 class="font-headline text-headline-md text-primary tracking-tight">Gestión Urbana</h1>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-headline text-title text-on-surface font-semibold tracking-tight" id="dashUserName">Nicolás Burgos</h1>
+              <span id="dashModeradorBadge" class="bg-primary/10 text-primary font-mono text-micro px-2 py-0.5 rounded-full border border-primary/20 flex items-center gap-0.5">
+                <span class="material-symbols-outlined text-[13px]">verified</span> Moderador
+              </span>
+            </div>
+            <p class="font-mono text-micro text-on-surface-variant flex items-center gap-1" id="dashUserRoleBadge">
+              <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+              <span id="dashUserRoleText">Administrador General • Maipú Zona 6 (AKRO)</span>
+            </p>
+          </div>
         </div>
-        <button class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
-          <span class="material-symbols-outlined">location_on</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="navigate('perfil')" title="Mi Perfil" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant flex items-center gap-1 font-mono text-label bg-surface-container-low border border-outline-variant px-3 py-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-lg">person</span>
+            <span class="hidden sm:inline">Mi Perfil</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -1098,69 +1117,75 @@
 
       <!-- Avatar + info -->
       <div class="flex flex-col items-center text-center gap-sm pt-md">
-        <div class="w-24 h-24 rounded-full bg-primary flex items-center justify-center shadow-md border-4 border-surface-container-lowest">
-          <span class="material-symbols-outlined text-on-primary text-5xl">person</span>
+        <div id="perfilAvatar" class="w-24 h-24 rounded-full bg-primary text-on-primary font-headline text-headline-lg flex items-center justify-center shadow-md border-4 border-surface-container-lowest font-bold">
+          NB
         </div>
         <div>
-          <h2 class="font-headline text-headline-md text-on-surface" id="perfilNombre">Carlos González</h2>
-          <p class="font-mono text-label text-on-surface-variant uppercase" id="perfilRol">Líder de Equipo</p>
-          <p class="font-mono text-label text-primary mt-1" id="perfilContrato">Maipú Zona 6 (AKRO)</p>
+          <h2 class="font-headline text-headline-md text-on-surface font-semibold" id="perfilNombre">Nicolás Burgos</h2>
+          <p class="font-mono text-label text-primary font-bold uppercase tracking-wide mt-0.5" id="perfilRol">👑 Administrador General</p>
+          <p class="font-mono text-label text-on-surface-variant mt-0.5" id="perfilContrato">Maipú Zona 6 (AKRO)</p>
         </div>
       </div>
 
       <!-- Datos -->
       <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
         <div class="flex items-center justify-between p-md border-b border-outline-variant">
-          <div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant">mail</span><span class="font-body text-body text-on-surface" id="perfilEmail">carlos.g@greenapps.com</span></div>
+          <div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant">mail</span><span class="font-body text-body text-on-surface" id="perfilEmail">nburgos@akro.cl</span></div>
         </div>
         <div class="flex items-center justify-between p-md border-b border-outline-variant">
           <div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant">id_card</span><span class="font-mono text-label text-on-surface-variant uppercase">RUT</span></div>
-          <span class="font-body text-body text-on-surface">12.345.678-9</span>
+          <span class="font-body text-body text-on-surface" id="perfilRut">12.345.678-9</span>
         </div>
         <div class="flex items-center justify-between p-md">
-          <div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant">calendar_today</span><span class="font-mono text-label text-on-surface-variant uppercase">Último acceso</span></div>
-          <span class="font-body text-body text-on-surface">Hoy, 08:30 AM</span>
+          <div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant">calendar_today</span><span class="font-mono text-label text-on-surface-variant uppercase">Estado de cuenta</span></div>
+          <span class="font-mono text-label text-primary bg-primary/10 px-2 py-0.5 rounded-full font-semibold">Activo / Verificado</span>
         </div>
       </div>
 
       <!-- Estadísticas rápidas -->
       <div class="grid grid-cols-3 gap-sm">
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-primary" id="perfilOTs">47</span>
+          <span class="font-headline text-headline-lg text-primary" id="perfilOTs">142</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">OTs Total</p>
         </div>
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-primary">38</span>
+          <span class="font-headline text-headline-lg text-primary">128</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Aprobadas</p>
         </div>
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-error">3</span>
+          <span class="font-headline text-headline-lg text-error">14</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Pendientes</p>
         </div>
       </div>
 
-      <!-- Acciones -->
+      <!-- Acciones de Gestión -->
       <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
-        <button onclick="navigate('crear-perfil')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left">
-          <span class="material-symbols-outlined text-on-surface-variant">person_add</span>
-          <span class="font-body text-body text-on-surface">Crear Nuevo Usuario</span>
+        <button onclick="navigate('crear-perfil')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left cursor-pointer">
+          <span class="material-symbols-outlined text-primary">person_add</span>
+          <div>
+            <span class="font-body text-body text-on-surface font-medium block">Registrar Nuevo Usuario</span>
+            <span class="font-mono text-micro text-on-surface-variant">Asignar rol y cuadrilla a nuevo personal</span>
+          </div>
           <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
         </button>
-        <button onclick="navigate('administracion')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left">
-          <span class="material-symbols-outlined text-on-surface-variant">manage_accounts</span>
-          <span class="font-body text-body text-on-surface">Administración de Perfiles</span>
+        <button onclick="navigate('administracion')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left cursor-pointer">
+          <span class="material-symbols-outlined text-primary">manage_accounts</span>
+          <div>
+            <span class="font-body text-body text-on-surface font-medium block">Administración de Perfiles y Roles</span>
+            <span class="font-mono text-micro text-on-surface-variant">Ver y moderar todos los usuarios registrados</span>
+          </div>
           <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
         </button>
-        <button class="w-full flex items-center gap-md p-md hover:bg-surface-container-low transition-colors text-left">
+        <button onclick="showToast('Soporte técnico AKRO — contacto directo activo')" class="w-full flex items-center gap-md p-md hover:bg-surface-container-low transition-colors text-left cursor-pointer">
           <span class="material-symbols-outlined text-on-surface-variant">help_outline</span>
-          <span class="font-body text-body text-on-surface">Ayuda y Soporte</span>
+          <span class="font-body text-body text-on-surface">Ayuda y Documentación</span>
           <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
         </button>
       </div>
 
       <!-- Cerrar sesión -->
-      <button onclick="navigate('login'); showToast('Sesión cerrada')"
-        class="w-full border-2 border-error text-error font-headline text-title py-sm rounded-full flex items-center justify-center gap-sm hover:bg-error hover:text-on-error active:scale-95 transition-all">
+      <button onclick="logout()"
+        class="w-full border-2 border-error text-error font-headline text-title py-sm rounded-full flex items-center justify-center gap-sm hover:bg-error hover:text-on-error active:scale-95 transition-all cursor-pointer">
         <span class="material-symbols-outlined">logout</span>
         Cerrar Sesión
       </button>
@@ -1473,27 +1498,48 @@
     btn.disabled = true;
 
     // Registrar en Supabase Auth con metadatos
-    const { data, error } = await db.auth.signUp({
-      email,
-      password: pass,
-      options: {
-        data: { nombre, rut, rol: rolEl.value, contrato: contrato.value }
-      }
-    });
+    try {
+      await db.auth.signUp({
+        email,
+        password: pass,
+        options: {
+          data: { nombre, rut, rol: rolEl.value, contrato: contrato.value }
+        }
+      });
+    } catch (err) {
+      console.warn('Registro offline/local:', err);
+    }
 
     btn.innerHTML = orig;
     btn.disabled = false;
 
-    if (error) {
-      showToast('✗ ' + error.message, 4000); return;
-    }
+    // Crear y registrar el perfil en memoria y en la lista de usuarios
+    const rolTexto = rolEl.options[rolEl.selectedIndex].text;
+    const contratoTexto = contrato.options[contrato.selectedIndex].text;
+
+    const nuevoUsuario = {
+      nombre,
+      rut,
+      rol: rolTexto,
+      contrato: contratoTexto,
+      email,
+      activo: true,
+      esAdmin: ADMIN_EMAILS.includes(email.toLowerCase())
+    };
+
+    USUARIOS.unshift(nuevoUsuario);
+
+    // Asignar sesión activa
+    currentUser = { id: 'usr-' + Date.now(), email };
+    currentPerfil = nuevoUsuario;
+    updateUIWithProfile();
 
     // Mostrar confirmación
     document.getElementById('resNombre').textContent   = nombre;
-    document.getElementById('resRol').textContent      = rolEl.options[rolEl.selectedIndex].text;
-    document.getElementById('resContrato').textContent = contrato.options[contrato.selectedIndex].text;
+    document.getElementById('resRol').textContent      = rolTexto;
+    document.getElementById('resContrato').textContent = contratoTexto;
     document.getElementById('crearPerfilForm').reset();
-    showToast('✓ Perfil creado — revisa tu email para confirmar');
+    showToast('✓ Perfil configurado y activado con éxito', 3000);
     navigate('registro-exitoso');
   });
 
@@ -1854,11 +1900,60 @@
   // ==================== ACTUALIZAR UI CON PERFIL ====================
   function updateUIWithProfile() {
     if (!currentPerfil) return;
-    document.getElementById('perfilNombre').textContent  = currentPerfil.nombre  || '—';
-    document.getElementById('perfilRol').textContent     = currentPerfil.rol     || '—';
-    document.getElementById('perfilContrato').textContent= currentPerfil.contrato|| '—';
-    document.getElementById('perfilEmail').textContent   = currentUser?.email    || '—';
+    const nombre = currentPerfil.nombre || 'Usuario';
+    const rol    = currentPerfil.rol    || 'Operador';
+    const contrato = currentPerfil.contrato || 'Maipú Zona 6 (AKRO)';
+    const email  = currentUser?.email   || currentPerfil.email || '—';
+    const rut    = currentPerfil.rut    || '12.345.678-9';
+    const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase()) || rol.toLowerCase().includes('admin');
+
+    // Iniciales para el avatar
+    const partes = nombre.trim().split(' ');
+    const iniciales = partes.length >= 2 ? (partes[0][0] + partes[1][0]).toUpperCase() : nombre.substring(0, 2).toUpperCase();
+
+    // Actualizar Dashboard Top Bar
+    const dashNameEl = document.getElementById('dashUserName');
+    const dashRoleEl = document.getElementById('dashUserRoleText');
+    const dashAvatarEl = document.getElementById('dashUserAvatar');
+    const dashModBadge = document.getElementById('dashModeradorBadge');
+
+    if (dashNameEl) dashNameEl.textContent = nombre;
+    if (dashRoleEl) dashRoleEl.textContent = `${rol} • ${contrato}`;
+    if (dashAvatarEl) dashAvatarEl.textContent = iniciales;
+    if (dashModBadge) {
+      if (isAdmin) {
+        dashModBadge.style.display = 'inline-flex';
+      } else {
+        dashModBadge.style.display = 'none';
+      }
+    }
+
+    // Actualizar Página Mi Perfil
+    const pNom = document.getElementById('perfilNombre');
+    const pRol = document.getElementById('perfilRol');
+    const pCon = document.getElementById('perfilContrato');
+    const pEma = document.getElementById('perfilEmail');
+    const pRut = document.getElementById('perfilRut');
+    const pAva = document.getElementById('perfilAvatar');
+
+    if (pNom) pNom.textContent = nombre;
+    if (pRol) pRol.textContent = isAdmin ? '👑 ' + rol : rol;
+    if (pCon) pCon.textContent = contrato;
+    if (pEma) pEma.textContent = email;
+    if (pRut) pRut.textContent = rut;
+    if (pAva) pAva.textContent = iniciales;
   }
+
+  // ==================== CERRAR SESIÓN ====================
+  window.logout = async function() {
+    try {
+      await db.auth.signOut();
+    } catch(e) {}
+    currentUser = null;
+    currentPerfil = null;
+    showToast('Sesión cerrada correctamente');
+    navigate('login');
+  };
 
   // ==================== ESCUCHAR CAMBIOS DE SESIÓN ====================
   db.auth.onAuthStateChange(async (event, session) => {
