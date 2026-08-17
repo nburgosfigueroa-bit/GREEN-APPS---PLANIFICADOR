@@ -998,12 +998,12 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tSolicitante">
             <span>Solicitante</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-tSolicitante" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <div class="relative">
             <select id="tSolicitante" required
               class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none transition-all cursor-pointer">
-              <option value="" disabled selected>Seleccione solicitante *</option>
+              <option value="" disabled selected>Seleccione solicitante...</option>
               <option value="mun">Municipalidad</option>
               <option value="vec">Vecino / Comunidad</option>
               <option value="int">Interno / Supervisión</option>
@@ -1018,7 +1018,7 @@
             <label class="font-mono text-label text-on-surface-variant uppercase" for="tArea">
               <span>Área Verde Oficial (Contrato Zona 6)</span>
             </label>
-            <span class="text-error font-bold text-micro">* 436 AVs Registradas</span>
+            <span id="err-tArea" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </div>
           <div class="relative">
             <select id="tArea" required
@@ -1039,7 +1039,7 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tDireccion">
             <span>Dirección o Referencia Exacta</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-tDireccion" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <input id="tDireccion" type="text" placeholder="Calle, número o punto de referencia en terreno..." required
             class="w-full h-14 px-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
@@ -1049,12 +1049,12 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tTipoTrabajo">
             <span>Tipo de Trabajo Operativo</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-tTipoTrabajo" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <div class="relative">
             <select id="tTipoTrabajo" required
               class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none transition-all cursor-pointer">
-              <option value="" disabled selected>Seleccione categoría de trabajo *</option>
+              <option value="" disabled selected>Seleccione categoría de trabajo...</option>
               <option value="mob">Mantenimiento de Mobiliario</option>
               <option value="poda">Poda Urbana y Despeje</option>
               <option value="tolva">Operación Camión Tolva + Minicargador</option>
@@ -1073,7 +1073,7 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tDesc">
             <span>Descripción de la Intervención</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-tDesc" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <textarea id="tDesc" rows="3" required placeholder="Detalle el estado inicial, la anomalía detectada y las acciones a realizar..."
             class="w-full p-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all resize-none"></textarea>
@@ -1083,7 +1083,7 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tMateriales">
             <span>Materiales / Insumos / Cuadrilla</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-tMateriales" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <div class="flex items-center gap-sm py-xs">
             <input id="tEspecial" type="checkbox" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
@@ -1097,12 +1097,12 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between">
             <span>Evidencia Gráfica en Terreno</span>
-            <span class="text-error font-bold text-micro">* Foto Obligatoria</span>
+            <span id="err-tEvidencia" class="field-error hidden text-error font-bold text-micro">* Foto Obligatoria</span>
           </label>
           <div class="upload-zone w-full min-h-24 rounded-2xl flex flex-col items-center justify-center gap-xs cursor-pointer p-md border-2 border-dashed border-primary/30 hover:border-primary transition-all" id="uploadZone">
             <span class="material-symbols-outlined text-4xl icon-fill text-primary">add_a_photo</span>
             <span class="font-mono text-label text-primary font-bold">Adjuntar Fotografía / Video de Evidencia</span>
-            <span class="font-mono text-micro text-on-surface-variant">(Foto obligatoria para validar la orden — JPG, PNG, MP4)</span>
+            <span class="font-mono text-micro text-on-surface-variant">(JPG, PNG, MP4)</span>
           </div>
           <div id="uploadedFiles" class="flex flex-wrap gap-sm"></div>
         </div>
@@ -2455,9 +2455,23 @@
     showToast(`✓ ${files.length} archivo(s) adjunto(s)`);
   }
 
+  // Auto-ocultar badges de error en formulario OT al escribir
+  ['tSolicitante', 'tArea', 'tDireccion', 'tTipoTrabajo', 'tDesc', 'tMateriales', 'tPrioridad', 'tPlazo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const clearError = () => {
+        if (el.value && el.value.trim() !== '') {
+          document.getElementById('err-' + id)?.classList.add('hidden');
+          el.classList.remove('border-error', 'ring-2', 'ring-error');
+        }
+      };
+      el.addEventListener('input', clearError);
+      el.addEventListener('change', clearError);
+    }
+  });
+
   // ==================== ENVÍO OT (Supabase DB + Storage con Validación Total) ====================
   document.getElementById('btnSubmitTask').addEventListener('click', async () => {
-    // Lista completa de campos obligatorios
     const mandatoryFields = [
       { id: 'tSolicitante', label: 'Solicitante' },
       { id: 'tArea',        label: 'Código de Área Verde' },
@@ -2469,23 +2483,19 @@
       { id: 'tPlazo',       label: 'Plazo Límite de Ejecución' }
     ];
 
-    // Limpiar estilos de error anteriores
-    mandatoryFields.forEach(f => {
-      const el = document.getElementById(f.id);
-      if (el) el.classList.remove('border-error', 'ring-2', 'ring-error');
-    });
-    document.getElementById('uploadZone').classList.remove('border-error', 'ring-2', 'ring-error');
+    let hasErrors = false;
 
     // 1. Validar celdas de texto / selects obligatorios
     for (const f of mandatoryFields) {
       const el = document.getElementById(f.id);
-      if (!el || !el.value.trim()) {
-        if (el) {
-          el.classList.add('border-error', 'ring-2', 'ring-error');
-          el.focus();
-        }
-        showToast(`⚠ Celda obligatoria: Por favor complete "${f.label}"`, 3500);
-        return;
+      const val = el ? el.value.trim() : '';
+      if (!val) {
+        document.getElementById('err-' + f.id)?.classList.remove('hidden');
+        el?.classList.add('border-error', 'ring-2', 'ring-error');
+        hasErrors = true;
+      } else {
+        document.getElementById('err-' + f.id)?.classList.add('hidden');
+        el?.classList.remove('border-error', 'ring-2', 'ring-error');
       }
     }
 
@@ -2494,9 +2504,16 @@
                      (document.getElementById('uploadedFiles').children.length > 0);
     if (!hasFiles) {
       const uz = document.getElementById('uploadZone');
+      document.getElementById('err-tEvidencia')?.classList.remove('hidden');
       uz.classList.add('border-error', 'ring-2', 'ring-error');
-      uz.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      showToast('⚠ Fotografía obligatoria: Adjunte al menos una foto de evidencia en terreno', 4000);
+      hasErrors = true;
+    } else {
+      document.getElementById('err-tEvidencia')?.classList.add('hidden');
+      document.getElementById('uploadZone').classList.remove('border-error', 'ring-2', 'ring-error');
+    }
+
+    if (hasErrors) {
+      showToast('⚠ Complete las celdas obligatorias marcadas en rojo', 3500);
       return;
     }
 
