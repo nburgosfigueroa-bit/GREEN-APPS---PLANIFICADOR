@@ -619,11 +619,14 @@
 
         <!-- Solicitante -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant uppercase" for="tSolicitante">Solicitante *</label>
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tSolicitante">
+            <span>Solicitante</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
+          </label>
           <div class="relative">
             <select id="tSolicitante" required
               class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none transition-all cursor-pointer">
-              <option value="" disabled selected>Seleccione solicitante</option>
+              <option value="" disabled selected>Seleccione solicitante *</option>
               <option value="mun">Municipalidad</option>
               <option value="vec">Vecino / Comunidad</option>
               <option value="int">Interno / Supervisión</option>
@@ -634,11 +637,14 @@
 
         <!-- Código Área Verde -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant uppercase" for="tArea">Código de Área Verde *</label>
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tArea">
+            <span>Código de Área Verde</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
+          </label>
           <div class="relative">
             <select id="tArea" required
               class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none transition-all cursor-pointer">
-              <option value="" disabled selected>Seleccione código (Ej: AV-042)</option>
+              <option value="" disabled selected>Seleccione código (Ej: AV-042) *</option>
               <option value="AV-042">AV-042 - Parque Central Sur</option>
               <option value="AV-115">AV-115 - Plaza Los Héroes</option>
               <option value="AV-089">AV-089 - Bandejón Alameda</option>
@@ -654,18 +660,24 @@
 
         <!-- Dirección -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant uppercase" for="tDireccion">Dirección o Referencia *</label>
-          <input id="tDireccion" type="text" placeholder="Calle, número o punto de referencia..." required
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tDireccion">
+            <span>Dirección o Referencia Exacta</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
+          </label>
+          <input id="tDireccion" type="text" placeholder="Calle, número o punto de referencia en terreno..." required
             class="w-full h-14 px-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
         </div>
 
         <!-- Tipo de Trabajo -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant uppercase" for="tTipoTrabajo">Tipo de Trabajo Operativo *</label>
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tTipoTrabajo">
+            <span>Tipo de Trabajo Operativo</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
+          </label>
           <div class="relative">
             <select id="tTipoTrabajo" required
               class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none transition-all cursor-pointer">
-              <option value="" disabled selected>Seleccione categoría</option>
+              <option value="" disabled selected>Seleccione categoría de trabajo *</option>
               <option value="mob">Mantenimiento de Mobiliario</option>
               <option value="poda">Poda Urbana y Despeje</option>
               <option value="tolva">Operación Camión Tolva + Minicargador</option>
@@ -682,29 +694,38 @@
 
         <!-- Descripción -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant uppercase" for="tDesc">Descripción de la Intervención *</label>
-          <textarea id="tDesc" rows="3" required placeholder="Detalle el estado inicial y las acciones realizadas en terreno..."
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tDesc">
+            <span>Descripción de la Intervención</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
+          </label>
+          <textarea id="tDesc" rows="3" required placeholder="Detalle el estado inicial, la anomalía detectada y las acciones a realizar..."
             class="w-full p-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all resize-none"></textarea>
         </div>
 
         <!-- Materiales -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant uppercase" for="tMateriales">Materiales / Insumos Utilizados</label>
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tMateriales">
+            <span>Materiales / Insumos / Cuadrilla</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
+          </label>
           <div class="flex items-center gap-sm py-xs">
             <input id="tEspecial" type="checkbox" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
-            <label for="tEspecial" class="font-body text-body text-on-surface cursor-pointer select-none">¿Requiere algo especial?</label>
+            <label for="tEspecial" class="font-body text-body text-on-surface cursor-pointer select-none">¿Requiere equipamiento especial o maquinaria pesada?</label>
           </div>
-          <input id="tMateriales" type="text" placeholder="Ej: 5 bolsas basura, 2L lubricante, clavos..."
+          <input id="tMateriales" type="text" placeholder="Ej: 5 bolsas basura, 2L lubricante, cuadrilla 3 operarios..." required
             class="w-full h-14 px-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
         </div>
 
         <!-- Adjuntar evidencia -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant uppercase">Evidencia Gráfica *</label>
-          <div class="upload-zone w-full min-h-24 rounded-2xl flex flex-col items-center justify-center gap-xs cursor-pointer p-md" id="uploadZone">
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between">
+            <span>Evidencia Gráfica en Terreno</span>
+            <span class="text-error font-bold text-micro">* Foto Obligatoria</span>
+          </label>
+          <div class="upload-zone w-full min-h-24 rounded-2xl flex flex-col items-center justify-center gap-xs cursor-pointer p-md border-2 border-dashed border-primary/30 hover:border-primary transition-all" id="uploadZone">
             <span class="material-symbols-outlined text-4xl icon-fill text-primary">add_a_photo</span>
-            <span class="font-mono text-label text-primary">Adjuntar Foto / Video</span>
-            <span class="font-mono text-micro text-on-surface-variant">(JPG, PNG, MP4 — máx. 50MB)</span>
+            <span class="font-mono text-label text-primary font-bold">Adjuntar Fotografía / Video de Evidencia</span>
+            <span class="font-mono text-micro text-on-surface-variant">(Foto obligatoria para validar la orden — JPG, PNG, MP4)</span>
           </div>
           <div id="uploadedFiles" class="flex flex-wrap gap-sm"></div>
         </div>
@@ -714,7 +735,10 @@
       <!-- Columna derecha: prioridad + submit -->
       <div class="flex flex-col gap-sm md:col-span-4 md:mt-14">
         <div class="bg-surface-container-low border border-outline-variant rounded-2xl p-md flex flex-col gap-sm">
-          <label class="font-mono text-label text-on-surface-variant uppercase" for="tPrioridad">Nivel de Instrucción / Prioridad *</label>
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tPrioridad">
+            <span>Nivel de Prioridad</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
+          </label>
           <div class="relative">
             <select id="tPrioridad" required
               class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none cursor-pointer">
@@ -728,15 +752,18 @@
         </div>
 
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant uppercase" for="tPlazo">Plazo Máximo de Ejecución</label>
-          <input id="tPlazo" type="date"
+          <label class="font-mono text-label text-on-surface-variant uppercase flex justify-between" for="tPlazo">
+            <span>Plazo Límite de Ejecución</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
+          </label>
+          <input id="tPlazo" type="date" required
             class="w-full h-14 px-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
         </div>
 
         <button id="btnSubmitTask" type="button"
-          class="w-full h-14 bg-primary text-on-primary font-headline text-title rounded-full flex items-center justify-center gap-sm shadow-md active:scale-95 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none">
+          class="w-full h-14 bg-primary text-on-primary font-headline text-title rounded-full flex items-center justify-center gap-sm shadow-md hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none cursor-pointer">
           <span class="material-symbols-outlined">cloud_upload</span>
-          <span id="btnTaskText">Registrar Tarea</span>
+          <span id="btnTaskText">Registrar y Validar Tarea</span>
         </button>
       </div>
 
@@ -1717,13 +1744,52 @@
     showToast(`✓ ${files.length} archivo(s) adjunto(s)`);
   }
 
-  // ==================== ENVÍO OT (Supabase DB + Storage) ====================
+  // ==================== ENVÍO OT (Supabase DB + Storage con Validación Total) ====================
   document.getElementById('btnSubmitTask').addEventListener('click', async () => {
-    const required = ['tSolicitante','tArea','tDireccion','tTipoTrabajo','tDesc'];
-    const missing = required.filter(id => !document.getElementById(id).value.trim());
-    if (missing.length) { showToast('⚠ Complete los campos obligatorios'); return; }
+    // Lista completa de campos obligatorios
+    const mandatoryFields = [
+      { id: 'tSolicitante', label: 'Solicitante' },
+      { id: 'tArea',        label: 'Código de Área Verde' },
+      { id: 'tDireccion',   label: 'Dirección o Referencia Exacta' },
+      { id: 'tTipoTrabajo', label: 'Tipo de Trabajo Operativo' },
+      { id: 'tDesc',        label: 'Descripción de la Intervención' },
+      { id: 'tMateriales',  label: 'Materiales / Insumos / Cuadrilla' },
+      { id: 'tPrioridad',   label: 'Nivel de Prioridad' },
+      { id: 'tPlazo',       label: 'Plazo Límite de Ejecución' }
+    ];
 
-    // Si no hay sesión activa, guardar localmente
+    // Limpiar estilos de error anteriores
+    mandatoryFields.forEach(f => {
+      const el = document.getElementById(f.id);
+      if (el) el.classList.remove('border-error', 'ring-2', 'ring-error');
+    });
+    document.getElementById('uploadZone').classList.remove('border-error', 'ring-2', 'ring-error');
+
+    // 1. Validar celdas de texto / selects obligatorios
+    for (const f of mandatoryFields) {
+      const el = document.getElementById(f.id);
+      if (!el || !el.value.trim()) {
+        if (el) {
+          el.classList.add('border-error', 'ring-2', 'ring-error');
+          el.focus();
+        }
+        showToast(`⚠ Celda obligatoria: Por favor complete "${f.label}"`, 3500);
+        return;
+      }
+    }
+
+    // 2. Validar que exista al menos una foto / evidencia gráfica
+    const hasFiles = (window._pendingFiles && window._pendingFiles.length > 0) ||
+                     (document.getElementById('uploadedFiles').children.length > 0);
+    if (!hasFiles) {
+      const uz = document.getElementById('uploadZone');
+      uz.classList.add('border-error', 'ring-2', 'ring-error');
+      uz.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('⚠ Fotografía obligatoria: Adjunte al menos una foto de evidencia en terreno', 4000);
+      return;
+    }
+
+    // Si no hay sesión activa, guardar localmente con datos completos
     if (!currentUser) {
       submitOTLocal(); return;
     }
