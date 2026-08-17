@@ -2218,25 +2218,7 @@
     // Generar código OTP de 6 dígitos seguro
     currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
 
-    // 1. Despachar envío de correo real vía HTTP Email Relay
-    try {
-      fetch('https://formsubmit.co/ajax/' + encodeURIComponent(email), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _subject: `Confirma tu email — Tu código de acceso de Gestión Urbana: ${currentOtpCode}`,
-          _captcha: 'false',
-          Remitente: 'Gestión Urbana • GreenApps (Contrato Maipú Zona 6)',
-          Usuario: nombre,
-          RUT: rut,
-          Rol: rolEl.options[rolEl.selectedIndex].text,
-          Codigo_De_Seguridad: currentOtpCode,
-          Mensaje: `Tu código de verificación de 6 dígitos para acceder al sistema es: ${currentOtpCode}. Este código es de uso personal y expira en 5 minutos.`
-        })
-      }).catch(e => console.warn('Email relay background dispatch:', e));
-    } catch (e) {}
-
-    // 2. Despachar registro y OTP en Supabase Auth
+    // Registrar en Supabase Auth con metadatos
     try {
       await db.auth.signUp({
         email,
@@ -2245,9 +2227,8 @@
           data: { nombre, rut, rol: rolEl.value, contrato: contratoEl.value, foto: uploadedProfilePhotoData }
         }
       });
-      await db.auth.signInWithOtp({ email });
     } catch (err) {
-      console.warn('Supabase auth dispatch:', err);
+      console.warn('Supabase signUp:', err);
     }
 
     btn.innerHTML = orig;
@@ -2275,19 +2256,11 @@
     currentPerfil = nuevoUsuario;
     updateUIWithProfile();
 
-    // Actualizar datos de confirmación
-    const resNom = document.getElementById('resNombre');
-    const resRol = document.getElementById('resRol');
-    const resCon = document.getElementById('resContrato');
-    if (resNom) resNom.textContent = nombre;
-    if (resRol) resRol.textContent = rolTexto;
-    if (resCon) resCon.textContent = contratoTexto;
-
     const form = document.getElementById('crearPerfilForm');
     if (form) form.reset();
 
-    showToast(`✓ Código de 6 dígitos enviado a ${email}. Revisa tu bandeja de entrada o spam.`, 4500);
-    navigate('registro-exitoso');
+    showToast(`✓ ¡Bienvenido ${nombre}! Has sido registrado como ${rolTexto}`, 4000);
+    navigate('dashboard');
   });
 
   // ==================== DASHBOARD ====================
@@ -2942,7 +2915,7 @@
   
   // Activar página inicial de inmediato
   const initialHash = window.location.hash.replace('#', '');
-  if (initialHash && document.getElementById('page-' + initialHash)) {
+  if (initialHash && document.getElementById('page-' + initialHash) && initialHash !== 'verificar-codigo') {
     navigate(initialHash);
   } else {
     navigate('login');
