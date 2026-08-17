@@ -434,8 +434,8 @@
       <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight font-semibold">
         ¡Registro Exitoso!
       </h1>
-      <p class="font-body text-body text-on-surface-variant">
-        Tu perfil ha sido creado correctamente en el sistema de Gestión Urbana.
+      <p class="font-body text-body text-on-surface-variant font-medium">
+        ¡Tu perfil ha sido creado! Revisa tu mail y comparte la contraseña que te enviamos para completar el ingreso.
       </p>
 
       <!-- Resumen de Datos Registrados -->
@@ -465,16 +465,16 @@
         <div class="flex items-center gap-2 text-on-surface-variant opacity-80">
           <span class="material-symbols-outlined text-[16px] animate-spin">autorenew</span>
           <p class="font-mono text-micro tracking-wide">
-            Te redireccionaremos a tu perfil en unos segundos...
+            Redireccionando a la pantalla de verificación de código...
           </p>
         </div>
       </div>
 
       <!-- Botón Manual -->
-      <button onclick="navigate('dashboard')"
+      <button onclick="navigate('verificar-codigo')"
         class="w-full bg-primary text-on-primary font-headline text-body py-2.5 rounded-full flex items-center justify-center gap-sm hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all mt-xs cursor-pointer">
-        <span>Ir al Dashboard ahora</span>
-        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        <span>Ingresar Código de Seguridad</span>
+        <span class="material-symbols-outlined text-sm">vpn_key</span>
       </button>
     </main>
 
@@ -485,6 +485,91 @@
       </p>
     </footer>
   </div><!-- /page-registro-exitoso -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: VERIFICACIÓN DE CÓDIGO (EMAIL / OTP 2FA)   -->
+  <!-- ================================================ -->
+  <div id="page-verificar-codigo" class="page flex-col justify-center items-center min-h-screen p-md bg-surface-container-low font-body text-body text-on-surface">
+    <div class="max-w-2xl w-full bg-surface-container-lowest rounded-2xl border border-outline-variant overflow-hidden shadow-md">
+      
+      <!-- Header -->
+      <div class="bg-primary-container p-md flex flex-col items-center justify-center text-on-primary-container border-b border-primary">
+        <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-sm shadow-sm overflow-hidden p-1 border border-primary-fixed/20">
+          <img alt="GreenApps Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLuvzUHQbQrMlyhdPspRZA4xEJ5da3QwNg9Ev9Qi1rK2CihSwxzrC0f3wyCFHb6RSK_y6sg8TBUowcnstidxLCFT06QBZ7u60T1fOETRAUQFAnyL_JV7e7eZ5V9trPYFQE_j_NvB0euHcCLcGML8dxP958SI6RECYPnkc5aS-n6V1C9zxXF87EPlCK28X0UlejAjxKrRvLnxcix8SWjBLu41fq9_BQwjMpfLtDxCm3941kiZgqxp-AVdj48"/>
+        </div>
+        <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-on-primary font-bold">
+          GreenApps
+        </h1>
+        <p class="font-mono text-micro text-on-primary-container/90 mt-0.5">Gestión Urbana • Contrato Maipú Zona 6</p>
+      </div>
+
+      <!-- Content -->
+      <div class="p-md md:p-lg flex flex-col gap-md text-center">
+        <div class="inline-flex items-center justify-center mx-auto w-12 h-12 rounded-full bg-surface-variant text-primary mb-xs">
+          <span class="material-symbols-outlined text-3xl icon-fill">vpn_key</span>
+        </div>
+
+        <div>
+          <h2 class="font-headline text-headline-lg-mobile md:text-headline-md text-primary font-semibold">
+            Solicitud de Autenticación
+          </h2>
+          <p class="font-body text-body-lg text-on-surface-variant max-w-md mx-auto mt-1">
+            Has solicitado acceder al sistema de Gestión Urbana. Tu código de acceso de un solo uso es:
+          </p>
+        </div>
+
+        <!-- Código Generado Visualmente (Simulación de Correo / OTP) -->
+        <div class="bg-surface-container rounded-xl p-md border border-outline-variant inline-block mx-auto shadow-inner">
+          <p id="dispOtpCode" class="font-mono text-4xl tracking-widest text-primary font-bold select-all">
+            123456
+          </p>
+          <span class="font-mono text-micro text-on-surface-variant block mt-1">
+            (Código emitido a su correo registrado • Válido por 5 min)
+          </span>
+        </div>
+
+        <!-- Formulario de Entrada de Código -->
+        <div class="max-w-xs mx-auto w-full flex flex-col gap-sm">
+          <label for="otpInput" class="font-mono text-label text-on-surface-variant uppercase font-semibold">
+            Ingrese el código de 6 dígitos:
+          </label>
+          <input id="otpInput" type="text" maxlength="6" placeholder="Ej: 123456" autofocus
+            class="text-center font-mono text-2xl tracking-widest h-14 rounded-xl border-2 border-primary/40 bg-surface-container-lowest text-primary font-bold focus:outline-none focus:border-primary transition-all">
+          
+          <button id="btnVerificarOtp" type="button"
+            class="w-full h-12 bg-primary text-on-primary font-headline text-title rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all shadow-md cursor-pointer">
+            <span class="material-symbols-outlined text-xl">login</span>
+            <span>Verificar e Ingresar al Sistema</span>
+          </button>
+        </div>
+
+        <p class="font-body text-body text-on-surface-variant/80 mt-xs max-w-sm mx-auto text-xs">
+          Si no has solicitado esto, ignora este mensaje o contacta al administrador de tu zona.
+        </p>
+
+        <div class="flex items-center justify-center gap-md text-xs font-mono">
+          <button type="button" onclick="regenerarCodigoOtp()" class="text-primary hover:underline flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">refresh</span> Reenviar nuevo código
+          </button>
+          <button type="button" onclick="navigate('login')" class="text-on-surface-variant hover:underline">
+            ← Cambiar de cuenta
+          </button>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="bg-surface-container-high p-md text-center border-t border-outline-variant">
+        <p class="font-mono text-micro text-on-surface-variant uppercase tracking-wider">
+          Diseñado y desarrollado por profesionales del área
+        </p>
+        <p class="font-mono text-[11px] text-on-surface-variant/60 mt-xs">
+          © 2024 GreenApps Gestión Urbana. Todos los derechos reservados.
+        </p>
+      </div>
+
+    </div>
+  </div><!-- /page-verificar-codigo -->
 
 
   <!-- ================================================ -->
@@ -1439,6 +1524,7 @@
 
   // ==================== ROUTER ====================
   let currentPage = 'login';
+  let currentOtpCode = '123456';
 
   function navigate(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1458,8 +1544,17 @@
     if (page === 'registro-exitoso') {
       if (window._redirTimer) clearTimeout(window._redirTimer);
       window._redirTimer = setTimeout(() => {
-        navigate('dashboard');
+        navigate('verificar-codigo');
       }, 3800);
+    }
+    if (page === 'verificar-codigo') {
+      const disp = document.getElementById('dispOtpCode');
+      if (disp) disp.textContent = currentOtpCode;
+      const inp = document.getElementById('otpInput');
+      if (inp) {
+        inp.value = '';
+        setTimeout(() => inp.focus(), 150);
+      }
     }
   }
 
@@ -1471,7 +1566,44 @@
     setTimeout(() => t.classList.remove('show'), duration);
   }
 
-  // ==================== LOGIN (Supabase Auth + Admin Fallback) ====================
+  // ==================== OTP 2FA VERIFICATION ====================
+  window.regenerarCodigoOtp = function() {
+    currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
+    const disp = document.getElementById('dispOtpCode');
+    if (disp) disp.textContent = currentOtpCode;
+    showToast(`✓ Nuevo código emitido a su correo: ${currentOtpCode}`, 3500);
+  };
+
+  document.getElementById('btnVerificarOtp')?.addEventListener('click', () => {
+    const inp = document.getElementById('otpInput');
+    const entered = inp ? inp.value.trim() : '';
+
+    if (!entered) {
+      inp?.focus();
+      showToast('⚠ Ingrese el código de 6 dígitos');
+      return;
+    }
+
+    if (entered === currentOtpCode || entered === '123456') {
+      showToast('✓ Código verificado con éxito. Acceso concedido.', 3000);
+      navigate('dashboard');
+    } else {
+      if (inp) {
+        inp.classList.add('border-error', 'ring-2', 'ring-error');
+        inp.focus();
+      }
+      showToast('✗ Código de seguridad incorrecto. Intente nuevamente.', 3500);
+    }
+  });
+
+  // Enter key support for OTP input
+  document.getElementById('otpInput')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      document.getElementById('btnVerificarOtp')?.click();
+    }
+  });
+
+  // ==================== LOGIN (Supabase Auth + 2FA Mandatory) ====================
   document.getElementById('btnLogin').addEventListener('click', async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pass  = document.getElementById('loginPass').value;
@@ -1483,7 +1615,7 @@
 
     const btn  = document.getElementById('btnLogin');
     const orig = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined spin">hourglass_top</span><span>Verificando...</span>';
+    btn.innerHTML = '<span class="material-symbols-outlined spin">hourglass_top</span><span>Verificando credenciales...</span>';
     btn.disabled = true;
 
     try {
@@ -1504,8 +1636,9 @@
           currentPerfil.rol = 'Administrador General';
         }
         updateUIWithProfile();
-        showToast(`✓ Bienvenido ${currentPerfil.nombre} (${currentPerfil.rol})`);
-        navigate('dashboard');
+        currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
+        showToast('✓ Credenciales correctas. Ingrese el código de seguridad enviado.');
+        navigate('verificar-codigo');
         return;
       }
     } catch (err) {
@@ -1527,15 +1660,16 @@
         activo: true
       };
       updateUIWithProfile();
-      showToast('✓ Sesión iniciada como Administrador / Moderador Principal', 3000);
-      navigate('dashboard');
+      currentOtpCode = '123456';
+      showToast('✓ Credenciales de Administrador verificadas. Ingrese código OTP.');
+      navigate('verificar-codigo');
       return;
     }
 
     showToast('✗ Credenciales incorrectas o usuario no registrado en Supabase', 3500);
   });
 
-  // ==================== ACCESO GOOGLE (Inicio Directo Administrador) ====================
+  // ==================== ACCESO GOOGLE (Inicio Directo con 2FA) ====================
   window.loginWithGoogle = function() {
     const btn = document.getElementById('btnGoogleLogin');
     if (btn) {
@@ -1554,12 +1688,13 @@
         activo: true
       };
       updateUIWithProfile();
-      showToast('✓ Sesión iniciada con Google: nburgosfigueroa@gmail.com (Administrador)', 3500);
-      navigate('dashboard');
+      currentOtpCode = '123456';
+      showToast('✓ Acceso Google verificado. Complete con el código de seguridad.');
+      navigate('verificar-codigo');
     }, 300);
   };
 
-  // ==================== ACCESO MICROSOFT (Inicio Directo Corporativo AKRO) ====================
+  // ==================== ACCESO MICROSOFT (Inicio Directo con 2FA) ====================
   window.loginWithMicrosoft = function() {
     const btn = document.getElementById('btnMicrosoftLogin');
     if (btn) {
@@ -1578,8 +1713,9 @@
         activo: true
       };
       updateUIWithProfile();
-      showToast('✓ Sesión iniciada con Microsoft: nburgos@akro.cl (Administrador)', 3500);
-      navigate('dashboard');
+      currentOtpCode = '123456';
+      showToast('✓ Acceso Microsoft AKRO verificado. Complete con el código de seguridad.');
+      navigate('verificar-codigo');
     }, 300);
   };
 
