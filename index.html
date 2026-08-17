@@ -303,7 +303,10 @@
     <footer class="mt-lg text-center">
       <p class="font-mono text-label text-on-surface-variant">Diseñado para profesionales del área urbana</p>
     </footer>
-   <!-- ================================================ -->
+  </div><!-- /page-login -->
+
+
+  <!-- ================================================ -->
   <!-- PAGE: CREAR PERFIL                               -->
   <!-- ================================================ -->
   <div id="page-crear-perfil" class="page flex-col justify-center items-center min-h-screen p-md bg-surface">
@@ -311,11 +314,24 @@
       <div class="mb-lg flex flex-col items-center text-center">
         <span class="material-symbols-outlined text-primary text-[48px] mb-sm icon-fill">person_add</span>
         <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">Crear Nuevo Perfil</h1>
-        <p class="font-body text-body text-on-surface-variant mt-xs">Ingrese los datos técnicos para registrar el nuevo usuario en el sistema.</p>
+        <p class="font-body text-body text-on-surface-variant mt-xs">Ingrese sus datos oficiales y foto de acreditación para operar en terreno.</p>
       </div>
 
       <form id="crearPerfilForm" class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.02)] flex flex-col gap-md" onsubmit="return false;">
         
+        <!-- Foto de Perfil / Acreditación en Terreno -->
+        <div class="flex flex-col items-center gap-xs py-xs">
+          <div id="avatarPreviewBox" class="w-24 h-24 rounded-full bg-surface-container-high border-2 border-dashed border-primary/40 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative group hover:border-primary transition-all">
+            <img id="avatarPreviewImg" class="hidden w-full h-full object-cover" src="" alt="Foto de Perfil">
+            <div id="avatarPlaceholder" class="flex flex-col items-center justify-center text-on-surface-variant group-hover:text-primary">
+              <span class="material-symbols-outlined text-3xl">add_a_photo</span>
+              <span class="font-mono text-micro font-bold mt-1">Tomar Foto</span>
+            </div>
+            <input type="file" id="userPhotoInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+          </div>
+          <span class="font-mono text-micro text-on-surface-variant">Foto de perfil obligatoria para credencial en terreno</span>
+        </div>
+
         <!-- Nombre Completo -->
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="fullName">
@@ -1715,7 +1731,28 @@
     }, 200);
   };
 
-  // ==================== CREAR PERFIL (Supabase Auth con Validación Total) ====================
+  // ==================== FOTO DE PERFIL EN REGISTRO ====================
+  let uploadedProfilePhotoData = null;
+  document.getElementById('userPhotoInput')?.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        uploadedProfilePhotoData = ev.target.result;
+        const img = document.getElementById('avatarPreviewImg');
+        const placeholder = document.getElementById('avatarPlaceholder');
+        if (img && placeholder) {
+          img.src = uploadedProfilePhotoData;
+          img.classList.remove('hidden');
+          placeholder.classList.add('hidden');
+        }
+        showToast('✓ Fotografía de perfil cargada');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // ==================== CREAR PERFIL (Validación Estricta + Foto + OTP) ====================
   document.getElementById('btnCrearPerfil').addEventListener('click', async () => {
     const nombreEl   = document.getElementById('fullName') || document.getElementById('cpNombre');
     const rutEl      = document.getElementById('rut') || document.getElementById('cpRut');
@@ -1729,6 +1766,11 @@
     const email    = emailEl ? emailEl.value.trim() : '';
     const pass     = passEl ? passEl.value : '';
 
+    if (!uploadedProfilePhotoData) {
+      document.getElementById('avatarPreviewBox')?.classList.add('border-error', 'ring-2', 'ring-error');
+      showToast('⚠ Fotografía obligatoria: Debe tomarse o subir una foto para su credencial');
+      return;
+    }
     if (!nombre) {
       nombreEl?.focus();
       showToast('⚠ Celda obligatoria: Por favor ingrese su Nombre Completo');
@@ -1771,7 +1813,7 @@
         email,
         password: pass,
         options: {
-          data: { nombre, rut, rol: rolEl.value, contrato: contratoEl.value }
+          data: { nombre, rut, rol: rolEl.value, contrato: contratoEl.value, foto: uploadedProfilePhotoData }
         }
       });
     } catch (err) {
@@ -1781,9 +1823,9 @@
     btn.innerHTML = orig;
     btn.disabled = false;
 
-    // Crear y registrar el perfil en memoria y en la lista de usuarios
     const rolTexto = rolEl.options[rolEl.selectedIndex].text;
     const contratoTexto = contratoEl.options[contratoEl.selectedIndex].text;
+    const esAdmin = ADMIN_EMAILS.includes(email.toLowerCase());
 
     const nuevoUsuario = {
       nombre,
@@ -1791,8 +1833,9 @@
       rol: rolTexto,
       contrato: contratoTexto,
       email,
+      foto: uploadedProfilePhotoData,
       activo: true,
-      esAdmin: ADMIN_EMAILS.includes(email.toLowerCase())
+      esAdmin
     };
 
     USUARIOS.unshift(nuevoUsuario);
@@ -1802,7 +1845,7 @@
     currentPerfil = nuevoUsuario;
     updateUIWithProfile();
 
-    // Mostrar confirmación
+    // Actualizar datos de confirmación
     const resNom = document.getElementById('resNombre');
     const resRol = document.getElementById('resRol');
     const resCon = document.getElementById('resContrato');
@@ -1810,10 +1853,15 @@
     if (resRol) resRol.textContent = rolTexto;
     if (resCon) resCon.textContent = contratoTexto;
 
+    // Generar código de seguridad
+    currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
+    const disp = document.getElementById('dispOtpCode');
+    if (disp) disp.textContent = currentOtpCode;
+
     const form = document.getElementById('crearPerfilForm');
     if (form) form.reset();
 
-    showToast('✓ Perfil registrado exitosamente', 3000);
+    showToast('✓ Perfil registrado exitosamente. Verifique su código de seguridad.', 3500);
     navigate('registro-exitoso');
   });
 
