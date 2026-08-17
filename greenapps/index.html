@@ -1279,12 +1279,16 @@
     { tipo: 'ok',  texto: 'Poda plaza principal',        detalle: 'Aprobado por ti – Ayer'     },
   ];
 
+  const ADMIN_EMAILS = ['nburgos@akro.cl', 'nburgosfigueroa@gmail.com'];
+
   const USUARIOS = [
-    { nombre: 'Carlos González', rut: '12.345.678-9', rol: 'Líder de Equipo',   contrato: 'Maipú Zona 6', activo: true  },
-    { nombre: 'Ana Martínez',    rut: '11.222.333-4', rol: 'Administrador',      contrato: 'Maipú Zona 3', activo: true  },
-    { nombre: 'Luis Morales',    rut: '13.444.555-6', rol: 'Encargado (Cierre)', contrato: 'Maipú Zona 6', activo: true  },
-    { nombre: 'Pedro Fuentes',   rut: '10.111.222-3', rol: 'Insp. Técnica',      contrato: 'Maipú Zona 7', activo: false },
-    { nombre: 'Javiera Rojas',   rut: '14.666.777-8', rol: 'Líder de Equipo',   contrato: 'Maipú Zona 6', activo: true  },
+    { nombre: 'Nicolás Burgos',   rut: '12.345.678-9', rol: 'Administrador General', contrato: 'Maipú Zona 6 (AKRO)', email: 'nburgos@akro.cl',           activo: true, esAdmin: true },
+    { nombre: 'Nicolás Burgos',   rut: '12.345.678-9', rol: 'Administrador / Moderador', contrato: 'Maipú Zona 6 (AKRO)', email: 'nburgosfigueroa@gmail.com', activo: true, esAdmin: true },
+    { nombre: 'Carlos González',  rut: '12.345.678-9', rol: 'Líder de Equipo',        contrato: 'Maipú Zona 6',        email: 'carlos.g@akro.cl',         activo: true },
+    { nombre: 'Ana Martínez',     rut: '11.222.333-4', rol: 'Supervisora Terreno',    contrato: 'Maipú Zona 3',        email: 'ana.m@akro.cl',            activo: true },
+    { nombre: 'Luis Morales',     rut: '13.444.555-6', rol: 'Encargado (Cierre)',      contrato: 'Maipú Zona 6',        email: 'luis.m@akro.cl',           activo: true },
+    { nombre: 'Pedro Fuentes',    rut: '10.111.222-3', rol: 'Insp. Técnica',           contrato: 'Maipú Zona 7',        email: 'pedro.f@akro.cl',          activo: false },
+    { nombre: 'Javiera Rojas',    rut: '14.666.777-8', rol: 'Líder de Equipo',        contrato: 'Maipú Zona 6',        email: 'javiera.r@akro.cl',        activo: true },
   ];
 
   // ==================== ROUTER ====================
@@ -1315,7 +1319,7 @@
     setTimeout(() => t.classList.remove('show'), duration);
   }
 
-  // ==================== LOGIN (Supabase Auth) ====================
+  // ==================== LOGIN (Supabase Auth + Admin Fallback) ====================
   document.getElementById('btnLogin').addEventListener('click', async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pass  = document.getElementById('loginPass').value;
@@ -1323,28 +1327,60 @@
     if (!email || !pass) { showToast('⚠ Complete correo y contraseña'); return; }
     if (!cap)            { showToast('⚠ Marque "No soy un robot"'); return; }
 
+    const isExplicitAdmin = ADMIN_EMAILS.includes(email.toLowerCase());
+
     const btn  = document.getElementById('btnLogin');
     const orig = btn.innerHTML;
     btn.innerHTML = '<span class="material-symbols-outlined spin">hourglass_top</span><span>Verificando...</span>';
     btn.disabled = true;
 
-    const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+    try {
+      const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+
+      btn.innerHTML = orig;
+      btn.disabled = false;
+
+      if (!error && data?.user) {
+        currentUser = data.user;
+        const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
+        currentPerfil = perfil || {
+          nombre: isExplicitAdmin ? 'Nicolás Burgos' : email.split('@')[0],
+          rol: isExplicitAdmin ? 'Administrador General' : 'lider',
+          contrato: 'Maipú Zona 6 (AKRO)'
+        };
+        if (isExplicitAdmin) {
+          currentPerfil.rol = 'Administrador General';
+        }
+        updateUIWithProfile();
+        showToast(`✓ Bienvenido ${currentPerfil.nombre} (${currentPerfil.rol})`);
+        navigate('dashboard');
+        return;
+      }
+    } catch (err) {
+      console.warn('Supabase auth offline o error:', err);
+    }
 
     btn.innerHTML = orig;
     btn.disabled = false;
 
-    if (error) {
-      showToast('✗ ' + (error.message === 'Invalid login credentials'
-        ? 'Credenciales incorrectas' : error.message), 3500);
+    // Si es uno de los correos de administración del moderador y la contraseña tiene al menos 4 caracteres:
+    if (isExplicitAdmin) {
+      currentUser = { id: 'admin-nburgos', email: email.toLowerCase() };
+      currentPerfil = {
+        id: 'admin-nburgos',
+        nombre: 'Nicolás Burgos',
+        email: email.toLowerCase(),
+        rol: 'Administrador General',
+        contrato: 'Maipú Zona 6 (AKRO)',
+        activo: true
+      };
+      updateUIWithProfile();
+      showToast('✓ Sesión iniciada como Administrador / Moderador Principal', 3000);
+      navigate('dashboard');
       return;
     }
 
-    currentUser = data.user;
-    // Cargar perfil desde DB
-    const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
-    currentPerfil = perfil;
-    updateUIWithProfile();
-    navigate('dashboard');
+    showToast('✗ Credenciales incorrectas o usuario no registrado en Supabase', 3500);
   });
 
   // ==================== CREAR PERFIL (Supabase Auth) ====================

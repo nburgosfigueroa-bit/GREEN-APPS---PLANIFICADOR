@@ -130,15 +130,26 @@ CREATE TRIGGER trg_ot_updated
 -- ================================================================
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+  assigned_rol TEXT;
 BEGIN
+  -- Asignar rol admin automáticamente a los correos del administrador / moderador
+  IF LOWER(NEW.email) IN ('nburgos@akro.cl', 'nburgosfigueroa@gmail.com') THEN
+    assigned_rol := 'admin';
+  ELSE
+    assigned_rol := COALESCE(NEW.raw_user_meta_data->>'rol', 'lider');
+  END IF;
+
   INSERT INTO public.perfiles (id, nombre, rol, contrato)
   VALUES (
     NEW.id,
-    COALESCE(NEW.raw_user_meta_data->>'nombre', split_part(NEW.email, '@', 1)),
-    COALESCE(NEW.raw_user_meta_data->>'rol', 'lider'),
+    COALESCE(NEW.raw_user_meta_data->>'nombre', 'Nicolás Burgos'),
+    assigned_rol,
     COALESCE(NEW.raw_user_meta_data->>'contrato', 'maipu_6')
   )
-  ON CONFLICT (id) DO NOTHING;
+  ON CONFLICT (id) DO UPDATE
+    SET rol = assigned_rol,
+        nombre = EXCLUDED.nombre;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
