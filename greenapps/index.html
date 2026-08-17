@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GreenApps — Sistema de Gestión Urbana</title>
-  <meta name="description" content="Sistema de gestión de mantenimiento de áreas verdes y operaciones urbanas. Controla órdenes de trabajo, multimedia y reportes operativos.">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -248,8 +250,8 @@
         <!-- Acceso social (Google & Microsoft) + Crear perfil -->
         <div class="flex flex-col gap-sm">
           <!-- Google Login -->
-          <button type="button" id="btnGoogleLogin"
-            class="w-full bg-surface border border-outline-variant text-on-surface font-headline text-body py-sm rounded-full flex items-center justify-center gap-sm hover:bg-surface-container hover:border-outline active:scale-95 transition-all shadow-sm">
+          <button type="button" id="btnGoogleLogin" onclick="loginWithGoogle()"
+            class="w-full bg-surface border border-outline-variant text-on-surface font-headline text-body py-sm rounded-full flex items-center justify-center gap-sm hover:bg-surface-container hover:border-outline active:scale-95 transition-all shadow-sm cursor-pointer">
             <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
               <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24Z"/>
@@ -260,8 +262,8 @@
           </button>
 
           <!-- Microsoft Login -->
-          <button type="button" id="btnMicrosoftLogin"
-            class="w-full bg-surface border border-outline-variant text-on-surface font-headline text-body py-sm rounded-full flex items-center justify-center gap-sm hover:bg-surface-container hover:border-outline active:scale-95 transition-all shadow-sm">
+          <button type="button" id="btnMicrosoftLogin" onclick="loginWithMicrosoft()"
+            class="w-full bg-surface border border-outline-variant text-on-surface font-headline text-body py-sm rounded-full flex items-center justify-center gap-sm hover:bg-surface-container hover:border-outline active:scale-95 transition-all shadow-sm cursor-pointer">
             <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 21 21">
               <path fill="#f25022" d="M1 1h9v9H1z"/>
               <path fill="#00a4ef" d="M1 11h9v9H1z"/>
@@ -1404,11 +1406,12 @@
   });
 
   // ==================== ACCESO GOOGLE (Inicio Directo Administrador) ====================
-  document.getElementById('btnGoogleLogin')?.addEventListener('click', () => {
+  window.loginWithGoogle = function() {
     const btn = document.getElementById('btnGoogleLogin');
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Iniciando con Google...</span>';
-    btn.disabled = true;
+    if (btn) {
+      btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Iniciando con Google...</span>';
+      btn.disabled = true;
+    }
 
     setTimeout(() => {
       currentUser = { id: 'admin-google-nburgos', email: 'nburgosfigueroa@gmail.com' };
@@ -1422,18 +1425,17 @@
       };
       updateUIWithProfile();
       showToast('✓ Sesión iniciada con Google: nburgosfigueroa@gmail.com (Administrador)', 3500);
-      btn.innerHTML = orig;
-      btn.disabled = false;
       navigate('dashboard');
-    }, 400);
-  });
+    }, 300);
+  };
 
   // ==================== ACCESO MICROSOFT (Inicio Directo Corporativo AKRO) ====================
-  document.getElementById('btnMicrosoftLogin')?.addEventListener('click', () => {
+  window.loginWithMicrosoft = function() {
     const btn = document.getElementById('btnMicrosoftLogin');
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Iniciando con Microsoft...</span>';
-    btn.disabled = true;
+    if (btn) {
+      btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Iniciando con Microsoft...</span>';
+      btn.disabled = true;
+    }
 
     setTimeout(() => {
       currentUser = { id: 'admin-akro-nburgos', email: 'nburgos@akro.cl' };
@@ -1447,11 +1449,9 @@
       };
       updateUIWithProfile();
       showToast('✓ Sesión iniciada con Microsoft: nburgos@akro.cl (Administrador)', 3500);
-      btn.innerHTML = orig;
-      btn.disabled = false;
       navigate('dashboard');
-    }, 400);
-  });
+    }, 300);
+  };
 
   // ==================== CREAR PERFIL (Supabase Auth) ====================
   document.getElementById('btnCrearPerfil').addEventListener('click', async () => {
