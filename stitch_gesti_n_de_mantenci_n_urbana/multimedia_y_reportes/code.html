@@ -1,0 +1,373 @@
+<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Gestión Multimedia y Reportes</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#2e3132",
+                    "on-tertiary-fixed": "#161d1f",
+                    "tertiary-container": "#363d3f",
+                    "on-surface": "#191c1d",
+                    "on-secondary-fixed": "#241a00",
+                    "primary-container": "#1a4332",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#ebc246",
+                    "on-primary-container": "#85af99",
+                    "primary": "#002d1d",
+                    "tertiary-fixed-dim": "#c1c8ca",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#dde4e6",
+                    "on-tertiary-container": "#a0a7aa",
+                    "tertiary": "#202729",
+                    "on-primary-fixed-variant": "#264e3d",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#ffe08b",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#d9dadb",
+                    "surface-container-low": "#f3f4f5",
+                    "surface-bright": "#f8f9fa",
+                    "on-secondary": "#ffffff",
+                    "background": "#f8f9fa",
+                    "primary-fixed-dim": "#a4d0b9",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#edeeef",
+                    "primary-fixed": "#c0edd4",
+                    "on-primary-fixed": "#002114",
+                    "inverse-on-surface": "#f0f1f2",
+                    "inverse-primary": "#a4d0b9",
+                    "surface-container-high": "#e7e8e9",
+                    "secondary-container": "#fdd355",
+                    "surface-tint": "#3e6654",
+                    "on-secondary-fixed-variant": "#584400",
+                    "on-background": "#191c1d",
+                    "outline-variant": "#c1c8c2",
+                    "outline": "#717973",
+                    "on-secondary-container": "#735a00",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#414944",
+                    "on-tertiary-fixed-variant": "#41484a",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#745b00",
+                    "surface-container-highest": "#e1e3e4",
+                    "surface": "#f8f9fa",
+                    "surface-variant": "#e1e3e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "xl": "64px",
+                    "container-max": "1280px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "base": "8px",
+                    "gutter": "20px",
+                    "lg": "40px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-technical": ["JetBrains Mono"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "button-text": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-technical": ["13px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "button-text": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom scrollbar for gallery */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased pb-24 md:pb-0">
+<!-- Top Navigation (Mobile & Desktop) -->
+<header class="w-full sticky top-0 bg-surface z-40 transition-colors duration-200" style="box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+<!-- Mobile TopAppBar Shell -->
+<div class="md:hidden flex px-md py-sm w-full items-center justify-between">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold tracking-tight">Gestión Urbana</h1>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="location_on">location_on</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a park maintenance supervisor outdoors in bright sunlight, wearing safety gear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ_DIAPOAxHbIQiPgQwloU3qi1oDDyvGFBAlrwScNkkLXvRZ158BjEnhq585tsSnt2Y9J1tL6pWQeWeRARmK3ihY3d90Dy0pjXxJlUxbRnhNP4cSQsUPmUGOBHpErSdr32KdtBcsJ96iOpiRXZZR6zncBvmzg6nQrD1d7nc-Cai4n6tYT4AMfI76ZNSpxTyy4DzONLhZa9aaiVNKEEflFNV2h-I08vGy6brSMjnfxTtjzoxIb4aeVm">
+</div>
+</div>
+</div>
+<!-- Desktop TopAppBar Nav Cluster -->
+<div class="hidden md:flex flex-row px-lg py-md w-full max-w-container-max mx-auto items-center justify-between">
+<div class="flex items-center gap-xl">
+<h1 class="font-headline-lg text-headline-lg text-primary font-extrabold tracking-tight">Gestión Urbana</h1>
+<nav class="flex items-center gap-md">
+<a class="font-button-text text-button-text text-on-surface-variant hover:text-primary transition-colors" href="#">Formulario</a>
+<a class="font-button-text text-button-text text-on-surface-variant hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="font-button-text text-button-text text-primary flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined icon-fill">perm_media</span>
+                        Multimedia
+                    </a>
+<a class="font-button-text text-button-text text-on-surface-variant hover:text-primary transition-colors" href="#">Ajustes</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-2 text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-label-technical text-label-technical">Sector Norte</span>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant hover:border-primary transition-colors cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a park maintenance supervisor outdoors in bright sunlight, wearing safety gear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYjkEhB4wMYv__B5q9kPB8Qt9AKt8Wi0_0pF71z5wWwyKbhp6XSFrkFE_-5kY6cwGOCAvvY8li_P6CCMz45PkK42JDBxI_yf_M4M81k1_zq07bwxFpeCrsXaUNCmTjx-_F2Wm2F9AOANgkhjJCPOZu8-xo9pGlVdKamgC5A-k33NdY2SlXAcjm4AUy5ZLsiNhDIUkdJNUGFAr5ULlUt6p8ib3hko-JDBks97iKEextio-GZSaLPumu">
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-container-max mx-auto px-md md:px-lg pt-md md:pt-xl flex flex-col gap-lg">
+<!-- Header & Primary Action -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-display-lg md:text-display-lg text-on-surface font-bold">Multimedia y Reportes</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Documentación visual y actas de mantenimiento.</p>
+</div>
+<button class="bg-secondary-container text-on-secondary-container hover:bg-secondary hover:text-on-secondary transition-colors duration-200 px-6 py-3 rounded-lg flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+<span class="material-symbols-outlined icon-fill">picture_as_pdf</span>
+<span class="font-button-text text-button-text">Generar Orden de Trabajo PDF</span>
+</button>
+</section>
+<!-- Filters (Bento Style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-sm bg-surface-container-lowest p-sm border border-outline-variant rounded-xl">
+<div class="flex flex-col gap-xs p-2">
+<label class="font-label-technical text-label-technical text-on-surface-variant">Código de Área Verde</label>
+<select class="bg-surface border-none text-on-surface font-body-md text-body-md focus:ring-2 focus:ring-primary rounded-lg py-2">
+<option>Todos los sectores</option>
+<option>AV-104 (Plaza Central)</option>
+<option>AV-209 (Parque Lineal)</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs p-2 md:border-l border-outline-variant">
+<label class="font-label-technical text-label-technical text-on-surface-variant">Tipo de Trabajo</label>
+<div class="flex gap-2 overflow-x-auto scrollbar-hide py-1">
+<span class="bg-primary text-on-primary font-label-technical text-label-technical px-3 py-1 rounded-full whitespace-nowrap cursor-pointer">Todos</span>
+<span class="bg-surface-container-high text-on-surface hover:bg-surface-variant font-label-technical text-label-technical px-3 py-1 rounded-full whitespace-nowrap cursor-pointer transition-colors">Poda</span>
+<span class="bg-surface-container-high text-on-surface hover:bg-surface-variant font-label-technical text-label-technical px-3 py-1 rounded-full whitespace-nowrap cursor-pointer transition-colors">Mobiliarios</span>
+<span class="bg-surface-container-high text-on-surface hover:bg-surface-variant font-label-technical text-label-technical px-3 py-1 rounded-full whitespace-nowrap cursor-pointer transition-colors">Minicargador</span></div>
+</div>
+<div class="flex flex-col gap-xs p-2 md:border-l border-outline-variant">
+<label class="font-label-technical text-label-technical text-on-surface-variant">Fecha</label>
+<div class="flex items-center gap-2 bg-surface px-3 py-2 rounded-lg cursor-pointer hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
+<span class="font-body-md text-body-md text-on-surface">Últimos 7 días</span>
+</div>
+</div>
+</section>
+<!-- Asymmetric Bento Layout for Gallery and Reports -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
+<!-- Gallery Section (Spans 2 columns on Desktop) -->
+<section class="lg:col-span-2 flex flex-col gap-sm">
+<h3 class="font-button-text text-button-text text-on-surface-variant flex items-center gap-2 uppercase tracking-wider">
+<span class="material-symbols-outlined">photo_library</span>
+                    Galería Reciente
+                </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-sm"><div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col border-l-4 border-l-error relative group sm:col-span-2 md:col-span-1">
+<div class="h-48 w-full relative bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="A photo showing a large fallen tree branch blocking a paved urban park pathway. Danger tape is visible. Bright, harsh daylight indicating high utility documentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjW77VFKtFglF8M0YDci7w4hYMeszp8Yf0izmWFXTv7mGmZHVfmvzEM__gUNcTT526vlPkoFWfqodaBwoduFWuP9wZULmF6f7QOvzVe-z6rkVCplwBGBXmdi4N5YbC2e6CfAOJHKDfT_D8fJwxW_8ATjFaMwLir19yVgbkQH_xWbhYg0B_OlYy9nf0ae6hH3-sCvkaH6IpU3Hv5BlXYkcgjIg8bjuVQIDpactjuGwyBCkE7FlSafd1">
+<div class="absolute top-2 right-2 bg-error text-on-error px-2 py-1 rounded font-label-technical text-label-technical flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">error</span> Urgente
+                            </div>
+</div>
+<div class="p-4 flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<span class="font-button-text text-button-text text-on-surface">Despeje de Vía</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-055</span>
+</div>
+<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-on-surface-variant font-label-technical text-label-technical">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">calendar_today</span> Hoy, 08:00</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">location_on</span> Acceso Norte</span>
+</div>
+</div>
+</div>
+<!-- Photo Card (Maintained Status - Green Left Border) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col border-l-4 border-l-[#1a4332] relative group">
+<div class="h-48 w-full relative bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="A high-quality photo of freshly pruned trees in an urban park during bright daylight. The cuts are clean, and the surrounding grass is neatly mowed. Corporate modern high-utility aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpAorALR8RIBDIgM6GMRZihrW9wJ0mtT5WNJ7Kn8fJD7WsXVGU4i0DV-3o2LquEmfdNUzPDXc61obvhiSQ6qrmCHHxnJvWFP5xs2D4IP8RB82ailKdbUIM7YRTaZFUgXcYojKe76Kn0BlPFM_QSu_6Gj9tydfE73YLb6qf6m0jBkdTzp266hQOGUlYD7zjbDWK8o8NJelDW_IhtR7PT0Pon7BXMEDObitvlsXwb29g5-Kptqgh5UVj">
+<div class="absolute top-2 right-2 bg-surface/90 backdrop-blur-sm px-2 py-1 rounded text-primary font-label-technical text-label-technical flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">check_circle</span> Mantenido
+                            </div>
+</div>
+<div class="p-4 flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<span class="font-button-text text-button-text text-on-surface">Poda de Altura</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-104</span>
+</div>
+<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-on-surface-variant font-label-technical text-label-technical">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">calendar_today</span> 24 Oct, 09:30</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">location_on</span> Plaza Central</span>
+</div>
+</div>
+<!-- Hover Action Overlay -->
+<div class="absolute inset-0 bg-inverse-surface/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+<button class="bg-surface text-primary rounded-full p-3 shadow-lg pointer-events-auto hover:scale-105 transition-transform">
+<span class="material-symbols-outlined icon-fill">zoom_in</span>
+</button>
+</div>
+</div>
+<!-- Video Card (Pending Status - Yellow Left Border) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col border-l-4 border-l-secondary-container relative group">
+<div class="h-48 w-full relative bg-surface-container-highest flex items-center justify-center">
+<img class="w-full h-full object-cover opacity-80" data-alt="A clear photo of a broken sprinkler head in a park lawn, spraying water unevenly. Bright sunlight casting distinct shadows. Technical maintenance focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUtV_md636CfUQtHwIsimsLv_nAuwh2YhFOAQUieTMynNUeuUxlW4DLhf4an97ZfvBBDFTGpFyMIC-tiYvHqcFULsAF3LF_PlEpDbl8Uap8NVW5tjxPewBnv2F94fW3ovhKSDmv3-nFG89BmgrrGtbGSa1uWYgAGFOjGelcrNfBI3VPVheE8w-Pb2fmqyEeDI2nli8GJS5oWNltisXqdskk0ku1BkdBAOarvcK80ycgzLFo0av4z6Y">
+<div class="absolute inset-0 bg-tertiary/20"></div>
+<button class="absolute bg-surface/90 text-on-surface rounded-full p-4 shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center hover:scale-105 transition-transform z-10">
+<span class="material-symbols-outlined icon-fill text-[32px]">play_arrow</span>
+</button>
+<div class="absolute top-2 right-2 bg-surface/90 backdrop-blur-sm px-2 py-1 rounded text-on-secondary-container font-label-technical text-label-technical flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">warning</span> Pendiente
+                            </div>
+<div class="absolute bottom-2 right-2 bg-tertiary/80 text-on-tertiary font-label-technical text-label-technical px-2 py-0.5 rounded text-[11px]">0:45</div>
+</div>
+<div class="p-4 flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<span class="font-button-text text-button-text text-on-surface">Falla Sistema Riego</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-209</span>
+</div>
+<div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-on-surface-variant font-label-technical text-label-technical">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">calendar_today</span> 23 Oct, 14:15</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">location_on</span> Parque Lineal</span>
+</div>
+</div>
+</div>
+<!-- Photo Card (Urgent Status - Red Left Border) -->
+
+</div>
+<button class="mt-2 w-full py-3 border border-outline text-on-surface font-button-text text-button-text rounded-lg hover:bg-surface-container-low transition-colors">Cargar Más Archivos</button>
+</section>
+<!-- Generated Reports Section (Spans 1 column on Desktop) -->
+<aside class="flex flex-col gap-sm">
+<h3 class="font-button-text text-button-text text-on-surface-variant flex items-center gap-2 uppercase tracking-wider">
+<span class="material-symbols-outlined">folder_open</span>
+                    Reportes Generados
+                </h3>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col overflow-hidden">
+<!-- Report Row 1 -->
+<div class="flex items-center justify-between p-4 border-b border-surface-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface leading-tight">Acta_Semanal_AV104.pdf</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant mt-1">2.4 MB • 24 Oct 2023</span>
+</div>
+</div>
+<button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container hover:text-on-primary-container">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+<!-- Report Row 2 -->
+<div class="flex items-center justify-between p-4 border-b border-surface-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface leading-tight">Inventario_Riego_Q3.pdf</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant mt-1">5.1 MB • 20 Oct 2023</span>
+</div>
+</div>
+<button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container hover:text-on-primary-container">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+<!-- Report Row 3 -->
+<div class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text text-on-surface leading-tight">Incidente_Emergencia_001.pdf</span>
+<span class="font-label-technical text-label-technical text-on-surface-variant mt-1">1.2 MB • 18 Oct 2023</span>
+</div>
+</div>
+<button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container hover:text-on-primary-container">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<div class="mt-4 p-4 bg-surface-container-high rounded-xl border border-surface-variant">
+<p class="font-label-technical text-label-technical text-on-surface-variant flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] mt-0.5">info</span>
+                        Los reportes se retienen en el dispositivo por 30 días antes de ser archivados en la nube central.
+                    </p>
+</div>
+</aside>
+</div>
+</main>
+<!-- Mobile BottomNavBar Shell -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface shadow-[0_-4px_12px_rgba(0,0,0,0.05)] pb-safe transition-transform duration-150" style="padding-bottom: env(safe-area-inset-bottom);">
+<div class="flex justify-around items-center px-sm py-xs w-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-label-technical text-label-technical mt-1">Formulario</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-technical text-label-technical mt-1">Dashboard</span>
+</a>
+<!-- Active State -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined icon-fill" data-icon="perm_media">perm_media</span>
+<span class="font-label-technical text-label-technical mt-1">Multimedia</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-technical text-label-technical mt-1">Ajustes</span>
+</a>
+</div>
+</nav>
+<script>
+        // Simple JS to handle mobile safe area padding for modern iOS/Android
+        document.addEventListener("DOMContentLoaded", () => {
+            const bottomNav = document.querySelector('nav.fixed.bottom-0');
+            if (bottomNav && CSS.supports('padding-bottom: env(safe-area-inset-bottom)')) {
+                bottomNav.style.paddingBottom = 'env(safe-area-inset-bottom)';
+            }
+        });
+    </script>
+
+
+</body></html>

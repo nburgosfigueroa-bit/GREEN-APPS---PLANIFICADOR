@@ -1,0 +1,31 @@
+# Dependencias
+node_modules/
+dist/
+build/
+
+# Variables de entorno y secretos
+.env
+.env.local
+.env.*.local
+*.env
+
+# Carpetas temporales y de pruebas
+scratch/
+.system_generated/
+*.tmp
+*.temp
+*.log
+logs/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

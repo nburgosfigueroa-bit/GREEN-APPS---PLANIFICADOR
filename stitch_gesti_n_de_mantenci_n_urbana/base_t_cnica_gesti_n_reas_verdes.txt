@@ -1,0 +1,8 @@
+App de Mantenimiento de Áreas Verdes y Gestión Urbana:
+- Tareas: Mantenimiento de mobiliario, podas urbanas, operación de camión tolva con minicargador.
+- Flujo de Datos: Formulario potente -> Excel en OneDrive -> Reporte automático -> Dashboard interactivo.
+- Multimedia: Los usuarios comparten imágenes y videos.
+- Almacenamiento: Estructura en OneDrive por [Código Área Verde] / [Tipo de Trabajo].
+- Salida: Generación de PDF (Orden de Trabajo/Informe).
+- Notificaciones: Cadenas de correo automáticas.
+- Control: Botón de cierre de trabajos vía email o dashboard para encargados.

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cierre de Trabajos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2e3132",
+                        "on-tertiary-fixed": "#161d1f",
+                        "tertiary-container": "#363d3f",
+                        "on-surface": "#191c1d",
+                        "on-secondary-fixed": "#241a00",
+                        "primary-container": "#1a4332",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#ebc246",
+                        "on-primary-container": "#85af99",
+                        "primary": "#002d1d",
+                        "tertiary-fixed-dim": "#c1c8ca",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#dde4e6",
+                        "on-tertiary-container": "#a0a7aa",
+                        "tertiary": "#202729",
+                        "on-primary-fixed-variant": "#264e3d",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#ffe08b",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-bright": "#f8f9fa",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9fa",
+                        "primary-fixed-dim": "#a4d0b9",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "primary-fixed": "#c0edd4",
+                        "on-primary-fixed": "#002114",
+                        "inverse-on-surface": "#f0f1f2",
+                        "inverse-primary": "#a4d0b9",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-container": "#fdd355",
+                        "surface-tint": "#3e6654",
+                        "on-secondary-fixed-variant": "#584400",
+                        "on-background": "#191c1d",
+                        "outline-variant": "#c1c8c2",
+                        "outline": "#717973",
+                        "on-secondary-container": "#735a00",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#414944",
+                        "on-tertiary-fixed-variant": "#41484a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#745b00",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface": "#f8f9fa",
+                        "surface-variant": "#e1e3e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xl": "64px",
+                        "container-max": "1280px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "base": "8px",
+                        "gutter": "20px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-technical": ["JetBrains Mono"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "button-text": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-technical": ["13px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "button-text": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-container-high w-full sticky top-0 border-b border-outline-variant dark:border-outline z-40 transition-colors duration-200">
+<div class="flex flex-col px-md py-sm w-full container mx-auto">
+<div class="flex justify-between items-center w-full">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a mature male urban management supervisor wearing a bright safety yellow vest over a dark green utility shirt, standing outdoors in bright daylight. The lighting is crisp and functional, reflecting a modern industrial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDahWPeD5Qhzh4xMSf8-AAb8yB84uBhypzdw_4t4TPdAn-NrTuVAf6qm9RUs4Xfsx4l0YAAoRekJNOMNrQqgiVApCTXV_1Kzj1vKzFYzGJsb8itUbO1YF6PPkTf09WjcbUaMNpmBc5cmu-w9te1dWICyTyO0HcLk4xIG2jCOBrFeR-LszAeTH3KmCnjGTGi3Jg9xKqMrj04HJrHh2OwNcAlH4CvKIGypXME-tOV9Ptbpe-e1EQqhfcE"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed-dim md:font-headline-lg md:text-headline-lg font-bold tracking-tight">Gestión Urbana</h1>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-2xl" data-icon="location_on">location_on</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow container mx-auto px-sm md:px-md py-md mb-20 md:mb-0">
+<div class="mb-md">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface mb-xs">Cierre de Trabajos</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Revisión y aprobación de tareas pendientes.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-md">
+<!-- Pending Reviews Column -->
+<div class="lg:col-span-8 flex flex-col gap-sm">
+<!-- Review Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col relative">
+<div class="absolute left-0 top-0 bottom-0 w-xs bg-secondary-container"></div>
+<div class="p-md pl-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="inline-flex items-center px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-technical text-label-technical mb-2">
+                                    Para Revisión
+                                </span>
+<h3 class="font-button-text text-button-text text-on-surface">Reparación de luminaria sector norte</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">ID: #TRB-4928 | Operador: Carlos G.</p>
+</div>
+<span class="font-label-technical text-label-technical text-on-surface-variant">Hace 2h</span>
+</div>
+<!-- Multimedia Evidence -->
+<div class="mb-md">
+<p class="font-label-technical text-label-technical text-on-surface-variant mb-2">Evidencia Adjunta:</p>
+<div class="flex gap-sm overflow-x-auto pb-2">
+<div class="w-32 h-24 flex-shrink-0 rounded bg-surface-variant border border-outline-variant overflow-hidden relative">
+<img alt="Evidencia 1" class="w-full h-full object-cover" data-alt="A close-up view of a newly installed LED street light fixture mounted on a metal pole against a clear blue sky. The lighting is bright and sunny, highlighting the crisp metallic finish of the light housing, fitting the modern industrial utility aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA75GMBFj-wCKPJ3nOjziuw1LutyFJWvpDW9Gx7LHOjGCdE13PVS9FOPelAbBIEd0Sq4qXVIm-6XYRnfATOQH65cLqc_Sp3OinKuSOOx7CkxiRunPZPu42MEIN1dRzhYPfh5e4iBpQD1k_zkFTNiPY4iHubK5ZGDNdQqBdlFcxPlQYZLa3FVB0Dz-osczmx9YpVf9_lQiNyHcx8Ou767bkzA1q5hXwkGxttCD0yFcA8kmfWO-xaBBnU"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 bg-surface/50 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-on-surface">zoom_in</span>
+</div>
+</div>
+<div class="w-32 h-24 flex-shrink-0 rounded bg-surface-variant border border-outline-variant overflow-hidden relative">
+<img alt="Evidencia 2" class="w-full h-full object-cover" data-alt="A medium shot of an electrical utility box open on a sidewalk, showing neatly organized, color-coded wiring inside. The scene is illuminated by harsh daylight, casting sharp shadows, consistent with a robust, field-operator technical environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAkfMDvQZZUWLfUKw_8mehR13p5MQvdmziGQS2yuxgN4NqGHhkEerfwYwqVIV1k1tPlmlr2InkGxGQQeagiBuygI3EbT94qjNAvPJGiFOLIXsEcYREqUwJmWR_TE0gAeEKWTctTRdO5-h8PRzcLdUsjh5moeoeWobCfQfP4HJiMv0plfjiKmZYYEoL79VPV8DBAr69j7lPhQB-uf_UzbiDsN8QGkJj1Dd7obVNLv1HqXJo-lOZEJ4R"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 bg-surface/50 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-on-surface">zoom_in</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-sm pt-sm border-t border-outline-variant mt-auto">
+<button class="flex-1 bg-primary text-on-primary font-button-text text-button-text py-3 px-4 rounded hover:bg-surface-tint transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Aprobar y Cerrar
+                            </button>
+<button class="flex-1 bg-surface border-2 border-outline text-on-surface font-button-text text-button-text py-3 px-4 rounded hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="cancel">cancel</span>
+                                Rechazar
+                            </button>
+</div>
+</div>
+</div>
+<!-- Review Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden flex flex-col relative opacity-75">
+<div class="absolute left-0 top-0 bottom-0 w-xs bg-secondary-container"></div>
+<div class="p-md pl-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="inline-flex items-center px-2 py-1 rounded bg-secondary-container text-on-secondary-container font-label-technical text-label-technical mb-2">
+                                    Para Revisión
+                                </span>
+<h3 class="font-button-text text-button-text text-on-surface">Poda de árboles av. principal</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">ID: #TRB-4925 | Operador: Luis M.</p>
+</div>
+<span class="font-label-technical text-label-technical text-on-surface-variant">Hace 5h</span>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-sm pt-sm border-t border-outline-variant mt-auto">
+<button class="flex-1 bg-primary text-on-primary font-button-text text-button-text py-3 px-4 rounded hover:bg-surface-tint transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Aprobar y Cerrar
+                            </button>
+<button class="flex-1 bg-surface border-2 border-outline text-on-surface font-button-text text-button-text py-3 px-4 rounded hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="cancel">cancel</span>
+                                Rechazar
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar -->
+<div class="lg:col-span-4 flex flex-col gap-md">
+<!-- Recent Closures Widget -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-md">
+<h3 class="font-button-text text-button-text text-on-surface mb-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-outline" data-icon="history">history</span>
+                        Cierres Recientes
+                    </h3>
+<ul class="flex flex-col gap-0">
+<li class="py-sm border-b border-outline-variant last:border-b-0 flex items-start gap-sm">
+<div class="w-8 h-8 rounded bg-primary-container text-on-primary-container flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div>
+<p class="font-label-technical text-label-technical text-on-surface">Mantenimiento bomba riego</p>
+<p class="font-label-technical text-label-technical text-on-surface-variant mt-1">Aprobado por ti - 10:30 AM</p>
+</div>
+</li>
+<li class="py-sm border-b border-outline-variant last:border-b-0 flex items-start gap-sm">
+<div class="w-8 h-8 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-sm" data-icon="close" data-weight="fill" style="font-variation-settings: 'FILL' 1;">close</span>
+</div>
+<div>
+<p class="font-label-technical text-label-technical text-on-surface">Limpieza desagüe pluvial</p>
+<p class="font-label-technical text-label-technical text-on-surface-variant mt-1">Rechazado - Faltan fotos</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface dark:bg-inverse-surface fixed bottom-0 w-full z-50 border-t border-outline-variant dark:border-outline shadow-lg dark:shadow-none flex justify-around items-center px-sm py-xs transition-transform duration-150">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant p-2 hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded w-16">
+<span class="material-symbols-outlined mb-1" data-icon="assignment">assignment</span>
+<span class="font-label-technical text-[10px] uppercase tracking-wider">Formulario</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 hover:bg-surface-container-high dark:hover:bg-tertiary-container w-16">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
+<span class="font-label-technical text-[10px] uppercase tracking-wider">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant p-2 hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded w-16">
+<span class="material-symbols-outlined mb-1" data-icon="perm_media">perm_media</span>
+<span class="font-label-technical text-[10px] uppercase tracking-wider">Multimedia</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant p-2 hover:bg-surface-container-high dark:hover:bg-tertiary-container rounded w-16">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="font-label-technical text-[10px] uppercase tracking-wider">Ajustes</span>
+</button>
+</nav>
+</body></html>

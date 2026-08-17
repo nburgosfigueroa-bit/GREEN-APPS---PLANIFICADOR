@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard Interactivo - Gestión Urbana</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Hanken+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2e3132",
+                        "on-tertiary-fixed": "#161d1f",
+                        "tertiary-container": "#363d3f",
+                        "on-surface": "#191c1d",
+                        "on-secondary-fixed": "#241a00",
+                        "primary-container": "#1a4332",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#ebc246",
+                        "on-primary-container": "#85af99",
+                        "primary": "#002d1d",
+                        "tertiary-fixed-dim": "#c1c8ca",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#dde4e6",
+                        "on-tertiary-container": "#a0a7aa",
+                        "tertiary": "#202729",
+                        "on-primary-fixed-variant": "#264e3d",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#ffe08b",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d9dadb",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-bright": "#f8f9fa",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9fa",
+                        "primary-fixed-dim": "#a4d0b9",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "primary-fixed": "#c0edd4",
+                        "on-primary-fixed": "#002114",
+                        "inverse-on-surface": "#f0f1f2",
+                        "inverse-primary": "#a4d0b9",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-container": "#fdd355",
+                        "surface-tint": "#3e6654",
+                        "on-secondary-fixed-variant": "#584400",
+                        "on-background": "#191c1d",
+                        "outline-variant": "#c1c8c2",
+                        "outline": "#717973",
+                        "on-secondary-container": "#735a00",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#414944",
+                        "on-tertiary-fixed-variant": "#41484a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#745b00",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface": "#f8f9fa",
+                        "surface-variant": "#e1e3e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xl": "64px",
+                        "container-max": "1280px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "base": "8px",
+                        "gutter": "20px",
+                        "lg": "40px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-technical": ["JetBrains Mono"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "button-text": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-technical": ["13px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "button-text": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex flex-col px-md py-sm z-40 transition-colors duration-200">
+<div class="flex items-center justify-between w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<img alt="User Avatar" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a female urban landscape manager in her 30s. She is wearing a dark green utility uniform. Bright, clean lighting, outdoor urban park setting blurred in the background. Modern, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI9KN6krfxWJnpuH-VGyw0FI13vwSFtuVF8BtOAhQQOIfk4YG9T1NXY1ZTg9P8-gFRRGXP5WyyYYIOU14PXHzCOalg6EsQJeL2FQKP5xv-j6c3DbUCS_2Rto8w4pNwLqWm1Oi7RkIp18pUgSjtA23t2N0QEJBx6rMZ9ks2WwK5bFDsIksfl_Ql8BYQrBb_-YsOUEZcsx2qZQJPqYSGC12SiJRnvCCwJLEmYn3KvxLmk8muo4FO7G9N"/>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">Gestión Urbana</h1>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors duration-200 text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">location_on</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-container-max mx-auto px-md py-md flex flex-col gap-md">
+<!-- Filter Section -->
+<section class="flex flex-col gap-xs">
+<label class="font-label-technical text-label-technical text-on-surface-variant uppercase" for="area-code">Filtro de Sector</label>
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg pl-[40px] pr-sm py-sm font-body-md text-body-md text-on-surface focus:border-[2px] focus:border-primary focus:outline-none transition-all placeholder:text-on-surface-variant/50" id="area-code" placeholder="Código de Área Verde (ej. Z-Norte-04)" type="text"/>
+</div>
+</section>
+<!-- KPI Productivity Summary (Bento Grid) -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-sm">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col justify-between shadow-sm">
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Productividad</span>
+<div class="mt-sm flex items-end gap-xs">
+<span class="font-display-lg text-display-lg text-primary leading-none">84</span>
+<span class="font-button-text text-button-text text-primary mb-1">%</span>
+</div>
+<div class="mt-xs flex items-center gap-1 text-primary-fixed-dim">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span class="font-label-technical text-label-technical">+12% vs sem ant.</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col justify-between shadow-sm">
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Intervenciones</span>
+<div class="mt-sm flex items-end gap-xs">
+<span class="font-display-lg text-display-lg text-on-surface leading-none">142</span>
+</div>
+<div class="mt-xs text-on-surface-variant font-label-technical text-label-technical">
+                    Total completadas
+                </div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col justify-between shadow-sm col-span-2 md:col-span-2 bg-gradient-to-br from-primary-container to-primary text-on-primary-container relative overflow-hidden">
+<div class="relative z-10">
+<span class="font-label-technical text-label-technical text-primary-fixed-dim uppercase">Alerta del Sistema</span>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary mt-xs mb-sm">2 Zonas Críticas</h3>
+<button class="bg-secondary-container text-on-secondary-container font-button-text text-button-text px-4 py-2 rounded-full inline-flex items-center gap-2 hover:bg-secondary hover:text-on-secondary transition-colors w-max">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+                        Revisar Ahora
+                    </button>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-8 text-[120px] opacity-10 text-on-primary">nature</span>
+</div>
+</section>
+<!-- Tasks by Status Chart -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm flex flex-col gap-md">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Tareas por Estado</h2>
+<button class="p-1 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Custom CSS Bar Chart -->
+<div class="w-full flex h-[32px] rounded-full overflow-hidden bg-surface-container border border-outline-variant/30">
+<div class="bg-primary h-full transition-all duration-500 flex items-center justify-center text-on-primary font-label-technical text-[11px]" style="width: 60%;" title="Completado: 60%">60%</div>
+<div class="bg-secondary-container h-full transition-all duration-500 flex items-center justify-center text-on-secondary-container font-label-technical text-[11px]" style="width: 25%;" title="Pendiente: 25%">25%</div>
+<div class="bg-error h-full transition-all duration-500 flex items-center justify-center text-on-error font-label-technical text-[11px]" style="width: 15%;" title="Atrasado: 15%">15%</div>
+</div>
+<!-- Legend -->
+<div class="flex justify-between items-center pt-xs">
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Completado (142)</span>
+</div>
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded-full bg-secondary-container"></div>
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Pendiente (58)</span>
+</div>
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded-full bg-error"></div>
+<span class="font-label-technical text-label-technical text-on-surface-variant uppercase">Atrasado (35)</span>
+</div>
+</div>
+</section>
+<!-- Recent Activities List -->
+<section class="flex flex-col gap-sm">
+<div class="flex justify-between items-end mb-xs">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Actividades Recientes</h2>
+<a class="font-button-text text-button-text text-primary hover:underline" href="#">Ver Todo</a>
+</div>
+<div class="flex flex-col gap-sm">
+<!-- Status: Completado (Green Accent) -->
+<div class="bg-surface-container-lowest border border-outline-variant border-l-[4px] border-l-primary rounded-xl p-md flex items-center justify-between hover:bg-surface-bright transition-colors cursor-pointer shadow-sm group">
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary font-label-technical text-label-technical">Poda</span>
+<span class="text-on-surface-variant font-label-technical text-label-technical">Hoy, 09:30 AM</span>
+</div>
+<h4 class="font-button-text text-button-text text-on-surface">Sector Norte - Parque Central</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm truncate max-w-[250px]">Poda de mantenimiento en línea de árboles perimetrales.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Status: Pendiente (Yellow Accent) -->
+<div class="bg-surface-container-lowest border border-outline-variant border-l-[4px] border-l-secondary-container rounded-xl p-md flex items-center justify-between hover:bg-surface-bright transition-colors cursor-pointer shadow-sm group">
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-secondary-container/20 text-on-secondary-container font-label-technical text-label-technical">Irrigación</span>
+<span class="text-on-surface-variant font-label-technical text-label-technical">Programado: 14:00 PM</span>
+</div>
+<h4 class="font-button-text text-button-text text-on-surface">Plaza de los Fundadores</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm truncate max-w-[250px]">Revisión de aspersores sector B.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Status: Atrasado (Red Accent) -->
+<div class="bg-surface-container-lowest border border-outline-variant border-l-[4px] border-l-error rounded-xl p-md flex items-center justify-between hover:bg-surface-bright transition-colors cursor-pointer shadow-sm group">
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-error/10 text-error font-label-technical text-label-technical">Infraestructura</span>
+<span class="text-error font-label-technical text-label-technical">Atrasado 2 días</span>
+</div>
+<h4 class="font-button-text text-button-text text-on-surface">Ciclovía Este - Tramo 3</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm truncate max-w-[250px]">Reparación de luminaria vandalizada.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only shell anchor) -->
+<nav class="fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface shadow-lg flex justify-around items-center px-sm py-xs md:hidden scale-95 transition-transform duration-150" style="transform: scale(1);">
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">assignment</span>
+<span class="font-label-technical text-[10px] mt-1">Formulario</span>
+</a>
+<!-- Active -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1.5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px] icon-fill">dashboard</span>
+<span class="font-label-technical text-[10px] mt-1 font-bold">Dashboard</span>
+</a>
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">perm_media</span>
+<span class="font-label-technical text-[10px] mt-1">Multimedia</span>
+</a>
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="font-label-technical text-[10px] mt-1">Ajustes</span>
+</a>
+</nav>
+<!-- Desktop Side Nav Spacer equivalent (Optional, hidden on mobile) -->
+<aside class="hidden md:flex fixed left-0 top-[73px] bottom-0 w-20 border-r border-outline-variant bg-surface flex-col items-center py-md gap-lg">
+<a class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors" href="#" title="Formulario"><span class="material-symbols-outlined">assignment</span></a>
+<a class="p-3 bg-secondary-container text-on-secondary-container rounded-xl transition-colors" href="#" title="Dashboard"><span class="material-symbols-outlined icon-fill">dashboard</span></a>
+<a class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors" href="#" title="Multimedia"><span class="material-symbols-outlined">perm_media</span></a>
+<a class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors mt-auto" href="#" title="Ajustes"><span class="material-symbols-outlined">settings</span></a>
+</aside>
+<!-- Desktop main content offset -->
+<style>
+        @media (min-width: 768px) {
+            main { padding-left: 104px; } /* 80px sidebar + 24px padding */
+        }
+    </style>
+<script>
+        // Simple micro-interaction for input focus state
+        const filterInput = document.getElementById('area-code');
+        const filterContainer = filterInput.parentElement;
+        
+        filterInput.addEventListener('focus', () => {
+            filterContainer.querySelector('.material-symbols-outlined').classList.replace('text-on-surface-variant', 'text-primary');
+        });
+        
+        filterInput.addEventListener('blur', () => {
+            filterContainer.querySelector('.material-symbols-outlined').classList.replace('text-primary', 'text-on-surface-variant');
+        });
+    </script>
+</body></html>

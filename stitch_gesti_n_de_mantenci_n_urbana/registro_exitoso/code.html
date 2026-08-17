@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Registro Exitoso - Gestión Urbana</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e1e3e4",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#363d3f",
+                      "tertiary-fixed-dim": "#c1c8ca",
+                      "secondary": "#745b00",
+                      "surface-tint": "#3e6654",
+                      "on-primary-fixed-variant": "#264e3d",
+                      "surface-bright": "#f8f9fa",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-container": "#a0a7aa",
+                      "surface-dim": "#d9dadb",
+                      "error": "#ba1a1a",
+                      "primary": "#002d1d",
+                      "background": "#f8f9fa",
+                      "surface-container-low": "#f3f4f5",
+                      "secondary-fixed": "#ffe08b",
+                      "surface": "#f8f9fa",
+                      "surface-variant": "#e1e3e4",
+                      "on-secondary-fixed": "#241a00",
+                      "inverse-primary": "#a4d0b9",
+                      "on-secondary-container": "#735a00",
+                      "on-tertiary-fixed-variant": "#41484a",
+                      "tertiary": "#202729",
+                      "on-error-container": "#93000a",
+                      "surface-container-high": "#e7e8e9",
+                      "surface-container": "#edeeef",
+                      "on-primary": "#ffffff",
+                      "inverse-surface": "#2e3132",
+                      "outline": "#717973",
+                      "secondary-container": "#fdd355",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-container": "#85af99",
+                      "secondary-fixed-dim": "#ebc246",
+                      "tertiary-fixed": "#dde4e6",
+                      "primary-fixed": "#c0edd4",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary-fixed-variant": "#584400",
+                      "on-primary-fixed": "#002114",
+                      "on-tertiary-fixed": "#161d1f",
+                      "on-surface": "#191c1d",
+                      "on-error": "#ffffff",
+                      "on-background": "#191c1d",
+                      "outline-variant": "#c1c8c2",
+                      "primary-fixed-dim": "#a4d0b9",
+                      "primary-container": "#1a4332",
+                      "on-surface-variant": "#414944"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "20px",
+                      "base": "8px",
+                      "sm": "12px",
+                      "lg": "40px",
+                      "xs": "4px",
+                      "md": "24px",
+                      "xl": "64px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "button-text": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-technical": [
+                              "JetBrains Mono"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "button-text": [
+                              "16px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-technical": [
+                              "13px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .animate-progress-fill {
+            animation: fillProgress 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .animate-scale-in {
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes scaleIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen flex flex-col items-center justify-center relative p-md overflow-hidden"><div class="mb-xl relative z-10">
+    <img src="https://lh3.googleusercontent.com/aida/AP1WRLuvzUHQbQrMlyhdPspRZA4xEJ5da3QwNg9Ev9Qi1rK2CihSwxzrC0f3wyCFHb6RSK_y6sg8TBUowcnstidxLCFT06QBZ7u60T1fOETRAUQFAnyL_JV7e7eZ5V9trPYFQE_j_NvB0euHcCLcGML8dxP958SI6RECYPnkc5aS-n6V1C9zxXF87EPlCK28X0UlejAjxKrRvLnxcix8SWjBLu41fq9_BQwjMpfLtDxCm3941kiZgqxp-AVdj48" alt="Logo Gestión Urbana" class="h-12 w-auto object-contain">
+</div>
+<!-- Decorative Background Element (Subtle grid to imply technical environment) -->
+<div class="absolute inset-0 pointer-events-none opacity-5" style="background-image: radial-gradient(var(--tw-colors-on-surface) 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-xl p-xl flex flex-col items-center text-center shadow-sm relative z-10">
+<!-- Success Icon -->
+<div class="mb-lg h-24 w-24 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed animate-scale-in">
+<span class="material-symbols-outlined" style="font-size: 64px; font-variation-settings: &quot;FILL&quot; 1;">check_circle</span>
+</div>
+<!-- Typography Cluster -->
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-sm tracking-tight">
+            ¡Registro Exitoso!
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl">
+            Tu perfil ha sido creado correctamente en el sistema de Gestión Urbana.
+        </p>
+<!-- Redirection Status & Progress -->
+<div class="w-full flex flex-col items-center space-y-sm mt-md">
+<!-- Linear Progress Bar -->
+<div aria-label="Redirigiendo" class="w-full h-xs bg-surface-variant rounded-full overflow-hidden" role="progressbar">
+<div class="h-full bg-primary rounded-full animate-progress-fill w-0"></div>
+</div>
+<!-- Status Text -->
+<div class="flex items-center gap-2 mt-xs text-on-surface-variant opacity-80">
+<span class="material-symbols-outlined text-[16px] animate-spin" style="font-variation-settings: &quot;FILL&quot; 0;">autorenew</span>
+<p class="font-label-technical text-label-technical">
+                    Te redireccionaremos a tu perfil en unos segundos...
+                </p>
+</div>
+</div>
+</main>
+<!-- Footer Credits -->
+<footer class="absolute bottom-md w-full text-center px-md z-10 pointer-events-none">
+<p class="font-label-technical text-label-technical text-on-tertiary-container uppercase tracking-wider">
+            Diseñado y desarrollado por profesionales del área
+        </p>
+</footer>
+
+
+</body></html>

@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenApps — Sistema de Gestión Urbana</title>
+  <meta name="description" content="Sistema de gestión de mantenimiento de áreas verdes y operaciones urbanas. Controla órdenes de trabajo, multimedia y reportes operativos.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Google Fonts: Stitch design system -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+  <!-- Tailwind Design Tokens — exactamente los de Stitch -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary":                   "#002d1d",
+            "on-primary":                "#ffffff",
+            "primary-container":         "#1a4332",
+            "on-primary-container":      "#85af99",
+            "primary-fixed":             "#c0edd4",
+            "primary-fixed-dim":         "#a4d0b9",
+            "on-primary-fixed":          "#002114",
+            "on-primary-fixed-variant":  "#264e3d",
+            "secondary":                 "#745b00",
+            "on-secondary":              "#ffffff",
+            "secondary-container":       "#fdd355",
+            "on-secondary-container":    "#735a00",
+            "secondary-fixed":           "#ffe08b",
+            "secondary-fixed-dim":       "#ebc246",
+            "on-secondary-fixed":        "#241a00",
+            "on-secondary-fixed-variant":"#584400",
+            "tertiary":                  "#202729",
+            "on-tertiary":               "#ffffff",
+            "tertiary-container":        "#363d3f",
+            "on-tertiary-container":     "#a0a7aa",
+            "tertiary-fixed":            "#dde4e6",
+            "tertiary-fixed-dim":        "#c1c8ca",
+            "on-tertiary-fixed":         "#161d1f",
+            "on-tertiary-fixed-variant": "#41484a",
+            "error":                     "#ba1a1a",
+            "on-error":                  "#ffffff",
+            "error-container":           "#ffdad6",
+            "on-error-container":        "#93000a",
+            "surface":                   "#f8f9fa",
+            "surface-dim":               "#d9dadb",
+            "surface-bright":            "#f8f9fa",
+            "surface-container-lowest":  "#ffffff",
+            "surface-container-low":     "#f3f4f5",
+            "surface-container":         "#edeeef",
+            "surface-container-high":    "#e7e8e9",
+            "surface-container-highest": "#e1e3e4",
+            "surface-variant":           "#e1e3e4",
+            "surface-tint":              "#3e6654",
+            "on-surface":                "#191c1d",
+            "on-surface-variant":        "#414944",
+            "background":                "#f8f9fa",
+            "on-background":             "#191c1d",
+            "outline":                   "#717973",
+            "outline-variant":           "#c1c8c2",
+            "inverse-surface":           "#2e3132",
+            "inverse-on-surface":        "#f0f1f2",
+            "inverse-primary":           "#a4d0b9",
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "lg":      "0.25rem",
+            "xl":      "0.5rem",
+            "2xl":     "0.75rem",
+            "full":    "9999px",
+          },
+          spacing: {
+            "xs":   "4px",
+            "sm":   "12px",
+            "md":   "24px",
+            "lg":   "40px",
+            "xl":   "64px",
+            "gutter": "20px",
+            "container-max": "1280px",
+          },
+          fontFamily: {
+            "headline": ["Hanken Grotesk", "sans-serif"],
+            "body":     ["Inter", "sans-serif"],
+            "mono":     ["JetBrains Mono", "monospace"],
+          },
+          fontSize: {
+            "display":   ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "title":     ["18px", { lineHeight: "28px", fontWeight: "600" }],
+            "body-lg":   ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            "body":      ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "label":     ["13px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "500" }],
+            "micro":     ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "500" }],
+          },
+          maxWidth: {
+            "container": "1280px",
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Material Symbols defaults */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      user-select: none;
+    }
+    .icon-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* SPA page transitions */
+    .page { display: none; }
+    .page.active { display: flex; }
+
+    /* Scrollbar hide */
+    ::-webkit-scrollbar { width: 0; background: transparent; }
+    * { scrollbar-width: none; }
+
+    /* Input/select base */
+    select, input, textarea {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Active nav indicator */
+    .nav-active {
+      background-color: #fdd355;
+      color: #735a00;
+      border-radius: 9999px;
+    }
+
+    /* Hover card transition */
+    .task-card { transition: all 0.15s ease; }
+    .task-card:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+
+    /* Upload zone */
+    .upload-zone { transition: all 0.2s ease; border: 2px dashed #a4d0b9; }
+    .upload-zone:hover { border-color: #002d1d; background: rgba(0,45,29,0.04); }
+    .upload-zone.drag-over { border-color: #002d1d; background: rgba(0,45,29,0.08); }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin 0.8s linear infinite; }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #2e3132; color: #f0f1f2; padding: 10px 20px; border-radius: 9999px;
+      font-family: 'Inter', sans-serif; font-size: 14px;
+      opacity: 0; transition: all 0.3s ease; z-index: 9999; white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+
+<body class="bg-background text-on-background font-body antialiased min-h-screen">
+
+  <!-- ================================================ -->
+  <!-- TOAST GLOBAL                                      -->
+  <!-- ================================================ -->
+  <div id="toast"></div>
+
+  <!-- ================================================ -->
+  <!-- PAGE: LOGIN                                       -->
+  <!-- ================================================ -->
+  <div id="page-login" class="page active flex-col justify-center items-center min-h-screen p-md bg-background">
+    <main class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm flex flex-col">
+
+      <!-- Hero banner -->
+      <div class="relative h-48 w-full overflow-hidden bg-surface-container-high">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80'); filter: brightness(0.85);"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/85 to-transparent flex items-end p-md">
+          <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-primary-fixed-dim text-4xl icon-fill">eco</span>
+            <h1 class="font-headline text-headline-md text-on-primary">GreenApps</h1>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form area -->
+      <div class="p-md flex flex-col gap-md">
+        <div class="text-center">
+          <h2 class="font-headline text-headline-md text-on-surface mb-xs">Bienvenido</h2>
+          <p class="font-body text-body text-on-surface-variant text-sm">Acceso al sistema de gestión urbana. Ingrese sus credenciales para continuar.</p>
+        </div>
+
+        <form id="loginForm" class="flex flex-col gap-md" onsubmit="return false;">
+          <!-- Email -->
+          <div class="flex flex-col gap-xs">
+            <label class="font-mono text-label text-on-surface-variant uppercase" for="loginEmail">CORREO ELECTRÓNICO</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">mail</span>
+              <input id="loginEmail" type="email" placeholder="usuario@greenapps.com"
+                class="w-full bg-surface border border-outline-variant rounded-xl py-sm pl-10 pr-sm font-body text-body text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all">
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="flex flex-col gap-xs">
+            <div class="flex justify-between items-center">
+              <label class="font-mono text-label text-on-surface-variant uppercase" for="loginPass">CONTRASEÑA</label>
+              <button type="button" class="font-body text-sm text-primary hover:underline">Recuperar Contraseña</button>
+            </div>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">lock</span>
+              <input id="loginPass" type="password" placeholder="••••••••"
+                class="w-full bg-surface border border-outline-variant rounded-xl py-sm pl-10 pr-sm font-body text-body text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all">
+            </div>
+          </div>
+
+          <!-- Captcha simulado -->
+          <div class="bg-surface-container-low border border-outline-variant rounded-xl p-sm flex items-center justify-between">
+            <div class="flex items-center gap-sm">
+              <input id="captcha" type="checkbox" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
+              <label for="captcha" class="font-body text-body text-on-surface cursor-pointer select-none">No soy un robot</label>
+            </div>
+            <span class="material-symbols-outlined text-outline text-2xl">verified_user</span>
+          </div>
+
+          <!-- Botón principal -->
+          <button type="button" id="btnLogin"
+            class="w-full bg-primary text-on-primary font-headline text-title py-sm rounded-full flex items-center justify-center gap-sm hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all">
+            <span>Iniciar Sesión</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="relative flex items-center">
+          <div class="flex-grow border-t border-outline-variant"></div>
+          <span class="flex-shrink-0 mx-3 font-mono text-label text-on-surface-variant bg-surface-container-lowest px-2">ó cree un nuevo perfil</span>
+          <div class="flex-grow border-t border-outline-variant"></div>
+        </div>
+
+        <!-- Acceso social / Crear perfil -->
+        <div class="flex flex-col gap-sm">
+          <button type="button"
+            class="w-full bg-surface border border-outline-variant text-on-surface font-headline text-body py-sm rounded-full flex items-center justify-center gap-sm hover:bg-surface-container active:scale-95 transition-all"
+            onclick="navigate('crear-perfil')">
+            <span class="material-symbols-outlined text-xl">person_add</span>
+            <span>Crear Nuevo Perfil</span>
+          </button>
+          <button type="button"
+            class="w-full bg-surface border border-outline-variant text-on-surface font-headline text-body py-sm rounded-full flex items-center justify-center gap-sm hover:bg-surface-container active:scale-95 transition-all">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png" class="w-5 h-5 object-contain" alt="Microsoft">
+            <span>Continuar con Microsoft</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="mt-lg text-center">
+      <p class="font-mono text-label text-on-surface-variant">Diseñado para profesionales del área urbana</p>
+    </footer>
+  </div><!-- /page-login -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: CREAR PERFIL                               -->
+  <!-- ================================================ -->
+  <div id="page-crear-perfil" class="page flex-col justify-center items-center min-h-screen p-md bg-surface">
+    <main class="w-full max-w-[480px]">
+      <div class="mb-lg flex flex-col items-center text-center">
+        <span class="material-symbols-outlined text-primary text-5xl mb-sm icon-fill">person_add</span>
+        <h1 class="font-headline text-headline-md md:text-headline-lg text-primary">Crear Nuevo Perfil</h1>
+        <p class="font-body text-body text-on-surface-variant mt-xs">Ingrese los datos técnicos para registrar el nuevo usuario en el sistema.</p>
+      </div>
+
+      <form id="crearPerfilForm" class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md shadow-sm flex flex-col gap-md" onsubmit="return false;">
+
+        <!-- Nombre -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpNombre">
+            <span class="material-symbols-outlined text-base">badge</span> Nombre Completo
+          </label>
+          <input id="cpNombre" type="text" placeholder="Ej. Juan Pérez" required
+            class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
+        </div>
+
+        <!-- RUT -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpRut">
+            <span class="material-symbols-outlined text-base">id_card</span> RUT
+          </label>
+          <input id="cpRut" type="text" placeholder="Ej. 12.345.678-9" required
+            class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
+        </div>
+
+        <!-- Email -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpEmail">
+            <span class="material-symbols-outlined text-base">mail</span> Email
+          </label>
+          <input id="cpEmail" type="email" placeholder="correo@empresa.com" required
+            class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
+        </div>
+
+        <!-- Password -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpPass">
+            <span class="material-symbols-outlined text-base">lock</span> Contraseña
+          </label>
+          <input id="cpPass" type="password" placeholder="••••••••" required
+            class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
+        </div>
+
+        <!-- Rol -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpRol">
+            <span class="material-symbols-outlined text-base">admin_panel_settings</span> Rol
+          </label>
+          <div class="relative">
+            <select id="cpRol" required
+              class="appearance-none bg-surface-container-low border border-outline-variant rounded-lg p-sm pr-10 font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all cursor-pointer">
+              <option value="" disabled selected>Seleccione un rol...</option>
+              <option value="admin">Administrador</option>
+              <option value="lider">Líder de Equipo (Supervisores y Capataces)</option>
+              <option value="encargado">Encargado (Cierre de OT)</option>
+              <option value="inspeccion">Inspección Técnica (beta)</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+          </div>
+        </div>
+
+        <!-- Contrato -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpContrato">
+            <span class="material-symbols-outlined text-base">description</span> Contrato
+          </label>
+          <div class="relative">
+            <select id="cpContrato" required
+              class="appearance-none bg-surface-container-low border border-outline-variant rounded-lg p-sm pr-10 font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all cursor-pointer">
+              <option value="" disabled selected>Seleccione un contrato...</option>
+              <option value="maipu_3">Maipú Zona 3 (AKRO)</option>
+              <option value="maipu_6">Maipú Zona 6 (AKRO)</option>
+              <option value="maipu_7">Maipú Zona 7 (NÚCLEO)</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+          </div>
+        </div>
+
+        <!-- Botón -->
+        <button type="button" id="btnCrearPerfil"
+          class="mt-sm bg-primary text-on-primary font-headline text-title rounded-full py-sm px-md w-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none">
+          <span class="material-symbols-outlined text-xl icon-fill">check_circle</span>
+          Crear Perfil
+        </button>
+
+        <button type="button" onclick="navigate('login')"
+          class="text-center font-body text-body text-primary hover:underline">
+          ← Volver al inicio de sesión
+        </button>
+      </form>
+    </main>
+  </div><!-- /page-crear-perfil -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: REGISTRO EXITOSO                           -->
+  <!-- ================================================ -->
+  <div id="page-registro-exitoso" class="page flex-col justify-center items-center min-h-screen p-md bg-background">
+    <main class="w-full max-w-sm text-center flex flex-col items-center gap-md">
+      <div class="w-24 h-24 rounded-full bg-primary flex items-center justify-center shadow-lg">
+        <span class="material-symbols-outlined text-on-primary text-5xl icon-fill">check_circle</span>
+      </div>
+      <h1 class="font-headline text-headline-lg text-primary">¡Perfil Creado!</h1>
+      <p class="font-body text-body text-on-surface-variant">El nuevo usuario ha sido registrado exitosamente en el sistema.</p>
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md w-full text-left flex flex-col gap-sm">
+        <div class="flex justify-between items-center">
+          <span class="font-mono text-label text-on-surface-variant uppercase">Nombre</span>
+          <span class="font-body text-body text-on-surface font-medium" id="resNombre">—</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="font-mono text-label text-on-surface-variant uppercase">Rol</span>
+          <span class="font-body text-body text-on-surface font-medium" id="resRol">—</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="font-mono text-label text-on-surface-variant uppercase">Contrato</span>
+          <span class="font-body text-body text-on-surface font-medium" id="resContrato">—</span>
+        </div>
+      </div>
+      <button onclick="navigate('dashboard')"
+        class="w-full bg-primary text-on-primary font-headline text-title py-sm rounded-full flex items-center justify-center gap-sm hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all">
+        <span>Ir al Dashboard</span>
+        <span class="material-symbols-outlined">dashboard</span>
+      </button>
+    </main>
+  </div><!-- /page-registro-exitoso -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: DASHBOARD                                  -->
+  <!-- ================================================ -->
+  <div id="page-dashboard" class="page flex-col min-h-screen bg-background pb-20 md:pb-0">
+
+    <!-- Top App Bar -->
+    <header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex px-md py-sm z-40">
+      <div class="flex items-center justify-between w-full max-w-container mx-auto">
+        <div class="flex items-center gap-sm">
+          <div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-surface-variant">person</span>
+          </div>
+          <h1 class="font-headline text-headline-md text-primary tracking-tight">Gestión Urbana</h1>
+        </div>
+        <button class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
+          <span class="material-symbols-outlined">location_on</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="w-full max-w-container mx-auto px-md py-md flex flex-col gap-md md:pl-28">
+
+      <!-- Filtro -->
+      <section class="flex flex-col gap-xs">
+        <label class="font-mono text-label text-on-surface-variant uppercase" for="dashFilter">Filtro de Sector</label>
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+          <input id="dashFilter" type="text" placeholder="Código de Área Verde (ej. Z-Norte-04)"
+            class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl pl-10 pr-sm py-sm font-body text-body text-on-surface focus:border-2 focus:border-primary focus:outline-none transition-all placeholder:text-on-surface-variant/50">
+        </div>
+      </section>
+
+      <!-- KPI Cards -->
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-sm">
+        <!-- Productividad -->
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md flex flex-col justify-between shadow-sm">
+          <span class="font-mono text-label text-on-surface-variant uppercase">Productividad</span>
+          <div class="mt-sm flex items-end gap-xs">
+            <span class="font-headline text-display text-primary leading-none">84</span>
+            <span class="font-headline text-title text-primary mb-1">%</span>
+          </div>
+          <div class="mt-xs flex items-center gap-1 text-primary-fixed-dim">
+            <span class="material-symbols-outlined text-base">trending_up</span>
+            <span class="font-mono text-label">+12% vs sem ant.</span>
+          </div>
+        </div>
+
+        <!-- Intervenciones -->
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md flex flex-col justify-between shadow-sm">
+          <span class="font-mono text-label text-on-surface-variant uppercase">Intervenciones</span>
+          <div class="mt-sm flex items-end gap-xs">
+            <span class="font-headline text-display text-on-surface leading-none" id="kpiTotal">142</span>
+          </div>
+          <div class="mt-xs font-mono text-label text-on-surface-variant">Total completadas</div>
+        </div>
+
+        <!-- Alerta (wide) -->
+        <div class="bg-gradient-to-br from-primary-container to-primary text-on-primary-container rounded-2xl p-md flex flex-col justify-between shadow-sm col-span-2 relative overflow-hidden">
+          <div class="relative z-10">
+            <span class="font-mono text-label text-primary-fixed-dim uppercase">Alerta del Sistema</span>
+            <h3 class="font-headline text-headline-md text-on-primary mt-xs mb-sm">2 Zonas Críticas</h3>
+            <button class="bg-secondary-container text-on-secondary-container font-headline text-label px-4 py-2 rounded-full inline-flex items-center gap-2 hover:bg-secondary hover:text-on-secondary transition-colors"
+              onclick="navigate('cierre')">
+              <span class="material-symbols-outlined text-lg">warning</span>
+              Revisar Ahora
+            </button>
+          </div>
+          <span class="material-symbols-outlined absolute -right-4 -bottom-8 text-[120px] opacity-10 text-on-primary icon-fill">nature</span>
+        </div>
+      </section>
+
+      <!-- Barra de estado de tareas -->
+      <section class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md shadow-sm flex flex-col gap-md">
+        <div class="flex justify-between items-center">
+          <h2 class="font-headline text-headline-md text-on-surface">Tareas por Estado</h2>
+          <button class="p-1 rounded hover:bg-surface-container-high transition-colors text-on-surface-variant">
+            <span class="material-symbols-outlined">more_vert</span>
+          </button>
+        </div>
+        <div class="w-full flex h-8 rounded-full overflow-hidden bg-surface-container border border-outline-variant/30">
+          <div class="bg-primary h-full flex items-center justify-center text-on-primary font-mono text-micro transition-all duration-700" style="width:60%">60%</div>
+          <div class="bg-secondary-container h-full flex items-center justify-center text-on-secondary-container font-mono text-micro transition-all duration-700" style="width:25%">25%</div>
+          <div class="bg-error h-full flex items-center justify-center text-on-error font-mono text-micro transition-all duration-700" style="width:15%">15%</div>
+        </div>
+        <div class="flex flex-wrap gap-x-4 gap-y-1">
+          <div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-primary"></div><span class="font-mono text-label text-on-surface-variant uppercase">Completado (142)</span></div>
+          <div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-secondary-container"></div><span class="font-mono text-label text-on-surface-variant uppercase">Pendiente (58)</span></div>
+          <div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-error"></div><span class="font-mono text-label text-on-surface-variant uppercase">Atrasado (35)</span></div>
+        </div>
+      </section>
+
+      <!-- Actividades Recientes -->
+      <section class="flex flex-col gap-sm">
+        <div class="flex justify-between items-end mb-xs">
+          <h2 class="font-headline text-headline-md text-on-surface">Actividades Recientes</h2>
+          <button onclick="navigate('tareas')" class="font-headline text-title text-primary hover:underline">Ver Todo</button>
+        </div>
+        <div class="flex flex-col gap-sm" id="actividadesList">
+          <!-- Se llena desde JS -->
+        </div>
+      </section>
+
+      <!-- FAB nueva OT -->
+      <div class="fixed bottom-24 right-md md:bottom-8 z-30">
+        <button onclick="navigate('tareas')"
+          class="bg-secondary-container text-on-secondary-container shadow-lg rounded-full px-5 py-3 flex items-center gap-2 font-headline text-title hover:bg-secondary hover:text-on-secondary active:scale-95 transition-all">
+          <span class="material-symbols-outlined icon-fill">add_task</span>
+          <span class="hidden sm:inline">Nueva OT</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface shadow-lg flex justify-around items-center px-sm py-xs md:hidden">
+      <a onclick="navigate('tareas')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-2xl">assignment</span>
+        <span class="font-mono text-micro mt-1">Formulario</span>
+      </a>
+      <a class="flex flex-col items-center justify-center nav-active px-5 py-1.5 cursor-pointer">
+        <span class="material-symbols-outlined text-2xl icon-fill">dashboard</span>
+        <span class="font-mono text-micro mt-1 font-bold">Dashboard</span>
+      </a>
+      <a onclick="navigate('multimedia')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-2xl">perm_media</span>
+        <span class="font-mono text-micro mt-1">Multimedia</span>
+      </a>
+      <a onclick="navigate('perfil')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-2xl">settings</span>
+        <span class="font-mono text-micro mt-1">Ajustes</span>
+      </a>
+    </nav>
+
+    <!-- Side Nav (Desktop) -->
+    <aside class="hidden md:flex fixed left-0 top-[61px] bottom-0 w-20 border-r border-outline-variant bg-surface flex-col items-center py-md gap-lg z-30">
+      <a onclick="navigate('tareas')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Formulario"><span class="material-symbols-outlined">assignment</span></a>
+      <a class="p-3 bg-secondary-container text-on-secondary-container rounded-xl cursor-pointer" title="Dashboard"><span class="material-symbols-outlined icon-fill">dashboard</span></a>
+      <a onclick="navigate('multimedia')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Multimedia"><span class="material-symbols-outlined">perm_media</span></a>
+      <a onclick="navigate('cierre')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Cierre"><span class="material-symbols-outlined">task_alt</span></a>
+      <a onclick="navigate('perfil')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer mt-auto" title="Perfil"><span class="material-symbols-outlined">settings</span></a>
+    </aside>
+  </div><!-- /page-dashboard -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: TAREAS (NUEVA ORDEN DE TRABAJO)            -->
+  <!-- ================================================ -->
+  <div id="page-tareas" class="page flex-col min-h-screen bg-background pb-20 md:pb-0">
+
+    <header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex px-md py-sm z-40">
+      <div class="flex items-center justify-between w-full max-w-container mx-auto">
+        <div class="flex items-center gap-sm">
+          <div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-surface-variant">person</span>
+          </div>
+          <h1 class="font-headline text-headline-md text-primary tracking-tight">Gestión Urbana</h1>
+        </div>
+        <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high text-primary transition-colors">
+          <span class="material-symbols-outlined">location_on</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-1 px-md py-md pb-28 flex flex-col gap-md max-w-container mx-auto w-full md:pl-28 md:grid md:grid-cols-12">
+
+      <!-- Encabezado contextual -->
+      <div class="flex flex-col gap-xs md:col-span-12">
+        <span class="font-mono text-label text-on-surface-variant uppercase">CONTRATO: MAIPÚ ZONA 6</span>
+        <h2 class="font-headline text-headline-md text-on-surface">Órdenes de Trabajo</h2>
+        <p class="font-body text-body text-on-surface-variant">Herramienta diseñada para simplificar tus solicitudes de trabajos especiales.</p>
+      </div>
+
+      <!-- Formulario principal -->
+      <form id="taskForm" class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md flex flex-col gap-md md:col-span-8 shadow-sm" onsubmit="return false;">
+
+        <!-- Solicitante -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant uppercase" for="tSolicitante">Solicitante *</label>
+          <div class="relative">
+            <select id="tSolicitante" required
+              class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none transition-all cursor-pointer">
+              <option value="" disabled selected>Seleccione solicitante</option>
+              <option value="mun">Municipalidad</option>
+              <option value="vec">Vecino / Comunidad</option>
+              <option value="int">Interno / Supervisión</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+          </div>
+        </div>
+
+        <!-- Código Área Verde -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant uppercase" for="tArea">Código de Área Verde *</label>
+          <div class="relative">
+            <select id="tArea" required
+              class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none transition-all cursor-pointer">
+              <option value="" disabled selected>Seleccione código (Ej: AV-042)</option>
+              <option value="AV-042">AV-042 - Parque Central Sur</option>
+              <option value="AV-115">AV-115 - Plaza Los Héroes</option>
+              <option value="AV-089">AV-089 - Bandejón Alameda</option>
+              <option value="AV-201">AV-201 - Jardín Botánico Norte</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+          </div>
+          <button type="button" class="self-start flex items-center gap-xs text-primary font-mono text-label hover:underline mt-1">
+            <span class="material-symbols-outlined text-lg">map</span>
+            <span>Ubicar por GPS / Ver KML</span>
+          </button>
+        </div>
+
+        <!-- Dirección -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant uppercase" for="tDireccion">Dirección o Referencia *</label>
+          <input id="tDireccion" type="text" placeholder="Calle, número o punto de referencia..." required
+            class="w-full h-14 px-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
+        </div>
+
+        <!-- Tipo de Trabajo -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant uppercase" for="tTipoTrabajo">Tipo de Trabajo Operativo *</label>
+          <div class="relative">
+            <select id="tTipoTrabajo" required
+              class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none transition-all cursor-pointer">
+              <option value="" disabled selected>Seleccione categoría</option>
+              <option value="mob">Mantenimiento de Mobiliario</option>
+              <option value="poda">Poda Urbana y Despeje</option>
+              <option value="tolva">Operación Camión Tolva + Minicargador</option>
+              <option value="riego">Revisión de Sistemas de Riego</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+          </div>
+          <div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden mt-1">
+            <div id="workTypeBar" class="h-full w-0 transition-all duration-300 rounded-full"></div>
+          </div>
+        </div>
+
+        <hr class="border-outline-variant/50">
+
+        <!-- Descripción -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant uppercase" for="tDesc">Descripción de la Intervención *</label>
+          <textarea id="tDesc" rows="3" required placeholder="Detalle el estado inicial y las acciones realizadas en terreno..."
+            class="w-full p-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all resize-none"></textarea>
+        </div>
+
+        <!-- Materiales -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant uppercase" for="tMateriales">Materiales / Insumos Utilizados</label>
+          <div class="flex items-center gap-sm py-xs">
+            <input id="tEspecial" type="checkbox" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
+            <label for="tEspecial" class="font-body text-body text-on-surface cursor-pointer select-none">¿Requiere algo especial?</label>
+          </div>
+          <input id="tMateriales" type="text" placeholder="Ej: 5 bolsas basura, 2L lubricante, clavos..."
+            class="w-full h-14 px-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
+        </div>
+
+        <!-- Adjuntar evidencia -->
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant uppercase">Evidencia Gráfica *</label>
+          <div class="upload-zone w-full min-h-24 rounded-2xl flex flex-col items-center justify-center gap-xs cursor-pointer p-md" id="uploadZone">
+            <span class="material-symbols-outlined text-4xl icon-fill text-primary">add_a_photo</span>
+            <span class="font-mono text-label text-primary">Adjuntar Foto / Video</span>
+            <span class="font-mono text-micro text-on-surface-variant">(JPG, PNG, MP4 — máx. 50MB)</span>
+          </div>
+          <div id="uploadedFiles" class="flex flex-wrap gap-sm"></div>
+        </div>
+
+      </form><!-- /taskForm -->
+
+      <!-- Columna derecha: prioridad + submit -->
+      <div class="flex flex-col gap-sm md:col-span-4 md:mt-14">
+        <div class="bg-surface-container-low border border-outline-variant rounded-2xl p-md flex flex-col gap-sm">
+          <label class="font-mono text-label text-on-surface-variant uppercase" for="tPrioridad">Nivel de Instrucción / Prioridad *</label>
+          <div class="relative">
+            <select id="tPrioridad" required
+              class="w-full h-14 pl-sm pr-10 rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 appearance-none cursor-pointer">
+              <option value="0">0 — Emergencia (Módulo Comunal)</option>
+              <option value="1">1 — Instrucción ITS</option>
+              <option value="2">2 — Instrucción Administrador</option>
+              <option value="3" selected>3 — Instrucción Líder (Supervisión Terreno)</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">priority_high</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-xs">
+          <label class="font-mono text-label text-on-surface-variant uppercase" for="tPlazo">Plazo Máximo de Ejecución</label>
+          <input id="tPlazo" type="date"
+            class="w-full h-14 px-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
+        </div>
+
+        <button id="btnSubmitTask" type="button"
+          class="w-full h-14 bg-primary text-on-primary font-headline text-title rounded-full flex items-center justify-center gap-sm shadow-md active:scale-95 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none">
+          <span class="material-symbols-outlined">cloud_upload</span>
+          <span id="btnTaskText">Registrar Tarea</span>
+        </button>
+      </div>
+
+    </main>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface shadow-lg flex justify-around items-center px-sm py-xs md:hidden">
+      <a class="flex flex-col items-center justify-center nav-active px-4 py-1 cursor-pointer">
+        <span class="material-symbols-outlined icon-fill">assignment</span>
+        <span class="font-mono text-micro mt-1 font-bold">Formulario</span>
+      </a>
+      <a onclick="navigate('dashboard')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-mono text-micro mt-1">Dashboard</span>
+      </a>
+      <a onclick="navigate('multimedia')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined">perm_media</span>
+        <span class="font-mono text-micro mt-1">Multimedia</span>
+      </a>
+      <a onclick="navigate('perfil')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="font-mono text-micro mt-1">Ajustes</span>
+      </a>
+    </nav>
+
+    <!-- Side Nav (Desktop) -->
+    <aside class="hidden md:flex fixed left-0 top-[61px] bottom-0 w-20 border-r border-outline-variant bg-surface flex-col items-center py-md gap-lg z-30">
+      <a class="p-3 bg-secondary-container text-on-secondary-container rounded-xl cursor-pointer" title="Formulario"><span class="material-symbols-outlined icon-fill">assignment</span></a>
+      <a onclick="navigate('dashboard')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Dashboard"><span class="material-symbols-outlined">dashboard</span></a>
+      <a onclick="navigate('multimedia')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Multimedia"><span class="material-symbols-outlined">perm_media</span></a>
+      <a onclick="navigate('cierre')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Cierre"><span class="material-symbols-outlined">task_alt</span></a>
+      <a onclick="navigate('perfil')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer mt-auto" title="Perfil"><span class="material-symbols-outlined">settings</span></a>
+    </aside>
+  </div><!-- /page-tareas -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: MULTIMEDIA                                 -->
+  <!-- ================================================ -->
+  <div id="page-multimedia" class="page flex-col min-h-screen bg-surface pb-20 md:pb-0">
+
+    <!-- Header -->
+    <header class="w-full sticky top-0 bg-surface z-40 border-b border-outline-variant">
+      <div class="md:hidden flex px-md py-sm w-full items-center justify-between">
+        <h1 class="font-headline text-headline-md text-primary font-bold tracking-tight">Gestión Urbana</h1>
+        <div class="flex items-center gap-sm">
+          <span class="material-symbols-outlined text-on-surface-variant">location_on</span>
+          <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-surface-variant text-base">person</span>
+          </div>
+        </div>
+      </div>
+      <div class="hidden md:flex flex-row px-lg py-md w-full max-w-container mx-auto items-center justify-between">
+        <div class="flex items-center gap-xl">
+          <h1 class="font-headline text-headline-lg text-primary tracking-tight">Gestión Urbana</h1>
+          <nav class="flex items-center gap-md">
+            <a onclick="navigate('tareas')" class="font-headline text-title text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Formulario</a>
+            <a onclick="navigate('dashboard')" class="font-headline text-title text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Dashboard</a>
+            <a class="font-headline text-title text-primary flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-xl cursor-pointer">
+              <span class="material-symbols-outlined icon-fill">perm_media</span>
+              Multimedia
+            </a>
+            <a onclick="navigate('perfil')" class="font-headline text-title text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Ajustes</a>
+          </nav>
+        </div>
+        <div class="flex items-center gap-md">
+          <div class="flex items-center gap-2 text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full">
+            <span class="material-symbols-outlined text-lg">location_on</span>
+            <span class="font-mono text-label">Sector Norte</span>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-surface-variant">person</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="w-full max-w-container mx-auto px-md md:px-lg pt-md md:pt-xl flex flex-col gap-lg">
+
+      <!-- Header & PDF button -->
+      <section class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+        <div>
+          <h2 class="font-headline text-headline-md md:text-display text-on-surface font-bold">Multimedia y Reportes</h2>
+          <p class="font-body text-body text-on-surface-variant mt-2">Documentación visual y actas de mantenimiento.</p>
+        </div>
+        <button
+          class="bg-secondary-container text-on-secondary-container hover:bg-secondary hover:text-on-secondary transition-colors px-6 py-3 rounded-xl flex items-center gap-2 shadow-sm self-start md:self-auto">
+          <span class="material-symbols-outlined icon-fill">picture_as_pdf</span>
+          <span class="font-headline text-title">Generar Orden de Trabajo PDF</span>
+        </button>
+      </section>
+
+      <!-- Filtros -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-sm bg-surface-container-lowest p-sm border border-outline-variant rounded-2xl">
+        <div class="flex flex-col gap-xs p-2">
+          <label class="font-mono text-label text-on-surface-variant">Código de Área Verde</label>
+          <select class="bg-surface border-none text-on-surface font-body text-body focus:ring-2 focus:ring-primary rounded-xl py-2 outline-none">
+            <option>Todos los sectores</option>
+            <option>AV-104 (Plaza Central)</option>
+            <option>AV-209 (Parque Lineal)</option>
+          </select>
+        </div>
+        <div class="flex flex-col gap-xs p-2 md:border-l border-outline-variant">
+          <label class="font-mono text-label text-on-surface-variant">Tipo de Trabajo</label>
+          <div class="flex gap-2 overflow-x-auto py-1">
+            <span class="bg-primary text-on-primary font-mono text-label px-3 py-1 rounded-full whitespace-nowrap cursor-pointer">Todos</span>
+            <span class="bg-surface-container-high text-on-surface font-mono text-label px-3 py-1 rounded-full whitespace-nowrap cursor-pointer hover:bg-surface-variant transition-colors">Poda</span>
+            <span class="bg-surface-container-high text-on-surface font-mono text-label px-3 py-1 rounded-full whitespace-nowrap cursor-pointer hover:bg-surface-variant transition-colors">Mobiliarios</span>
+            <span class="bg-surface-container-high text-on-surface font-mono text-label px-3 py-1 rounded-full whitespace-nowrap cursor-pointer hover:bg-surface-variant transition-colors">Minicargador</span>
+          </div>
+        </div>
+        <div class="flex flex-col gap-xs p-2 md:border-l border-outline-variant">
+          <label class="font-mono text-label text-on-surface-variant">Fecha</label>
+          <div class="flex items-center gap-2 bg-surface px-3 py-2 rounded-xl cursor-pointer hover:bg-surface-variant transition-colors">
+            <span class="material-symbols-outlined text-on-surface-variant">calendar_today</span>
+            <span class="font-body text-body text-on-surface">Últimos 7 días</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bento: Galería + Reportes -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-md pb-8">
+
+        <!-- Galería (2 cols desktop) -->
+        <section class="lg:col-span-2 flex flex-col gap-sm">
+          <h3 class="font-headline text-title text-on-surface-variant flex items-center gap-2 uppercase tracking-wider">
+            <span class="material-symbols-outlined">photo_library</span>
+            Galería Reciente
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-sm">
+
+            <!-- Card urgente -->
+            <div class="bg-surface-container-lowest border border-l-4 border-outline-variant border-l-error rounded-2xl overflow-hidden flex flex-col relative group sm:col-span-2 lg:col-span-1">
+              <div class="h-48 w-full relative bg-surface-container-highest">
+                <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80" alt="Árbol caído en vía">
+                <div class="absolute top-2 right-2 bg-error text-on-error px-2 py-1 rounded font-mono text-label flex items-center gap-1 shadow-sm">
+                  <span class="material-symbols-outlined text-base">error</span> Urgente
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-xs">
+                <div class="flex justify-between items-start">
+                  <span class="font-headline text-title text-on-surface">Despeje de Vía</span>
+                  <span class="font-mono text-label text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-055</span>
+                </div>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 text-on-surface-variant font-mono text-label">
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">calendar_today</span> Hoy, 08:00</span>
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> Acceso Norte</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card mantenido -->
+            <div class="bg-surface-container-lowest border border-l-4 border-outline-variant border-l-primary rounded-2xl overflow-hidden flex flex-col relative group">
+              <div class="h-48 w-full relative">
+                <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80" alt="Poda altura">
+                <div class="absolute top-2 right-2 bg-surface/90 backdrop-blur-sm px-2 py-1 rounded text-primary font-mono text-label flex items-center gap-1">
+                  <span class="material-symbols-outlined text-base">check_circle</span> Mantenido
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-xs">
+                <div class="flex justify-between items-start">
+                  <span class="font-headline text-title text-on-surface">Poda de Altura</span>
+                  <span class="font-mono text-label text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-104</span>
+                </div>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 text-on-surface-variant font-mono text-label">
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">calendar_today</span> 24 Oct, 09:30</span>
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> Plaza Central</span>
+                </div>
+              </div>
+              <div class="absolute inset-0 bg-inverse-surface/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                <button class="bg-surface text-primary rounded-full p-3 shadow-lg pointer-events-auto hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined icon-fill">zoom_in</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card pendiente (video) -->
+            <div class="bg-surface-container-lowest border border-l-4 border-outline-variant border-l-secondary-container rounded-2xl overflow-hidden flex flex-col relative group">
+              <div class="h-48 w-full relative bg-surface-container-highest flex items-center justify-center">
+                <img class="w-full h-full object-cover opacity-80" src="https://images.unsplash.com/photo-1525904097878-94fb15835963?w=600&q=80" alt="Sistema riego">
+                <div class="absolute inset-0 bg-tertiary/20"></div>
+                <button class="absolute bg-surface/90 text-on-surface rounded-full p-4 shadow-lg flex items-center justify-center hover:scale-105 transition-transform z-10">
+                  <span class="material-symbols-outlined icon-fill text-4xl">play_arrow</span>
+                </button>
+                <div class="absolute top-2 right-2 bg-surface/90 backdrop-blur-sm px-2 py-1 rounded text-on-secondary-container font-mono text-label flex items-center gap-1">
+                  <span class="material-symbols-outlined text-base">warning</span> Pendiente
+                </div>
+                <div class="absolute bottom-2 right-2 bg-tertiary/80 text-on-tertiary font-mono text-micro px-2 py-0.5 rounded">0:45</div>
+              </div>
+              <div class="p-4 flex flex-col gap-xs">
+                <div class="flex justify-between items-start">
+                  <span class="font-headline text-title text-on-surface">Falla Sistema Riego</span>
+                  <span class="font-mono text-label text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-209</span>
+                </div>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 text-on-surface-variant font-mono text-label">
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">calendar_today</span> 23 Oct, 14:15</span>
+                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> Parque Lineal</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <button onclick="navigate('tareas')"
+            class="mt-2 w-full py-3 border border-outline text-on-surface font-headline text-title rounded-xl hover:bg-surface-container-low transition-colors">
+            Cargar Más Archivos
+          </button>
+        </section>
+
+        <!-- Reportes generados -->
+        <aside class="flex flex-col gap-sm">
+          <h3 class="font-headline text-title text-on-surface-variant flex items-center gap-2 uppercase tracking-wider">
+            <span class="material-symbols-outlined">folder_open</span>
+            Reportes Generados
+          </h3>
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl flex flex-col overflow-hidden">
+            <!-- Fila 1 -->
+            <div class="flex items-center justify-between p-4 border-b border-surface-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined">description</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-headline text-title text-on-surface leading-tight">Acta_Semanal_AV104.pdf</span>
+                  <span class="font-mono text-label text-on-surface-variant mt-1">2.4 MB • 24 Oct 2023</span>
+                </div>
+              </div>
+              <button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container">
+                <span class="material-symbols-outlined">download</span>
+              </button>
+            </div>
+            <!-- Fila 2 -->
+            <div class="flex items-center justify-between p-4 border-b border-surface-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined">description</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-headline text-title text-on-surface leading-tight">Inventario_Riego_Q3.pdf</span>
+                  <span class="font-mono text-label text-on-surface-variant mt-1">5.1 MB • 20 Oct 2023</span>
+                </div>
+              </div>
+              <button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container">
+                <span class="material-symbols-outlined">download</span>
+              </button>
+            </div>
+            <!-- Fila 3 -->
+            <div class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors group cursor-pointer">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined">description</span>
+                </div>
+                <div class="flex flex-col">
+                  <span class="font-headline text-title text-on-surface leading-tight">Incidente_Emergencia_001.pdf</span>
+                  <span class="font-mono text-label text-on-surface-variant mt-1">1.2 MB • 18 Oct 2023</span>
+                </div>
+              </div>
+              <button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container">
+                <span class="material-symbols-outlined">download</span>
+              </button>
+            </div>
+          </div>
+          <div class="p-4 bg-surface-container-high rounded-2xl border border-surface-variant">
+            <p class="font-mono text-label text-on-surface-variant flex items-start gap-2">
+              <span class="material-symbols-outlined text-base mt-0.5">info</span>
+              Los reportes se retienen 30 días antes de ser archivados en la nube central.
+            </p>
+          </div>
+        </aside>
+
+      </div>
+    </main>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant shadow-lg flex justify-around items-center px-sm py-xs">
+      <a onclick="navigate('tareas')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined">assignment</span>
+        <span class="font-mono text-micro mt-1">Formulario</span>
+      </a>
+      <a onclick="navigate('dashboard')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="font-mono text-micro mt-1">Dashboard</span>
+      </a>
+      <a class="flex flex-col items-center justify-center nav-active px-4 py-1 cursor-pointer">
+        <span class="material-symbols-outlined icon-fill">perm_media</span>
+        <span class="font-mono text-micro mt-1 font-bold">Multimedia</span>
+      </a>
+      <a onclick="navigate('perfil')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="font-mono text-micro mt-1">Ajustes</span>
+      </a>
+    </nav>
+  </div><!-- /page-multimedia -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: CIERRE DE TRABAJOS                         -->
+  <!-- ================================================ -->
+  <div id="page-cierre" class="page flex-col min-h-screen bg-background pb-20 md:pb-0">
+
+    <header class="bg-surface w-full sticky top-0 border-b border-outline-variant z-40">
+      <div class="flex px-md py-sm w-full container mx-auto justify-between items-center">
+        <div class="flex items-center gap-sm">
+          <div class="w-10 h-10 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-surface-variant">person</span>
+          </div>
+          <h1 class="font-headline text-headline-md text-primary font-bold tracking-tight">Gestión Urbana</h1>
+        </div>
+        <span class="material-symbols-outlined text-primary text-2xl">location_on</span>
+      </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-sm md:px-md py-md mb-20 md:mb-0">
+      <div class="mb-md">
+        <h2 class="font-headline text-headline-md md:text-headline-lg text-on-surface mb-xs">Cierre de Trabajos</h2>
+        <p class="font-body text-body text-on-surface-variant">Revisión y aprobación de tareas pendientes.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-md">
+
+        <!-- Tarjetas de revisión -->
+        <div class="lg:col-span-8 flex flex-col gap-sm" id="reviewList">
+          <!-- Se llena desde JS -->
+        </div>
+
+        <!-- Sidebar: cierres recientes -->
+        <div class="lg:col-span-4 flex flex-col gap-md">
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md">
+            <h3 class="font-headline text-title text-on-surface mb-sm flex items-center gap-2">
+              <span class="material-symbols-outlined text-outline">history</span>
+              Cierres Recientes
+            </h3>
+            <ul class="flex flex-col gap-0" id="closureHistory">
+              <!-- Se llena desde JS -->
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="md:hidden bg-surface fixed bottom-0 w-full z-50 border-t border-outline-variant shadow-lg flex justify-around items-center px-sm py-xs">
+      <a onclick="navigate('tareas')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg cursor-pointer w-16">
+        <span class="material-symbols-outlined mb-1">assignment</span>
+        <span class="font-mono text-micro uppercase tracking-wider">Formulario</span>
+      </a>
+      <a onclick="navigate('dashboard')" class="flex flex-col items-center justify-center nav-active rounded-full px-4 py-1 w-16 cursor-pointer">
+        <span class="material-symbols-outlined mb-1">dashboard</span>
+        <span class="font-mono text-micro uppercase tracking-wider">Dashboard</span>
+      </a>
+      <a onclick="navigate('multimedia')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg cursor-pointer w-16">
+        <span class="material-symbols-outlined mb-1">perm_media</span>
+        <span class="font-mono text-micro uppercase tracking-wider">Multimedia</span>
+      </a>
+      <a onclick="navigate('perfil')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg cursor-pointer w-16">
+        <span class="material-symbols-outlined mb-1">settings</span>
+        <span class="font-mono text-micro uppercase tracking-wider">Ajustes</span>
+      </a>
+    </nav>
+  </div><!-- /page-cierre -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: MI PERFIL / AJUSTES                        -->
+  <!-- ================================================ -->
+  <div id="page-perfil" class="page flex-col min-h-screen bg-background pb-20 md:pb-0">
+
+    <header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex px-md py-sm z-40">
+      <div class="flex items-center justify-between w-full max-w-container mx-auto">
+        <h1 class="font-headline text-headline-md text-primary tracking-tight">Mi Perfil</h1>
+        <button class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="w-full max-w-container mx-auto px-md py-md flex flex-col gap-md md:pl-28">
+
+      <!-- Avatar + info -->
+      <div class="flex flex-col items-center text-center gap-sm pt-md">
+        <div class="w-24 h-24 rounded-full bg-primary flex items-center justify-center shadow-md border-4 border-surface-container-lowest">
+          <span class="material-symbols-outlined text-on-primary text-5xl">person</span>
+        </div>
+        <div>
+          <h2 class="font-headline text-headline-md text-on-surface" id="perfilNombre">Carlos González</h2>
+          <p class="font-mono text-label text-on-surface-variant uppercase" id="perfilRol">Líder de Equipo</p>
+          <p class="font-mono text-label text-primary mt-1" id="perfilContrato">Maipú Zona 6 (AKRO)</p>
+        </div>
+      </div>
+
+      <!-- Datos -->
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+        <div class="flex items-center justify-between p-md border-b border-outline-variant">
+          <div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant">mail</span><span class="font-body text-body text-on-surface" id="perfilEmail">carlos.g@greenapps.com</span></div>
+        </div>
+        <div class="flex items-center justify-between p-md border-b border-outline-variant">
+          <div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant">id_card</span><span class="font-mono text-label text-on-surface-variant uppercase">RUT</span></div>
+          <span class="font-body text-body text-on-surface">12.345.678-9</span>
+        </div>
+        <div class="flex items-center justify-between p-md">
+          <div class="flex items-center gap-sm"><span class="material-symbols-outlined text-on-surface-variant">calendar_today</span><span class="font-mono text-label text-on-surface-variant uppercase">Último acceso</span></div>
+          <span class="font-body text-body text-on-surface">Hoy, 08:30 AM</span>
+        </div>
+      </div>
+
+      <!-- Estadísticas rápidas -->
+      <div class="grid grid-cols-3 gap-sm">
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
+          <span class="font-headline text-headline-lg text-primary" id="perfilOTs">47</span>
+          <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">OTs Total</p>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
+          <span class="font-headline text-headline-lg text-primary">38</span>
+          <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Aprobadas</p>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
+          <span class="font-headline text-headline-lg text-error">3</span>
+          <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Pendientes</p>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+        <button onclick="navigate('crear-perfil')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left">
+          <span class="material-symbols-outlined text-on-surface-variant">person_add</span>
+          <span class="font-body text-body text-on-surface">Crear Nuevo Usuario</span>
+          <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
+        </button>
+        <button onclick="navigate('administracion')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left">
+          <span class="material-symbols-outlined text-on-surface-variant">manage_accounts</span>
+          <span class="font-body text-body text-on-surface">Administración de Perfiles</span>
+          <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
+        </button>
+        <button class="w-full flex items-center gap-md p-md hover:bg-surface-container-low transition-colors text-left">
+          <span class="material-symbols-outlined text-on-surface-variant">help_outline</span>
+          <span class="font-body text-body text-on-surface">Ayuda y Soporte</span>
+          <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Cerrar sesión -->
+      <button onclick="navigate('login'); showToast('Sesión cerrada')"
+        class="w-full border-2 border-error text-error font-headline text-title py-sm rounded-full flex items-center justify-center gap-sm hover:bg-error hover:text-on-error active:scale-95 transition-all">
+        <span class="material-symbols-outlined">logout</span>
+        Cerrar Sesión
+      </button>
+    </main>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface shadow-lg flex justify-around items-center px-sm py-xs md:hidden">
+      <a onclick="navigate('tareas')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-2xl">assignment</span>
+        <span class="font-mono text-micro mt-1">Formulario</span>
+      </a>
+      <a onclick="navigate('dashboard')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-2xl">dashboard</span>
+        <span class="font-mono text-micro mt-1">Dashboard</span>
+      </a>
+      <a onclick="navigate('multimedia')" class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+        <span class="material-symbols-outlined text-2xl">perm_media</span>
+        <span class="font-mono text-micro mt-1">Multimedia</span>
+      </a>
+      <a class="flex flex-col items-center justify-center nav-active px-4 py-1 cursor-pointer">
+        <span class="material-symbols-outlined text-2xl icon-fill">settings</span>
+        <span class="font-mono text-micro mt-1 font-bold">Ajustes</span>
+      </a>
+    </nav>
+
+    <!-- Side Nav (Desktop) -->
+    <aside class="hidden md:flex fixed left-0 top-[61px] bottom-0 w-20 border-r border-outline-variant bg-surface flex-col items-center py-md gap-lg z-30">
+      <a onclick="navigate('tareas')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Formulario"><span class="material-symbols-outlined">assignment</span></a>
+      <a onclick="navigate('dashboard')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Dashboard"><span class="material-symbols-outlined">dashboard</span></a>
+      <a onclick="navigate('multimedia')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Multimedia"><span class="material-symbols-outlined">perm_media</span></a>
+      <a onclick="navigate('cierre')" class="p-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl transition-colors cursor-pointer" title="Cierre"><span class="material-symbols-outlined">task_alt</span></a>
+      <a class="p-3 bg-secondary-container text-on-secondary-container rounded-xl cursor-pointer mt-auto" title="Perfil"><span class="material-symbols-outlined icon-fill">settings</span></a>
+    </aside>
+  </div><!-- /page-perfil -->
+
+
+  <!-- ================================================ -->
+  <!-- PAGE: ADMINISTRACIÓN DE PERFILES                 -->
+  <!-- ================================================ -->
+  <div id="page-administracion" class="page flex-col min-h-screen bg-background pb-20 md:pb-0">
+
+    <header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex px-md py-sm z-40">
+      <div class="flex items-center justify-between w-full max-w-container mx-auto">
+        <div class="flex items-center gap-sm">
+          <button onclick="navigate('perfil')" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant">
+            <span class="material-symbols-outlined">arrow_back</span>
+          </button>
+          <h1 class="font-headline text-headline-md text-primary tracking-tight">Administración</h1>
+        </div>
+        <button onclick="navigate('crear-perfil')"
+          class="bg-secondary-container text-on-secondary-container font-headline text-label px-4 py-2 rounded-full flex items-center gap-1 hover:bg-secondary hover:text-on-secondary transition-colors">
+          <span class="material-symbols-outlined text-lg">person_add</span>
+          Nuevo Usuario
+        </button>
+      </div>
+    </header>
+
+    <main class="w-full max-w-container mx-auto px-md py-md flex flex-col gap-md md:pl-28">
+
+      <!-- Buscador -->
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+        <input type="text" placeholder="Buscar usuario, RUT, rol..."
+          class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl pl-10 pr-sm py-sm font-body text-body text-on-surface focus:border-2 focus:border-primary focus:outline-none transition-all">
+      </div>
+
+      <!-- Resumen rápido -->
+      <div class="grid grid-cols-3 gap-sm">
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
+          <span class="font-headline text-headline-lg text-primary">12</span>
+          <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Total</p>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
+          <span class="font-headline text-headline-lg text-primary">9</span>
+          <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Activos</p>
+        </div>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
+          <span class="font-headline text-headline-lg text-error">3</span>
+          <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Inactivos</p>
+        </div>
+      </div>
+
+      <!-- Lista de usuarios -->
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm" id="userList">
+        <!-- Se llena desde JS -->
+      </div>
+    </main>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface shadow-lg flex justify-around items-center px-sm py-xs md:hidden">
+      <a onclick="navigate('tareas')" class="flex flex-col items-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
+        <span class="material-symbols-outlined">assignment</span><span class="font-mono text-micro mt-1">Formulario</span>
+      </a>
+      <a onclick="navigate('dashboard')" class="flex flex-col items-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
+        <span class="material-symbols-outlined">dashboard</span><span class="font-mono text-micro mt-1">Dashboard</span>
+      </a>
+      <a onclick="navigate('multimedia')" class="flex flex-col items-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
+        <span class="material-symbols-outlined">perm_media</span><span class="font-mono text-micro mt-1">Multimedia</span>
+      </a>
+      <a onclick="navigate('perfil')" class="flex flex-col items-center text-on-surface-variant p-2 hover:bg-surface-container-high rounded-lg cursor-pointer">
+        <span class="material-symbols-outlined">settings</span><span class="font-mono text-micro mt-1">Ajustes</span>
+      </a>
+    </nav>
+  </div><!-- /page-administracion -->
+
+
+  <!-- ================================================ -->
+  <!-- JAVASCRIPT — SUPABASE + ROUTER + LÓGICA         -->
+  <!-- ================================================ -->
+  <script>
+  // ==================== SUPABASE CONFIG ====================
+  const SUPABASE_URL  = 'https://eqecwuzpkxutwitdmcse.supabase.co';
+  const SUPABASE_KEY  = 'sb_publishable_CI8VNVhKCmZf5Rfaqv47eA_0S6L_QsJ';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ==================== ESTADO GLOBAL ====================
+  let currentUser    = null;   // sesión activa
+  let currentPerfil  = null;   // datos de public.perfiles
+
+  // ==================== DATOS LOCALES (fallback/demo) ====================
+  const ACTIVIDADES = [
+    { tipo: 'Poda',          hora: 'Hoy, 09:30 AM',        lugar: 'Sector Norte – Parque Central',   desc: 'Poda de mantenimiento en línea de árboles perimetrales.',  estado: 'completado' },
+    { tipo: 'Irrigación',    hora: 'Programado: 14:00 PM', lugar: 'Plaza de los Fundadores',          desc: 'Revisión de aspersores sector B.',                           estado: 'pendiente'  },
+    { tipo: 'Infraestructura', hora: 'Atrasado 2 días',    lugar: 'Ciclovía Este – Tramo 3',          desc: 'Reparación de luminaria vandalizada.',                       estado: 'atrasado'   },
+    { tipo: 'Mobiliario',    hora: 'Hoy, 11:00 AM',        lugar: 'Parque Bicentenario Sur',          desc: 'Instalación de bancas y señalética.',                        estado: 'completado' },
+  ];
+
+  const REVIEWS = [
+    { id: '#TRB-4928', titulo: 'Reparación de luminaria sector norte', operador: 'Carlos G.', hace: 'Hace 2h',
+      fotos: ['https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=200&q=80','https://images.unsplash.com/photo-1505673542670-a5e3ff5b14a3?w=200&q=80'] },
+    { id: '#TRB-4925', titulo: 'Poda de árboles av. principal', operador: 'Luis M.', hace: 'Hace 5h', fotos: [] },
+  ];
+
+  const HISTORIAL_CIERRES = [
+    { tipo: 'ok',  texto: 'Mantenimiento bomba riego',  detalle: 'Aprobado por ti – 10:30 AM' },
+    { tipo: 'err', texto: 'Limpieza desagüe pluvial',   detalle: 'Rechazado – Faltan fotos'   },
+    { tipo: 'ok',  texto: 'Poda plaza principal',        detalle: 'Aprobado por ti – Ayer'     },
+  ];
+
+  const USUARIOS = [
+    { nombre: 'Carlos González', rut: '12.345.678-9', rol: 'Líder de Equipo',   contrato: 'Maipú Zona 6', activo: true  },
+    { nombre: 'Ana Martínez',    rut: '11.222.333-4', rol: 'Administrador',      contrato: 'Maipú Zona 3', activo: true  },
+    { nombre: 'Luis Morales',    rut: '13.444.555-6', rol: 'Encargado (Cierre)', contrato: 'Maipú Zona 6', activo: true  },
+    { nombre: 'Pedro Fuentes',   rut: '10.111.222-3', rol: 'Insp. Técnica',      contrato: 'Maipú Zona 7', activo: false },
+    { nombre: 'Javiera Rojas',   rut: '14.666.777-8', rol: 'Líder de Equipo',   contrato: 'Maipú Zona 6', activo: true  },
+  ];
+
+  // ==================== ROUTER ====================
+  let currentPage = 'login';
+
+  function navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + page);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo(0, 0);
+      currentPage = page;
+      onPageEnter(page);
+    }
+  }
+
+  function onPageEnter(page) {
+    if (page === 'dashboard') renderDashboard();
+    if (page === 'cierre') renderCierre();
+    if (page === 'administracion') renderAdminList();
+  }
+
+  // ==================== TOAST ====================
+  function showToast(msg, duration = 2500) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  // ==================== LOGIN (Supabase Auth) ====================
+  document.getElementById('btnLogin').addEventListener('click', async () => {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass  = document.getElementById('loginPass').value;
+    const cap   = document.getElementById('captcha').checked;
+    if (!email || !pass) { showToast('⚠ Complete correo y contraseña'); return; }
+    if (!cap)            { showToast('⚠ Marque "No soy un robot"'); return; }
+
+    const btn  = document.getElementById('btnLogin');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined spin">hourglass_top</span><span>Verificando...</span>';
+    btn.disabled = true;
+
+    const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+
+    btn.innerHTML = orig;
+    btn.disabled = false;
+
+    if (error) {
+      showToast('✗ ' + (error.message === 'Invalid login credentials'
+        ? 'Credenciales incorrectas' : error.message), 3500);
+      return;
+    }
+
+    currentUser = data.user;
+    // Cargar perfil desde DB
+    const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
+    currentPerfil = perfil;
+    updateUIWithProfile();
+    navigate('dashboard');
+  });
+
+  // ==================== CREAR PERFIL (Supabase Auth) ====================
+  document.getElementById('btnCrearPerfil').addEventListener('click', async () => {
+    const nombre   = document.getElementById('cpNombre').value.trim();
+    const rut      = document.getElementById('cpRut').value.trim();
+    const email    = document.getElementById('cpEmail').value.trim();
+    const pass     = document.getElementById('cpPass').value;
+    const rolEl    = document.getElementById('cpRol');
+    const contrato = document.getElementById('cpContrato');
+
+    if (!nombre || !rut || !email || !pass || !rolEl.value || !contrato.value) {
+      showToast('⚠ Complete todos los campos'); return;
+    }
+    if (pass.length < 6) { showToast('⚠ La contraseña debe tener al menos 6 caracteres'); return; }
+
+    const btn = document.getElementById('btnCrearPerfil');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined spin">hourglass_top</span><span>Registrando...</span>';
+    btn.disabled = true;
+
+    // Registrar en Supabase Auth con metadatos
+    const { data, error } = await db.auth.signUp({
+      email,
+      password: pass,
+      options: {
+        data: { nombre, rut, rol: rolEl.value, contrato: contrato.value }
+      }
+    });
+
+    btn.innerHTML = orig;
+    btn.disabled = false;
+
+    if (error) {
+      showToast('✗ ' + error.message, 4000); return;
+    }
+
+    // Mostrar confirmación
+    document.getElementById('resNombre').textContent   = nombre;
+    document.getElementById('resRol').textContent      = rolEl.options[rolEl.selectedIndex].text;
+    document.getElementById('resContrato').textContent = contrato.options[contrato.selectedIndex].text;
+    document.getElementById('crearPerfilForm').reset();
+    showToast('✓ Perfil creado — revisa tu email para confirmar');
+    navigate('registro-exitoso');
+  });
+
+  // ==================== DASHBOARD ====================
+  function renderDashboard() {
+    const list = document.getElementById('actividadesList');
+    list.innerHTML = '';
+    ACTIVIDADES.forEach(a => {
+      const borderCol = a.estado === 'completado' ? 'border-l-primary'
+                      : a.estado === 'pendiente'  ? 'border-l-secondary-container'
+                      : 'border-l-error';
+      const badgeBg   = a.estado === 'completado' ? 'bg-primary/10 text-primary'
+                      : a.estado === 'pendiente'  ? 'bg-secondary-container/20 text-on-secondary-container'
+                      : 'bg-error/10 text-error';
+      const timeColor = a.estado === 'atrasado' ? 'text-error' : 'text-on-surface-variant';
+      list.innerHTML += `
+        <div class="task-card bg-surface-container-lowest border border-outline-variant border-l-4 ${borderCol} rounded-2xl p-md flex items-center justify-between cursor-pointer shadow-sm group"
+             onclick="navigate('tareas')">
+          <div class="flex flex-col gap-xs">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded font-mono text-label ${badgeBg}">${a.tipo}</span>
+              <span class="${timeColor} font-mono text-label">${a.hora}</span>
+            </div>
+            <h4 class="font-headline text-title text-on-surface">${a.lugar}</h4>
+            <p class="font-body text-body text-on-surface-variant text-sm truncate max-w-[260px]">${a.desc}</p>
+          </div>
+          <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+        </div>`;
+    });
+  }
+
+  // ==================== CIERRE ====================
+  function renderCierre() {
+    // Tarjetas de revisión
+    const reviewList = document.getElementById('reviewList');
+    reviewList.innerHTML = '';
+    REVIEWS.forEach((r, idx) => {
+      const fotosHtml = r.fotos.map(f => `
+        <div class="w-32 h-24 flex-shrink-0 rounded-xl bg-surface-variant border border-outline-variant overflow-hidden relative group/img">
+          <img src="${f}" alt="Evidencia" class="w-full h-full object-cover">
+          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 bg-surface/50 transition-opacity cursor-pointer">
+            <span class="material-symbols-outlined text-on-surface">zoom_in</span>
+          </div>
+        </div>`).join('');
+      reviewList.innerHTML += `
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden flex flex-col relative ${idx>0?'opacity-80':''}">
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-container rounded-l-2xl"></div>
+          <div class="p-md pl-5">
+            <div class="flex justify-between items-start mb-sm">
+              <div>
+                <span class="inline-flex items-center px-2 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-mono text-label mb-2">Para Revisión</span>
+                <h3 class="font-headline text-title text-on-surface">${r.titulo}</h3>
+                <p class="font-body text-body text-on-surface-variant mt-1">ID: ${r.id} | Operador: ${r.operador}</p>
+              </div>
+              <span class="font-mono text-label text-on-surface-variant whitespace-nowrap">${r.hace}</span>
+            </div>
+            ${r.fotos.length ? `
+            <div class="mb-md">
+              <p class="font-mono text-label text-on-surface-variant mb-2">Evidencia Adjunta:</p>
+              <div class="flex gap-sm overflow-x-auto pb-2">${fotosHtml}</div>
+            </div>` : ''}
+            <div class="flex flex-col sm:flex-row gap-sm pt-sm border-t border-outline-variant">
+              <button onclick="approveTask(${idx})"
+                class="flex-1 bg-primary text-on-primary font-headline text-title py-3 px-4 rounded-xl hover:bg-surface-tint transition-colors flex items-center justify-center gap-2 active:scale-95">
+                <span class="material-symbols-outlined icon-fill">check_circle</span>
+                Aprobar y Cerrar
+              </button>
+              <button onclick="rejectTask(${idx})"
+                class="flex-1 bg-surface border-2 border-outline text-on-surface font-headline text-title py-3 px-4 rounded-xl hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2 active:scale-95">
+                <span class="material-symbols-outlined">cancel</span>
+                Rechazar
+              </button>
+            </div>
+          </div>
+        </div>`;
+    });
+
+    // Historial
+    const hist = document.getElementById('closureHistory');
+    hist.innerHTML = '';
+    HISTORIAL_CIERRES.forEach(c => {
+      const bgIcon = c.tipo === 'ok' ? 'bg-primary-container text-on-primary-container' : 'bg-error-container text-on-error-container';
+      const icon   = c.tipo === 'ok' ? 'check' : 'close';
+      hist.innerHTML += `
+        <li class="py-sm border-b border-outline-variant last:border-b-0 flex items-start gap-sm">
+          <div class="w-8 h-8 rounded-lg ${bgIcon} flex items-center justify-center flex-shrink-0 mt-1">
+            <span class="material-symbols-outlined text-sm icon-fill">${icon}</span>
+          </div>
+          <div>
+            <p class="font-mono text-label text-on-surface">${c.texto}</p>
+            <p class="font-mono text-label text-on-surface-variant mt-1">${c.detalle}</p>
+          </div>
+        </li>`;
+    });
+  }
+
+  function approveTask(idx) {
+    HISTORIAL_CIERRES.unshift({ tipo:'ok', texto: REVIEWS[idx].titulo, detalle:`Aprobado por ti – ahora` });
+    REVIEWS.splice(idx, 1);
+    renderCierre();
+    showToast('✓ Trabajo aprobado y cerrado');
+    document.getElementById('kpiTotal') && (document.getElementById('kpiTotal').textContent = parseInt(document.getElementById('kpiTotal').textContent)+1);
+  }
+
+  function rejectTask(idx) {
+    HISTORIAL_CIERRES.unshift({ tipo:'err', texto: REVIEWS[idx].titulo, detalle:`Rechazado – requiere corrección` });
+    REVIEWS.splice(idx, 1);
+    renderCierre();
+    showToast('✗ Trabajo rechazado');
+  }
+
+  // ==================== ADMIN ====================
+  function renderAdminList() {
+    const list = document.getElementById('userList');
+    list.innerHTML = '';
+    USUARIOS.forEach((u, i) => {
+      const isLast = i === USUARIOS.length - 1;
+      list.innerHTML += `
+        <div class="flex items-center justify-between p-md ${isLast?'':'border-b border-outline-variant'} hover:bg-surface-container-low transition-colors group cursor-pointer">
+          <div class="flex items-center gap-sm">
+            <div class="w-10 h-10 rounded-full ${u.activo ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'} flex items-center justify-center flex-shrink-0 font-headline text-title">
+              ${u.nombre.charAt(0)}
+            </div>
+            <div>
+              <p class="font-headline text-title text-on-surface">${u.nombre}</p>
+              <p class="font-mono text-label text-on-surface-variant">${u.rol} • ${u.contrato}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-sm">
+            <span class="font-mono text-label px-2 py-0.5 rounded-full ${u.activo ? 'bg-primary/10 text-primary' : 'bg-error/10 text-error'}">${u.activo ? 'Activo' : 'Inactivo'}</span>
+            <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+          </div>
+        </div>`;
+    });
+  }
+
+  // ==================== FORMULARIO OT ====================
+  // Barra de color según tipo de trabajo
+  document.getElementById('tTipoTrabajo').addEventListener('change', e => {
+    const bar = document.getElementById('workTypeBar');
+    bar.style.width = '100%';
+    const map = { mob:'bg-secondary', poda:'bg-surface-tint', tolva:'bg-error', riego:'bg-primary' };
+    bar.className = `h-full transition-all duration-300 rounded-full ${map[e.target.value] || 'bg-primary'}`;
+  });
+
+  // Upload zone drag & drop simulado
+  const uploadZone = document.getElementById('uploadZone');
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    addUploadedFiles(files);
+  });
+  uploadZone.addEventListener('click', () => {
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'image/*,video/*';
+    inp.multiple = true;
+    inp.onchange = () => addUploadedFiles(inp.files);
+    inp.click();
+  });
+
+  function addUploadedFiles(files) {
+    const container = document.getElementById('uploadedFiles');
+    Array.from(files).forEach(file => {
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-xs bg-surface-container-low border border-outline-variant rounded-xl px-sm py-xs';
+      div.innerHTML = `<span class="material-symbols-outlined text-primary text-lg">${file.type.startsWith('video') ? 'videocam' : 'image'}</span>
+        <span class="font-mono text-label text-on-surface truncate max-w-[140px]">${file.name}</span>
+        <span class="font-mono text-micro text-on-surface-variant">${(file.size/1024/1024).toFixed(1)}MB</span>`;
+      container.appendChild(div);
+    });
+    showToast(`✓ ${files.length} archivo(s) adjunto(s)`);
+  }
+
+  // ==================== ENVÍO OT (Supabase DB + Storage) ====================
+  document.getElementById('btnSubmitTask').addEventListener('click', async () => {
+    const required = ['tSolicitante','tArea','tDireccion','tTipoTrabajo','tDesc'];
+    const missing = required.filter(id => !document.getElementById(id).value.trim());
+    if (missing.length) { showToast('⚠ Complete los campos obligatorios'); return; }
+
+    // Si no hay sesión activa, guardar localmente
+    if (!currentUser) {
+      submitOTLocal(); return;
+    }
+
+    const btn  = document.getElementById('btnSubmitTask');
+    const text = document.getElementById('btnTaskText');
+    const icon = btn.querySelector('.material-symbols-outlined');
+
+    icon.textContent = 'hourglass_top';
+    icon.classList.add('spin');
+    text.textContent = 'Guardando en base de datos...';
+    btn.disabled = true;
+    btn.classList.replace('bg-primary','bg-surface-tint');
+
+    // 1. Insertar OT en Supabase
+    const otData = {
+      solicitante:       document.getElementById('tSolicitante').value,
+      area_verde:        document.getElementById('tArea').value,
+      direccion:         document.getElementById('tDireccion').value,
+      tipo_trabajo:      document.getElementById('tTipoTrabajo').value,
+      descripcion:       document.getElementById('tDesc').value,
+      materiales:        document.getElementById('tMateriales').value || null,
+      requiere_especial: document.getElementById('tEspecial').checked,
+      prioridad:         parseInt(document.getElementById('tPrioridad').value),
+      plazo:             document.getElementById('tPlazo').value || null,
+      estado:            'pendiente',
+      operador_id:       currentUser.id
+    };
+
+    const { data: otCreada, error: otError } = await db
+      .from('ordenes_trabajo')
+      .insert(otData)
+      .select()
+      .single();
+
+    if (otError) {
+      icon.classList.remove('spin');
+      icon.textContent = 'error';
+      text.textContent = 'Error al guardar';
+      btn.classList.replace('bg-surface-tint','bg-error');
+      showToast('✗ Error: ' + otError.message, 4000);
+      setTimeout(() => {
+        icon.textContent = 'cloud_upload';
+        text.textContent = 'Registrar Tarea';
+        btn.classList.replace('bg-error','bg-primary');
+        btn.disabled = false;
+      }, 3000);
+      return;
+    }
+
+    // 2. Subir archivos adjuntos al Storage (si hay)
+    const fileContainer = document.getElementById('uploadedFiles');
+    const fileItems = fileContainer.querySelectorAll('[data-file]');
+    // Los archivos se almacenan en window._pendingFiles
+    if (window._pendingFiles && window._pendingFiles.length > 0 && otCreada) {
+      text.textContent = 'Subiendo archivos...';
+      for (const file of window._pendingFiles) {
+        const ext  = file.name.split('.').pop();
+        const path = `${otCreada.id}/${Date.now()}_${file.name}`;
+        const { data: up, error: upErr } = await db.storage
+          .from('evidencias')
+          .upload(path, file, { cacheControl: '3600', upsert: false });
+        if (!upErr && up) {
+          // Registrar archivo en tabla
+          await db.from('archivos_multimedia').insert({
+            orden_id:       otCreada.id,
+            nombre_archivo: file.name,
+            tipo_mime:      file.type,
+            tamanio_bytes:  file.size,
+            storage_path:   up.path,
+            subido_por:     currentUser.id
+          });
+        }
+      }
+      window._pendingFiles = [];
+    }
+
+    // 3. Actualizar UI
+    icon.classList.remove('spin');
+    icon.textContent = 'check_circle';
+    text.textContent = '¡Registrado en Supabase!';
+    btn.classList.replace('bg-surface-tint','bg-[#1a4332]');
+
+    // Agregar a datos locales para render inmediato
+    ACTIVIDADES.unshift({
+      tipo:   document.getElementById('tTipoTrabajo').options[document.getElementById('tTipoTrabajo').selectedIndex].text,
+      hora:   'Ahora mismo',
+      lugar:  document.getElementById('tDireccion').value,
+      desc:   document.getElementById('tDesc').value,
+      estado: 'pendiente'
+    });
+    REVIEWS.push({
+      id:       otCreada.codigo || ('#OT-' + otCreada.id.slice(0,6).toUpperCase()),
+      titulo:   document.getElementById('tDesc').value.substring(0,60),
+      operador: currentPerfil?.nombre || 'Usuario',
+      hace:     'Justo ahora',
+      fotos:    []
+    });
+
+    setTimeout(() => {
+      document.getElementById('taskForm').reset();
+      document.getElementById('uploadedFiles').innerHTML = '';
+      document.getElementById('workTypeBar').style.width = '0';
+      window._pendingFiles = [];
+      icon.textContent = 'cloud_upload';
+      text.textContent = 'Registrar Tarea';
+      btn.classList.replace('bg-[#1a4332]','bg-primary');
+      btn.disabled = false;
+      showToast('✓ OT guardada en Supabase');
+      navigate('cierre');
+    }, 2200);
+  });
+
+  // Fallback local si no hay sesión
+  function submitOTLocal() {
+    const btn  = document.getElementById('btnSubmitTask');
+    const text = document.getElementById('btnTaskText');
+    const icon = btn.querySelector('.material-symbols-outlined');
+    icon.textContent = 'hourglass_top';
+    icon.classList.add('spin');
+    text.textContent = 'Guardando localmente...';
+    btn.disabled = true;
+    btn.classList.replace('bg-primary','bg-surface-tint');
+    setTimeout(() => {
+      icon.classList.remove('spin');
+      icon.textContent = 'check_circle';
+      text.textContent = '¡Registrado localmente!';
+      btn.classList.replace('bg-surface-tint','bg-[#1a4332]');
+      ACTIVIDADES.unshift({ tipo: 'Nueva OT', hora:'Ahora', lugar: document.getElementById('tDireccion').value, desc: document.getElementById('tDesc').value, estado:'pendiente' });
+      setTimeout(() => {
+        document.getElementById('taskForm').reset();
+        document.getElementById('uploadedFiles').innerHTML = '';
+        document.getElementById('workTypeBar').style.width = '0';
+        icon.textContent = 'cloud_upload';
+        text.textContent = 'Registrar Tarea';
+        btn.classList.replace('bg-[#1a4332]','bg-primary');
+        btn.disabled = false;
+        showToast('⚠ Guardado local – inicia sesión para sincronizar');
+        navigate('cierre');
+      }, 2000);
+    }, 1000);
+  }
+
+  // ==================== FILTRO DASHBOARD ====================
+  document.getElementById('dashFilter').addEventListener('input', e => {
+    const q = e.target.value.toLowerCase();
+    document.querySelectorAll('#actividadesList > div').forEach(card => {
+      const text = card.textContent.toLowerCase();
+      card.style.display = text.includes(q) ? '' : 'none';
+    });
+  });
+
+  // ==================== ARCHIVOS PENDIENTES ====================
+  // Guardar referencia a files reales para el upload a Storage
+  const _origAddFiles = addUploadedFiles;
+  window._pendingFiles = [];
+  const uploadZoneEl = document.getElementById('uploadZone');
+  // Patch addUploadedFiles para guardar referencias reales
+  function addUploadedFiles(files) {
+    const container = document.getElementById('uploadedFiles');
+    Array.from(files).forEach(file => {
+      window._pendingFiles.push(file); // guardar referencia real
+      const div = document.createElement('div');
+      div.setAttribute('data-file', file.name);
+      div.className = 'flex items-center gap-xs bg-surface-container-low border border-outline-variant rounded-xl px-sm py-xs';
+      div.innerHTML = `<span class="material-symbols-outlined text-primary text-lg">${file.type.startsWith('video') ? 'videocam' : 'image'}</span>
+        <span class="font-mono text-label text-on-surface truncate max-w-[140px]">${file.name}</span>
+        <span class="font-mono text-micro text-on-surface-variant">${(file.size/1024/1024).toFixed(1)}MB</span>`;
+      container.appendChild(div);
+    });
+    showToast(`✓ ${files.length} archivo(s) adjunto(s)`);
+  }
+
+  // ==================== ACTUALIZAR UI CON PERFIL ====================
+  function updateUIWithProfile() {
+    if (!currentPerfil) return;
+    document.getElementById('perfilNombre').textContent  = currentPerfil.nombre  || '—';
+    document.getElementById('perfilRol').textContent     = currentPerfil.rol     || '—';
+    document.getElementById('perfilContrato').textContent= currentPerfil.contrato|| '—';
+    document.getElementById('perfilEmail').textContent   = currentUser?.email    || '—';
+  }
+
+  // ==================== ESCUCHAR CAMBIOS DE SESIÓN ====================
+  db.auth.onAuthStateChange(async (event, session) => {
+    if (session?.user) {
+      currentUser = session.user;
+      const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
+      currentPerfil = perfil;
+      updateUIWithProfile();
+      // Cargar OTs reales en dashboard
+      await loadOTsFromSupabase();
+    } else {
+      currentUser   = null;
+      currentPerfil = null;
+    }
+  });
+
+  // ==================== CARGAR OTs DESDE SUPABASE ====================
+  async function loadOTsFromSupabase() {
+    const { data, error } = await db
+      .from('ordenes_trabajo')
+      .select('*, perfiles(nombre)')
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    if (error || !data) return; // silently fall back to local data
+
+    // Mapa tipo_trabajo a etiquetas
+    const tipoMap = { mob:'Mobiliario', poda:'Poda', tolva:'Camión Tolva', riego:'Riego' };
+    // Convertir a formato interno
+    const realesActividades = data.map(ot => ({
+      tipo:   tipoMap[ot.tipo_trabajo] || ot.tipo_trabajo,
+      hora:   new Date(ot.created_at).toLocaleString('es-CL', { hour:'2-digit', minute:'2-digit', day:'numeric', month:'short' }),
+      lugar:  ot.direccion,
+      desc:   ot.descripcion,
+      estado: ot.estado === 'aprobado' || ot.estado === 'cerrado' ? 'completado'
+            : ot.estado === 'rechazado' ? 'atrasado' : 'pendiente',
+      id:     ot.id
+    }));
+
+    // Solo reemplazar si hay datos reales
+    if (realesActividades.length > 0) {
+      ACTIVIDADES.length = 0;
+      realesActividades.forEach(a => ACTIVIDADES.push(a));
+    }
+
+    // Cargar en REVIEWS los pendientes de revisión
+    const pendientes = data.filter(ot => ot.estado === 'pendiente' || ot.estado === 'en_revision');
+    if (pendientes.length > 0) {
+      REVIEWS.length = 0;
+      pendientes.forEach(ot => REVIEWS.push({
+        id:       ot.id,
+        titulo:   ot.descripcion.substring(0,60),
+        operador: ot.perfiles?.nombre || 'Operador',
+        hace:     new Date(ot.created_at).toLocaleString('es-CL'),
+        fotos:    []
+      }));
+    }
+
+    // Re-renderizar si estamos en dashboard/cierre
+    if (currentPage === 'dashboard') renderDashboard();
+    if (currentPage === 'cierre')    renderCierre();
+
+    // Actualizar KPI total
+    const cerradas = data.filter(ot => ot.estado === 'cerrado' || ot.estado === 'aprobado').length;
+    const kpiEl = document.getElementById('kpiTotal');
+    if (kpiEl && cerradas > 0) kpiEl.textContent = cerradas;
+  }
+
+  // ==================== APROBAR/RECHAZAR OT en Supabase ====================
+  async function approveTask(idx) {
+    const rev = REVIEWS[idx];
+    if (!rev) return;
+
+    if (currentUser) {
+      const { error } = await db.from('ordenes_trabajo')
+        .update({ estado: 'cerrado', revisor_id: currentUser.id })
+        .eq('id', rev.id);
+      if (error) { showToast('✗ Error al aprobar: ' + error.message, 3500); return; }
+    }
+
+    HISTORIAL_CIERRES.unshift({ tipo:'ok', texto: rev.titulo, detalle: `Aprobado por ti – ahora` });
+    REVIEWS.splice(idx, 1);
+    renderCierre();
+    showToast('✓ Trabajo aprobado y cerrado');
+    const kpiEl = document.getElementById('kpiTotal');
+    if (kpiEl) kpiEl.textContent = parseInt(kpiEl.textContent) + 1;
+  }
+
+  async function rejectTask(idx) {
+    const rev = REVIEWS[idx];
+    if (!rev) return;
+
+    if (currentUser) {
+      const { error } = await db.from('ordenes_trabajo')
+        .update({ estado: 'rechazado', revisor_id: currentUser.id })
+        .eq('id', rev.id);
+      if (error) { showToast('✗ Error al rechazar: ' + error.message, 3500); return; }
+    }
+
+    HISTORIAL_CIERRES.unshift({ tipo:'err', texto: rev.titulo, detalle: `Rechazado – requiere corrección` });
+    REVIEWS.splice(idx, 1);
+    renderCierre();
+    showToast('✗ Trabajo rechazado');
+  }
+
+  // ==================== ADMINISTRACIÓN DE USUARIOS ====================
+  async function renderAdminList() {
+    const list = document.getElementById('userList');
+    list.innerHTML = '<div class="p-md text-center font-mono text-label text-on-surface-variant">Cargando usuarios...</div>';
+
+    // Intentar cargar desde Supabase si hay sesión
+    let usuarios = USUARIOS;
+    if (currentUser) {
+      const { data, error } = await db.from('perfiles').select('*').order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        usuarios = data.map(u => ({
+          nombre:   u.nombre,
+          rut:      u.rut || '—',
+          rol:      u.rol,
+          contrato: u.contrato,
+          activo:   u.activo
+        }));
+      }
+    }
+
+    list.innerHTML = '';
+    usuarios.forEach((u, i) => {
+      const isLast = i === usuarios.length - 1;
+      list.innerHTML += `
+        <div class="flex items-center justify-between p-md ${isLast?'':'border-b border-outline-variant'} hover:bg-surface-container-low transition-colors group cursor-pointer">
+          <div class="flex items-center gap-sm">
+            <div class="w-10 h-10 rounded-full ${u.activo ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'} flex items-center justify-center flex-shrink-0 font-headline text-title">
+              ${u.nombre.charAt(0)}
+            </div>
+            <div>
+              <p class="font-headline text-title text-on-surface">${u.nombre}</p>
+              <p class="font-mono text-label text-on-surface-variant">${u.rol} • ${u.contrato}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-sm">
+            <span class="font-mono text-label px-2 py-0.5 rounded-full ${u.activo ? 'bg-primary/10 text-primary' : 'bg-error/10 text-error'}">${u.activo ? 'Activo' : 'Inactivo'}</span>
+            <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+          </div>
+        </div>`;
+    });
+  }
+
+  // ==================== INIT ====================
+  renderDashboard();
+  // Verificar sesión activa al cargar
+  (async () => {
+    const { data: { session } } = await db.auth.getSession();
+    if (session?.user) {
+      currentUser = session.user;
+      const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
+      currentPerfil = perfil;
+      updateUIWithProfile();
+      await loadOTsFromSupabase();
+      // Si hay sesión activa, ir directo al dashboard
+      navigate('dashboard');
+    }
+  })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Administración de Usuarios - Urban Maintenance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "on-tertiary-container": "#a0a7aa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2e3132",
+                        "surface-container-low": "#f3f4f5",
+                        "outline-variant": "#c1c8c2",
+                        "surface": "#f8f9fa",
+                        "tertiary-container": "#363d3f",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed-variant": "#584400",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffe08b",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#a4d0b9",
+                        "primary": "#002d1d",
+                        "secondary-container": "#fdd355",
+                        "outline": "#717973",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-container": "#735a00",
+                        "primary-container": "#1a4332",
+                        "on-tertiary-fixed-variant": "#41484a",
+                        "surface-tint": "#3e6654",
+                        "surface-container": "#edeeef",
+                        "on-primary-fixed": "#002114",
+                        "tertiary": "#202729",
+                        "on-tertiary-fixed": "#161d1f",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "background": "#f8f9fa",
+                        "primary-fixed": "#c0edd4",
+                        "on-surface-variant": "#414944",
+                        "on-surface": "#191c1d",
+                        "on-primary-fixed-variant": "#264e3d",
+                        "surface-dim": "#d9dadb",
+                        "on-error": "#ffffff",
+                        "secondary": "#745b00",
+                        "secondary-fixed-dim": "#ebc246",
+                        "tertiary-fixed-dim": "#c1c8ca",
+                        "primary-fixed-dim": "#a4d0b9",
+                        "on-background": "#191c1d",
+                        "on-secondary-fixed": "#241a00",
+                        "tertiary-fixed": "#dde4e6",
+                        "on-primary-container": "#85af99"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "lg": "40px",
+                        "xs": "4px",
+                        "gutter": "20px",
+                        "base": "8px",
+                        "md": "24px",
+                        "sm": "12px",
+                        "xl": "64px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-technical": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "button-text": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "label-technical": ["13px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "button-text": ["16px", { "lineHeight": "20px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md flex flex-col md:flex-row">
+<!-- Mobile Top App Bar (Relevance Check: This is a sub-page with a "back" action, so global shell navigation is suppressed. We render a specific header for this linear/task-focused intent) -->
+<header class="md:hidden flex items-center justify-between px-md py-sm w-full bg-surface w-full top-0 sticky border-b border-outline-variant flat no shadows">
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:bg-surface-container active:opacity-80 transition-colors duration-200 rounded-full p-xs">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Administración de Usuarios</h1>
+</div>
+<img alt="Profile" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A small circular profile picture of a maintenance supervisor wearing safety gear. Professional headshot in a bright outdoor setting. High quality photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgsYknq9UgHEGvWtnFQO5QgPJNFnSAxtpWJEET6_DvBYEWuylOVioxAbrPtw-3nQb52ALj5Ikn0osK28qC43dGPI7IPZTPL1cbu_DCoq9hj0v-sRXXpq6Z0VVP9hBCoD2hETAPZHNlMP0Nx9-5HkjsgMzYiEEoe8u2oHLBwA0EZQRuRM12lVKlCb1A_KxcKHX1AGjMQ7vv-mWj9nvE5f-mFKfDf4Q-GdAZ1EBsiHRcsSUDk5eatNFo"/>
+</header>
+<!-- Desktop Sidebar (Suppressed for this specific task-focused screen based on logic rules, replaced with a contextual back/navigation block if needed, or assumed to be full width canvas) -->
+<!-- Content Canvas -->
+<main class="flex-1 p-md md:p-lg max-w-container-max mx-auto w-full pb-32 md:pb-lg">
+<!-- Desktop Header -->
+<div class="hidden md:flex items-center gap-md mb-lg border-b border-outline-variant pb-sm">
+<button class="text-on-surface-variant hover:bg-surface-container active:opacity-80 transition-colors duration-200 rounded-full p-sm">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">Administración de Usuarios</h1>
+</div>
+<!-- Summary Stats (Bento Grid approach) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-sm md:gap-md mb-md">
+<div class="bg-surface-container-low rounded-xl p-md border border-outline-variant flex items-center gap-md">
+<div class="bg-primary-container text-on-primary-container p-sm rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<div>
+<p class="font-label-technical text-label-technical text-on-surface-variant uppercase">Total Usuarios</p>
+<p class="font-display-lg text-display-lg text-primary">142</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-md border border-outline-variant flex items-center gap-md relative overflow-hidden">
+<div class="absolute right-0 top-0 w-24 h-24 bg-error-container rounded-bl-full opacity-20 -mr-sm -mt-sm"></div>
+<div class="bg-error-container text-on-error-container p-sm rounded-full flex items-center justify-center relative z-10">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+</div>
+<div class="relative z-10">
+<p class="font-label-technical text-label-technical text-on-surface-variant uppercase">Tickets Soporte</p>
+<p class="font-display-lg text-display-lg text-error">7</p>
+</div>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="mb-md relative">
+<div class="absolute inset-y-0 left-0 pl-sm flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</div>
+<input class="w-full bg-surface-container-highest border-2 border-transparent focus:border-primary focus:bg-surface rounded-lg py-sm pl-lg pr-sm font-body-md text-body-md text-on-surface placeholder-on-surface-variant transition-colors" placeholder="Buscar por nombre o RUT..." type="text"/>
+</div>
+<!-- User List (High-density rows with hairline separators) -->
+<div class="flex flex-col gap-sm">
+<!-- User Card 1 -->
+<div class="bg-surface rounded-lg border border-outline-variant p-sm md:p-md flex flex-col md:flex-row gap-sm md:gap-md items-start md:items-center hover:bg-surface-container-low transition-colors group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-xs bg-primary"></div> <!-- 4px left-accent border -->
+<div class="flex items-center gap-sm flex-1 pl-sm md:pl-0">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-lg flex-shrink-0">
+                        RC
+                    </div>
+<div>
+<h3 class="font-button-text text-button-text text-on-surface">Roberto Carlos</h3>
+<p class="font-label-technical text-label-technical text-on-surface-variant">RUT: 18.234.567-K • Zona Sur</p>
+</div>
+</div>
+<div class="flex flex-wrap md:flex-nowrap items-center gap-xs md:gap-sm w-full md:w-auto">
+<span class="bg-surface-variant text-on-surface-variant font-label-technical text-label-technical px-sm py-xs rounded-full">Operario</span>
+<span class="bg-primary-fixed text-on-primary-fixed font-label-technical text-label-technical px-sm py-xs rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary inline-block"></span> Activo</span>
+</div>
+<div class="flex items-center gap-base w-full md:w-auto justify-end mt-sm md:mt-0 border-t md:border-t-0 border-outline-variant pt-sm md:pt-0">
+<button class="text-on-surface-variant hover:text-primary p-xs rounded-full hover:bg-surface-container transition-colors" title="Restaurar Trabajo Eliminado">
+<span class="material-symbols-outlined">settings_backup_restore</span>
+</button>
+<button class="bg-surface-container-highest text-on-surface px-sm py-xs rounded-lg font-button-text text-button-text hover:bg-surface-variant transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-size: 18px;">edit</span> Editar
+                    </button>
+</div>
+</div>
+<!-- User Card 2 -->
+<div class="bg-surface rounded-lg border border-outline-variant p-sm md:p-md flex flex-col md:flex-row gap-sm md:gap-md items-start md:items-center hover:bg-surface-container-low transition-colors group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-xs bg-secondary"></div> <!-- 4px left-accent border -->
+<div class="flex items-center gap-sm flex-1 pl-sm md:pl-0">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-lg flex-shrink-0">
+                        AM
+                    </div>
+<div>
+<h3 class="font-button-text text-button-text text-on-surface">Ana Muñóz</h3>
+<p class="font-label-technical text-label-technical text-on-surface-variant">RUT: 15.987.654-3 • Zona Norte</p>
+</div>
+</div>
+<div class="flex flex-wrap md:flex-nowrap items-center gap-xs md:gap-sm w-full md:w-auto">
+<span class="bg-surface-variant text-on-surface-variant font-label-technical text-label-technical px-sm py-xs rounded-full">Supervisor</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed font-label-technical text-label-technical px-sm py-xs rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary inline-block"></span> Activo</span>
+</div>
+<div class="flex items-center gap-base w-full md:w-auto justify-end mt-sm md:mt-0 border-t md:border-t-0 border-outline-variant pt-sm md:pt-0">
+<button class="text-on-surface-variant hover:text-primary p-xs rounded-full hover:bg-surface-container transition-colors" title="Restaurar Trabajo Eliminado">
+<span class="material-symbols-outlined">settings_backup_restore</span>
+</button>
+<button class="bg-surface-container-highest text-on-surface px-sm py-xs rounded-lg font-button-text text-button-text hover:bg-surface-variant transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-size: 18px;">edit</span> Editar
+                    </button>
+</div>
+</div>
+<!-- User Card 3 (Inactive) -->
+<div class="bg-surface rounded-lg border border-outline-variant p-sm md:p-md flex flex-col md:flex-row gap-sm md:gap-md items-start md:items-center hover:bg-surface-container-low transition-colors group relative overflow-hidden opacity-75">
+<div class="absolute left-0 top-0 bottom-0 w-xs bg-outline"></div> <!-- 4px left-accent border -->
+<div class="flex items-center gap-sm flex-1 pl-sm md:pl-0">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-outline font-bold text-lg flex-shrink-0">
+                        JP
+                    </div>
+<div>
+<h3 class="font-button-text text-button-text text-outline">Juan Pérez</h3>
+<p class="font-label-technical text-label-technical text-on-surface-variant">RUT: 12.345.678-9 • Zona Centro</p>
+</div>
+</div>
+<div class="flex flex-wrap md:flex-nowrap items-center gap-xs md:gap-sm w-full md:w-auto">
+<span class="bg-surface-container text-outline font-label-technical text-label-technical px-sm py-xs rounded-full">Técnico</span>
+<span class="bg-surface-variant text-outline font-label-technical text-label-technical px-sm py-xs rounded-full flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-outline inline-block"></span> Inactivo</span>
+</div>
+<div class="flex items-center gap-base w-full md:w-auto justify-end mt-sm md:mt-0 border-t md:border-t-0 border-outline-variant pt-sm md:pt-0">
+<button class="text-on-surface-variant hover:text-primary p-xs rounded-full hover:bg-surface-container transition-colors" title="Restaurar Trabajo Eliminado">
+<span class="material-symbols-outlined">settings_backup_restore</span>
+</button>
+<button class="bg-surface-container-highest text-on-surface px-sm py-xs rounded-lg font-button-text text-button-text hover:bg-surface-variant transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-size: 18px;">edit</span> Editar
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (FAB) for Add User -->
+<button class="fixed bottom-lg right-md md:right-lg bg-primary text-on-primary w-14 h-14 rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:bg-primary-container transition-colors z-50">
+<span class="material-symbols-outlined" style="font-size: 28px;">person_add</span>
+</button>
+</body></html>

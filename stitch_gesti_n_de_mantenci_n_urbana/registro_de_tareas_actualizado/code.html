@@ -1,0 +1,359 @@
+<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Registro de Tareas - Gestión Urbana</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-surface": "#2e3132",
+                      "on-tertiary-fixed": "#161d1f",
+                      "tertiary-container": "#363d3f",
+                      "on-surface": "#191c1d",
+                      "on-secondary-fixed": "#241a00",
+                      "primary-container": "#1a4332",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#ebc246",
+                      "on-primary-container": "#85af99",
+                      "primary": "#002d1d",
+                      "tertiary-fixed-dim": "#c1c8ca",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#dde4e6",
+                      "on-tertiary-container": "#a0a7aa",
+                      "tertiary": "#202729",
+                      "on-primary-fixed-variant": "#264e3d",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#ffe08b",
+                      "on-tertiary": "#ffffff",
+                      "surface-dim": "#d9dadb",
+                      "surface-container-low": "#f3f4f5",
+                      "surface-bright": "#f8f9fa",
+                      "on-secondary": "#ffffff",
+                      "background": "#f8f9fa",
+                      "primary-fixed-dim": "#a4d0b9",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#edeeef",
+                      "primary-fixed": "#c0edd4",
+                      "on-primary-fixed": "#002114",
+                      "inverse-on-surface": "#f0f1f2",
+                      "inverse-primary": "#a4d0b9",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-container": "#fdd355",
+                      "surface-tint": "#3e6654",
+                      "on-secondary-fixed-variant": "#584400",
+                      "on-background": "#191c1d",
+                      "outline-variant": "#c1c8c2",
+                      "outline": "#717973",
+                      "on-secondary-container": "#735a00",
+                      "error-container": "#ffdad6",
+                      "on-surface-variant": "#414944",
+                      "on-tertiary-fixed-variant": "#41484a",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary": "#745b00",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface": "#f8f9fa",
+                      "surface-variant": "#e1e3e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "xl": "64px",
+                      "container-max": "1280px",
+                      "xs": "4px",
+                      "md": "24px",
+                      "base": "8px",
+                      "gutter": "20px",
+                      "lg": "40px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-technical": [
+                              "JetBrains Mono"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "button-text": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-technical": [
+                              "13px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "button-text": [
+                              "16px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean app-like feel */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col hide-scroll">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex flex-col px-md py-sm z-40">
+<div class="flex flex-row items-center justify-between w-full">
+<div class="flex items-center gap-sm">
+<!-- Leading Avatar -->
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+</div>
+<!-- Headline -->
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">Gestión Urbana</h1>
+<!-- Trailing Icon -->
+<button aria-label="Location" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors duration-200">
+<span class="material-symbols-outlined text-primary">location_on</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 px-md py-md pb-[100px] flex flex-col gap-md max-w-container-max mx-auto w-full md:px-lg md:py-lg md:grid md:grid-cols-12">
+<!-- Contextual Header -->
+<div class="flex flex-col gap-xs md:col-span-12"><span class="font-label-technical text-label-technical text-on-surface-variant uppercase">CONTRATO: MAIPÚ ZONA 6</span><h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Ordenes de Trabajo</h2><p class="font-body-md text-body-md text-on-surface-variant">Bienvenido, esta herramienta esta diseñada para simplificar tus solicitudes de trabajos especiales.</p></div>
+<!-- Form Card Level 1 Elevation (Pure white + 1px border) -->
+<form class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col gap-md md:col-span-8 shadow-sm" id="taskForm"><div class="flex flex-col gap-xs"><label class="font-label-technical text-label-technical text-on-surface-variant" for="applicant">Solicitante *</label><div class="relative"><select class="w-full h-14 pl-sm pr-10 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md text-on-surface focus:outline-none focus:border-primary focus:border-2 focus:ring-0 appearance-none transition-all cursor-pointer" id="applicant" required=""><option disabled="" selected="" value="">Seleccione solicitante</option><option value="mun">Municipalidad</option><option value="vec">Vecino / Comunidad</option><option value="int">Interno / Supervisión</option></select><span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span></div></div>
+<!-- Selector de Área Verde -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-technical text-label-technical text-on-surface-variant" for="areaSelect">Código de Área Verde *</label>
+<div class="relative">
+<select class="w-full h-14 pl-sm pr-10 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md text-on-surface focus:outline-none focus:border-primary focus:border-2 focus:ring-0 appearance-none transition-all cursor-pointer" id="areaSelect" required="">
+<option disabled="" selected="" value="">Seleccione código (Ej: AV-042)</option>
+<option value="AV-042">AV-042 - Parque Central Sur</option>
+<option value="AV-115">AV-115 - Plaza Los Héroes</option>
+<option value="AV-089">AV-089 - Bandejón Alameda</option>
+<option value="AV-201">AV-201 - Jardín Botánico Norte</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span><button class="mt-2 flex items-center gap-xs text-primary font-label-technical hover:underline" type="button"><span class="material-symbols-outlined text-[18px]">map</span><span class="">Ubicar por GPS / Ver KML</span></button>
+</div>
+</div><div class="flex flex-col gap-xs"><label class="font-label-technical text-label-technical text-on-surface-variant" for="address">Dirección o Referencia *</label><input class="w-full h-14 px-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md text-on-surface focus:outline-none focus:border-primary focus:border-2 focus:ring-0 transition-all" id="address" placeholder="Calle, número o punto de referencia..." required="" type="text"></div>
+<!-- Selector de Tipo de Trabajo -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-technical text-label-technical text-on-surface-variant" for="workType">Tipo de Trabajo Operativo *</label>
+<div class="relative">
+<select class="w-full h-14 pl-sm pr-10 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md text-on-surface focus:outline-none focus:border-primary focus:border-2 focus:ring-0 appearance-none transition-all cursor-pointer" id="workType" required="">
+<option disabled="" selected="" value="">Seleccione categoría</option>
+<option value="mob">Mantenimiento de Mobiliario</option>
+<option value="poda">Poda Urbana y Despeje</option>
+<option value="tolva">Operación Camión Tolva + Minicargador</option>
+<option value="riego">Revisión de Sistemas de Riego</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+</div>
+<!-- Status indicator strip (Visual flare for technical robust feel) -->
+<div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden mt-1">
+<div class="h-full bg-outline-variant w-0 transition-all duration-300" id="workTypeIndicator"></div>
+</div>
+</div>
+<hr class="border-outline-variant/50 my-xs">
+<!-- Descripción -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-technical text-label-technical text-on-surface-variant" for="desc">Descripción de la Intervención *</label>
+<textarea class="w-full p-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md text-on-surface focus:outline-none focus:border-primary focus:border-2 focus:ring-0 transition-all resize-none" id="desc" placeholder="Detalle el estado inicial y las acciones realizadas en terreno..." required="" rows="3"></textarea>
+</div>
+<!-- Materiales -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-technical text-label-technical text-on-surface-variant" for="materials">Materiales / Insumos Utilizados</label>
+<div class="flex items-center gap-sm py-xs"><input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" id="specialReq" type="checkbox"><label class="font-body-md text-on-surface" for="specialReq">¿Requiere algo especial?</label></div><input class="w-full h-14 px-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md text-on-surface focus:outline-none focus:border-primary focus:border-2 focus:ring-0 transition-all" id="materials" placeholder="Ej: 5 bolsas basura, 2L lubricante, clavos..." type="text">
+</div>
+<!-- Multimedia Attachment (Prominent) -->
+<div class="flex flex-col gap-xs mt-sm">
+<label class="font-label-technical text-label-technical text-on-surface-variant">Evidencia Gráfica *</label>
+<button class="w-full h-24 border-2 border-dashed border-primary/50 bg-primary-container/10 text-primary-container hover:bg-primary-container/20 rounded-xl flex flex-col items-center justify-center gap-xs transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" type="button">
+<span class="material-symbols-outlined text-[32px] filled-icon text-primary">add_a_photo</span>
+<span class="font-label-technical text-label-technical text-primary">Adjuntar Foto / Video</span>
+</button>
+</div>
+</form>
+<!-- Submit Action Column -->
+<div class="flex flex-col gap-sm md:col-span-4 md:mt-12">
+<!-- Information Panel -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-md flex flex-col gap-sm"><label class="font-label-technical text-label-technical text-on-surface-variant" for="priority">Nivel de Instrucción / Prioridad *</label><div class="relative"><select class="w-full h-14 pl-sm pr-10 rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md text-on-surface focus:outline-none focus:border-primary focus:border-2 focus:ring-0 appearance-none transition-all cursor-pointer" id="priority" required=""><option value="0">0 Emergencia (Módulo Comunal)</option><option value="1">1 Instrucción ITS</option><option value="2">2 Instrucción Administrador</option><option selected="" value="3">3 Instrucción Líder (Supervisión Terreno)</option></select><span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">priority_high</span></div></div>
+<!-- Submit Button (Primary) -->
+<div class="flex flex-col gap-xs mb-sm"><label class="font-label-technical text-label-technical text-on-surface-variant" for="deadline">Plazo Máximo de Ejecución / Planificar Período</label><input class="w-full h-14 px-sm rounded-lg border border-outline-variant bg-surface-container-lowest text-body-md text-on-surface focus:outline-none focus:border-primary focus:border-2 focus:ring-0 transition-all" id="deadline" type="date"></div><button class="w-full h-14 bg-primary text-on-primary font-button-text text-button-text rounded-full flex items-center justify-center gap-sm shadow-md active:scale-95 transition-transform mt-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" id="submitBtn" type="button">
+<span class="material-symbols-outlined">cloud_upload</span>
+<span id="btnText" class="">Registrar Tarea</span>
+<!-- Loading Spinner (Hidden by default) -->
+<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-on-primary hidden" fill="none" id="btnSpinner" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Shell) -->
+<nav class="fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface shadow-lg md:hidden flex justify-around items-center px-sm py-xs">
+<!-- Active Tab: Formulario -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined filled-icon">assignment</span>
+<span class="font-label-technical text-label-technical mt-1" style="font-size: 10px;">Formulario</span>
+</a>
+<!-- Inactive Tab: Dashboard -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 transition-transform duration-150 hover:bg-surface-container-high rounded-lg active:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-technical text-label-technical mt-1" style="font-size: 10px;">Dashboard</span>
+</a>
+<!-- Inactive Tab: Multimedia -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 transition-transform duration-150 hover:bg-surface-container-high rounded-lg active:scale-95" href="#">
+<span class="material-symbols-outlined">perm_media</span>
+<span class="font-label-technical text-label-technical mt-1" style="font-size: 10px;">Multimedia</span>
+</a>
+<!-- Inactive Tab: Ajustes -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 transition-transform duration-150 hover:bg-surface-container-high rounded-lg active:scale-95" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-technical text-label-technical mt-1" style="font-size: 10px;">Ajustes</span>
+</a>
+</nav>
+<!-- Interactive Micro-interactions Script -->
+<script>
+        // Update color bar based on selection
+        const workTypeSelect = document.getElementById('workType');
+        const indicator = document.getElementById('workTypeIndicator');
+        
+        workTypeSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            indicator.className = 'h-full w-full transition-all duration-300';
+            if(val === 'mob') indicator.classList.add('bg-secondary'); // yellow for furniture
+            else if(val === 'poda') indicator.classList.add('bg-surface-tint'); // green for pruning
+            else if(val === 'tolva') indicator.classList.add('bg-error'); // red for heavy machinery
+            else indicator.classList.add('bg-primary');
+        });
+
+        // Simulate Upload interaction
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const iconUpload = submitBtn.querySelector('.material-symbols-outlined');
+
+        submitBtn.addEventListener('click', () => {
+            // Check basic validity
+            const form = document.getElementById('taskForm');
+            if(!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Loading state
+            iconUpload.classList.add('hidden');
+            btnSpinner.classList.remove('hidden');
+            btnText.innerText = 'Sincronizando...';
+            submitBtn.classList.remove('bg-primary');
+            submitBtn.classList.add('bg-surface-tint');
+            submitBtn.disabled = true;
+
+            // Simulate network delay
+            setTimeout(() => {
+                // Success State
+                btnSpinner.classList.add('hidden');
+                iconUpload.classList.remove('hidden');
+                iconUpload.innerText = 'check_circle';
+                btnText.innerText = '¡Registrado con éxito!';
+                submitBtn.classList.remove('bg-surface-tint');
+                submitBtn.classList.add('bg-[#1a4332]'); // deep success green
+                
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    form.reset();
+                    indicator.style.width = '0%';
+                    iconUpload.innerText = 'cloud_upload';
+                    btnText.innerText = 'Registrar Tarea';
+                    submitBtn.classList.remove('bg-[#1a4332]');
+                    submitBtn.classList.add('bg-primary');
+                    submitBtn.disabled = false;
+                }, 3000);
+
+            }, 2000);
+        });
+    </script>
+
+
+</body></html>
