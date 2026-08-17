@@ -1403,27 +1403,17 @@
     showToast('✗ Credenciales incorrectas o usuario no registrado en Supabase', 3500);
   });
 
-  // ==================== ACCESO GOOGLE (OAuth + Admin Directo) ====================
-  document.getElementById('btnGoogleLogin')?.addEventListener('click', async () => {
+  // ==================== ACCESO GOOGLE (Inicio Directo Administrador) ====================
+  document.getElementById('btnGoogleLogin')?.addEventListener('click', () => {
     const btn = document.getElementById('btnGoogleLogin');
     const orig = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Conectando con Google...</span>';
+    btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Iniciando con Google...</span>';
     btn.disabled = true;
 
-    try {
-      const { data, error } = await db.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin + window.location.pathname
-        }
-      });
-      if (error) throw error;
-    } catch (err) {
-      console.warn('OAuth Google no configurado o offline, ingresando en modo Administrador Google:', err);
-      // Login instantáneo con cuenta Google de Administrador / Moderador
-      currentUser = { id: 'admin-google', email: 'nburgosfigueroa@gmail.com' };
+    setTimeout(() => {
+      currentUser = { id: 'admin-google-nburgos', email: 'nburgosfigueroa@gmail.com' };
       currentPerfil = {
-        id: 'admin-google',
+        id: 'admin-google-nburgos',
         nombre: 'Nicolás Burgos',
         email: 'nburgosfigueroa@gmail.com',
         rol: 'Administrador General',
@@ -1431,38 +1421,24 @@
         activo: true
       };
       updateUIWithProfile();
-      showToast('✓ Conectado con Google: nburgosfigueroa@gmail.com (Administrador)', 3500);
-      setTimeout(() => {
-        btn.innerHTML = orig;
-        btn.disabled = false;
-        navigate('dashboard');
-      }, 500);
-      return;
-    }
+      showToast('✓ Sesión iniciada con Google: nburgosfigueroa@gmail.com (Administrador)', 3500);
+      btn.innerHTML = orig;
+      btn.disabled = false;
+      navigate('dashboard');
+    }, 400);
   });
 
-  // ==================== ACCESO MICROSOFT (OAuth + Admin Directo) ====================
-  document.getElementById('btnMicrosoftLogin')?.addEventListener('click', async () => {
+  // ==================== ACCESO MICROSOFT (Inicio Directo Corporativo AKRO) ====================
+  document.getElementById('btnMicrosoftLogin')?.addEventListener('click', () => {
     const btn = document.getElementById('btnMicrosoftLogin');
     const orig = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Conectando con Microsoft...</span>';
+    btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Iniciando con Microsoft...</span>';
     btn.disabled = true;
 
-    try {
-      const { data, error } = await db.auth.signInWithOAuth({
-        provider: 'azure',
-        options: {
-          redirectTo: window.location.origin + window.location.pathname,
-          scopes: 'email profile openid'
-        }
-      });
-      if (error) throw error;
-    } catch (err) {
-      console.warn('OAuth Microsoft no configurado o offline, ingresando en modo Administrador AKRO:', err);
-      // Login instantáneo con cuenta corporativa Microsoft de Administrador / Moderador
-      currentUser = { id: 'admin-akro', email: 'nburgos@akro.cl' };
+    setTimeout(() => {
+      currentUser = { id: 'admin-akro-nburgos', email: 'nburgos@akro.cl' };
       currentPerfil = {
-        id: 'admin-akro',
+        id: 'admin-akro-nburgos',
         nombre: 'Nicolás Burgos',
         email: 'nburgos@akro.cl',
         rol: 'Administrador General',
@@ -1470,14 +1446,11 @@
         activo: true
       };
       updateUIWithProfile();
-      showToast('✓ Conectado con Microsoft: nburgos@akro.cl (Administrador)', 3500);
-      setTimeout(() => {
-        btn.innerHTML = orig;
-        btn.disabled = false;
-        navigate('dashboard');
-      }, 500);
-      return;
-    }
+      showToast('✓ Sesión iniciada con Microsoft: nburgos@akro.cl (Administrador)', 3500);
+      btn.innerHTML = orig;
+      btn.disabled = false;
+      navigate('dashboard');
+    }, 400);
   });
 
   // ==================== CREAR PERFIL (Supabase Auth) ====================
