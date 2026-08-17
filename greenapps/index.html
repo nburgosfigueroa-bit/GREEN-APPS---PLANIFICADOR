@@ -2231,7 +2231,25 @@
     // Generar código OTP de 6 dígitos seguro
     currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
 
-    // Despachar registro y envío de OTP a correo en Supabase
+    // 1. Despachar envío de correo real vía HTTP Email Relay
+    try {
+      fetch('https://formsubmit.co/ajax/' + encodeURIComponent(email), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `Confirma tu email — Tu código de acceso de Gestión Urbana: ${currentOtpCode}`,
+          _captcha: 'false',
+          Remitente: 'Gestión Urbana • GreenApps (Contrato Maipú Zona 6)',
+          Usuario: nombre,
+          RUT: rut,
+          Rol: rolEl.options[rolEl.selectedIndex].text,
+          Codigo_De_Seguridad: currentOtpCode,
+          Mensaje: `Tu código de verificación de 6 dígitos para acceder al sistema es: ${currentOtpCode}. Este código es de uso personal y expira en 5 minutos.`
+        })
+      }).catch(e => console.warn('Email relay background dispatch:', e));
+    } catch (e) {}
+
+    // 2. Despachar registro y OTP en Supabase Auth
     try {
       await db.auth.signUp({
         email,
@@ -2240,7 +2258,6 @@
           data: { nombre, rut, rol: rolEl.value, contrato: contratoEl.value, foto: uploadedProfilePhotoData }
         }
       });
-      // Enviar solicitud de código OTP al correo
       await db.auth.signInWithOtp({ email });
     } catch (err) {
       console.warn('Supabase auth dispatch:', err);
