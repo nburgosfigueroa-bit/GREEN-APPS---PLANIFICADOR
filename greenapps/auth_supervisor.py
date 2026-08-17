@@ -225,37 +225,76 @@ def supervisar_registro_perfil(perfil: dict) -> dict:
 
 # ==================== 4. GENERADOR DE PLANTILLA HTML DE CORREO ====================
 def generar_html_correo_auth(email: str, codigo_otp: str) -> str:
-    """Genera la plantilla HTML con el código de 6 dígitos lista para ser enviada."""
+    """Genera la plantilla HTML exacta de Gestión Urbana con el código de 6 dígitos."""
     return f"""<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Solicitud de Autenticación - GreenApps</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Solicitud de Autenticación - GreenApps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+  body {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #f3f4f5; margin: 0; padding: 24px; color: #191c1d; }}
+  .email-card {{ max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; border: 1px solid #c1c8c2; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }}
+  .header {{ background-color: #1a4332; padding: 28px 24px; text-align: center; color: #ffffff; border-bottom: 2px solid #002d1d; }}
+  .logo-box {{ width: 64px; height: 64px; background-color: #002d1d; border-radius: 12px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; }}
+  .content {{ padding: 36px 28px; text-align: center; }}
+  .key-badge {{ display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background-color: #e1e3e4; color: #002d1d; margin-bottom: 12px; }}
+  .code-box {{ background-color: #edeeef; padding: 18px 36px; border-radius: 12px; border: 1px solid #c1c8c2; display: inline-block; margin: 20px auto; }}
+  .code-text {{ font-family: 'JetBrains Mono', monospace, Courier; font-size: 38px; letter-spacing: 10px; color: #002d1d; font-weight: 700; margin: 0; }}
+  .footer {{ background-color: #e7e8e9; padding: 20px; text-align: center; border-top: 1px solid #c1c8c2; font-size: 12px; color: #717973; }}
+  .btn-system {{ display: inline-block; padding: 14px 32px; background-color: #002d1d; color: #ffffff; font-weight: 600; text-decoration: none; border-radius: 8px; margin-top: 16px; font-size: 15px; }}
+</style>
 </head>
-<body style="font-family: Arial, sans-serif; background-color: #f3f4f5; padding: 20px; color: #191c1d;">
-  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; border: 1px solid #c1c8c2; overflow: hidden;">
-    <div style="background-color: #1a4332; padding: 24px; text-align: center; color: #ffffff;">
-      <h1 style="margin: 0; font-size: 24px;">GreenApps — Gestión Urbana</h1>
+<body>
+<div class="email-card">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-box">
+      <img alt="GreenApps Logo" style="width:100%; height:100%; object-fit:contain;" src="https://lh3.googleusercontent.com/aida/AP1WRLuvzUHQbQrMlyhdPspRZA4xEJ5da3QwNg9Ev9Qi1rK2CihSwxzrC0f3wyCFHb6RSK_y6sg8TBUowcnstidxLCFT06QBZ7u60T1fOETRAUQFAnyL_JV7e7eZ5V9trPYFQE_j_NvB0euHcCLcGML8dxP958SI6RECYPnkc5aS-n6V1C9zxXF87EPlCK28X0UlejAjxKrRvLnxcix8SWjBLu41fq9_BQwjMpfLtDxCm3941kiZgqxp-AVdj48"/>
     </div>
-    <div style="padding: 32px; text-align: center;">
-      <h2 style="color: #002d1d; margin-top: 0;">Solicitud de Autenticación</h2>
-      <p style="color: #414944; font-size: 16px;">
-        Has solicitado acceder al sistema de Gestión Urbana. Tu código de acceso de un solo uso es:
-      </p>
-      <div style="background-color: #edeeef; padding: 16px 32px; border-radius: 8px; border: 1px solid #c1c8c2; display: inline-block; margin: 16px 0;">
-        <span style="font-family: monospace; font-size: 36px; letter-spacing: 8px; color: #002d1d; font-weight: bold;">
-          {codigo_otp}
-        </span>
-      </div>
-      <p style="color: #717973; font-size: 13px;">
-        Este código es válido durante 5 minutos. Si no has solicitado esto, ignora este mensaje.
-      </p>
+    <h1 style="margin: 0; font-size: 26px; font-weight: 700; color: #ffffff;">GreenApps</h1>
+    <p style="margin: 4px 0 0; font-size: 13px; color: #c0edd4; font-family: monospace;">Gestión Urbana • Contrato Maipú Zona 6</p>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="key-badge">
+      <span style="font-size: 28px;">🔑</span>
     </div>
-    <div style="background-color: #e7e8e9; padding: 16px; text-align: center; font-size: 12px; color: #414944; border-top: 1px solid #c1c8c2;">
-      © 2024 GreenApps Gestión Urbana • Contrato Maipú Zona 6 (AKRO)
+    <h2 style="font-size: 22px; color: #002d1d; margin: 8px 0 12px; font-weight: 700;">Solicitud de Autenticación</h2>
+    <p style="color: #414944; font-size: 16px; max-width: 440px; margin: 0 auto 16px; line-height: 1.5;">
+      Has solicitado acceder al sistema de Gestión Urbana para el correo <strong>{email}</strong>. Tu código de acceso de un solo uso es:
+    </p>
+
+    <!-- Código OTP de 6 dígitos -->
+    <div class="code-box">
+      <p class="code-text">{codigo_otp}</p>
+    </div>
+
+    <p style="color: #717973; font-size: 13px; max-width: 400px; margin: 16px auto 8px; line-height: 1.4;">
+      Este código es de uso personal y expira en 5 minutos. Si no has solicitado esto, ignora este mensaje o contacta al administrador de tu contrato.
+    </p>
+
+    <div style="margin-top: 24px;">
+      <a class="btn-system" href="https://nburgosfigueroa-bit.github.io/GREEN-APPS---PLANIFICADOR/#verificar-codigo">
+        Ir al Sistema a Ingresar Código →
+      </a>
     </div>
   </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p style="margin: 0 0 6px; text-transform: uppercase; font-family: monospace; font-size: 11px; letter-spacing: 0.05em;">
+      Diseñado y desarrollado por profesionales del área
+    </p>
+    <p style="margin: 0; font-size: 11px;">
+      © 2024 GreenApps Gestión Urbana. Todos los derechos reservados.
+    </p>
+  </div>
+</div>
 </body>
 </html>"""
 

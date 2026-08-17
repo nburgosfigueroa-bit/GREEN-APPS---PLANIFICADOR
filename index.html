@@ -573,9 +573,9 @@
   <!-- PAGE: VERIFICACIÓN DE CÓDIGO (EMAIL / OTP 2FA)   -->
   <!-- ================================================ -->
   <div id="page-verificar-codigo" class="page flex-col justify-center items-center min-h-screen p-md bg-surface-container-low font-body text-body text-on-surface">
-    <div class="max-w-2xl w-full bg-surface-container-lowest rounded-2xl border border-outline-variant overflow-hidden shadow-md">
+    <div class="max-w-md w-full bg-surface-container-lowest rounded-2xl border border-outline-variant overflow-hidden shadow-lg">
       
-      <!-- Header -->
+      <!-- Header Corporativo -->
       <div class="bg-primary-container p-md flex flex-col items-center justify-center text-on-primary-container border-b border-primary">
         <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-sm shadow-sm overflow-hidden p-1 border border-primary-fixed/20">
           <img alt="GreenApps Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLuvzUHQbQrMlyhdPspRZA4xEJ5da3QwNg9Ev9Qi1rK2CihSwxzrC0f3wyCFHb6RSK_y6sg8TBUowcnstidxLCFT06QBZ7u60T1fOETRAUQFAnyL_JV7e7eZ5V9trPYFQE_j_NvB0euHcCLcGML8dxP958SI6RECYPnkc5aS-n6V1C9zxXF87EPlCK28X0UlejAjxKrRvLnxcix8SWjBLu41fq9_BQwjMpfLtDxCm3941kiZgqxp-AVdj48"/>
@@ -586,53 +586,51 @@
         <p class="font-mono text-micro text-on-primary-container/90 mt-0.5">Gestión Urbana • Contrato Maipú Zona 6</p>
       </div>
 
-      <!-- Content -->
+      <!-- Content Area -->
       <div class="p-md md:p-lg flex flex-col gap-md text-center">
-        <div class="inline-flex items-center justify-center mx-auto w-12 h-12 rounded-full bg-surface-variant text-primary mb-xs">
-          <span class="material-symbols-outlined text-3xl icon-fill">vpn_key</span>
+        <div class="inline-flex items-center justify-center mx-auto w-14 h-14 rounded-full bg-primary/10 text-primary mb-xs">
+          <span class="material-symbols-outlined text-3xl icon-fill">mark_email_read</span>
         </div>
 
         <div>
-          <h2 class="font-headline text-headline-lg-mobile md:text-headline-md text-primary font-semibold">
-            Solicitud de Autenticación
+          <h2 class="font-headline text-headline-md text-primary font-semibold">
+            Revisa tu Correo Electrónico
           </h2>
-          <p class="font-body text-body-lg text-on-surface-variant max-w-md mx-auto mt-1">
-            Has solicitado acceder al sistema de Gestión Urbana. Tu código de acceso de un solo uso es:
+          <p class="font-body text-body text-on-surface-variant max-w-sm mx-auto mt-1 text-sm">
+            Hemos enviado un código de seguridad de 6 dígitos a:
+          </p>
+          <p id="verifUserEmail" class="font-mono font-bold text-primary text-sm mt-1 bg-surface-container py-1 px-3 rounded-lg inline-block border border-outline-variant">
+            usuario@empresa.cl
           </p>
         </div>
 
-        <!-- Código Generado Visualmente (Simulación de Correo / OTP) -->
-        <div class="bg-surface-container rounded-xl p-md border border-outline-variant inline-block mx-auto shadow-inner">
-          <p id="dispOtpCode" class="font-mono text-4xl tracking-widest text-primary font-bold select-all">
-            123456
-          </p>
-          <span class="font-mono text-micro text-on-surface-variant block mt-1">
-            (Código emitido a su correo registrado • Válido por 5 min)
-          </span>
+        <div class="p-3 bg-surface-container-low rounded-xl border border-outline-variant text-left text-xs text-on-surface-variant flex items-start gap-2">
+          <span class="material-symbols-outlined text-primary text-lg flex-shrink-0">info</span>
+          <span>Abre el mensaje de <strong>Gestión Urbana</strong> en tu bandeja de entrada o spam y copia el código de acceso.</span>
         </div>
 
-        <!-- Formulario de Entrada de Código -->
-        <div class="max-w-xs mx-auto w-full flex flex-col gap-sm">
+        <!-- Formulario de Entrada de Código (El usuario debe ingresar lo recibido en su mail) -->
+        <div class="w-full flex flex-col gap-sm">
           <label for="otpInput" class="font-mono text-label text-on-surface-variant uppercase font-semibold">
-            Ingrese el código de 6 dígitos:
+            Ingrese el código recibido en su mail:
           </label>
-          <input id="otpInput" type="text" maxlength="6" placeholder="Ej: 123456" autofocus
-            class="text-center font-mono text-2xl tracking-widest h-14 rounded-xl border-2 border-primary/40 bg-surface-container-lowest text-primary font-bold focus:outline-none focus:border-primary transition-all">
+          <input id="otpInput" type="text" maxlength="6" placeholder="______" autofocus
+            class="text-center font-mono text-3xl tracking-widest h-14 rounded-xl border-2 border-primary/40 bg-surface-container-lowest text-primary font-bold focus:outline-none focus:border-primary transition-all">
           
           <button id="btnVerificarOtp" type="button"
-            class="w-full h-12 bg-primary text-on-primary font-headline text-title rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all shadow-md cursor-pointer">
+            class="w-full h-12 bg-primary text-on-primary font-headline text-title rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all shadow-md cursor-pointer mt-1">
             <span class="material-symbols-outlined text-xl">login</span>
             <span>Verificar e Ingresar al Sistema</span>
           </button>
         </div>
 
-        <p class="font-body text-body text-on-surface-variant/80 mt-xs max-w-sm mx-auto text-xs">
-          Si no has solicitado esto, ignora este mensaje o contacta al administrador de tu zona.
+        <p class="font-body text-body text-on-surface-variant/80 text-xs max-w-xs mx-auto">
+          ¿No recibiste el correo? Revisa tu carpeta de spam o solicita un reenvío.
         </p>
 
-        <div class="flex items-center justify-center gap-md text-xs font-mono">
+        <div class="flex items-center justify-center gap-md text-xs font-mono pt-xs border-t border-outline-variant">
           <button type="button" onclick="regenerarCodigoOtp()" class="text-primary hover:underline flex items-center gap-1">
-            <span class="material-symbols-outlined text-sm">refresh</span> Reenviar nuevo código
+            <span class="material-symbols-outlined text-sm">refresh</span> Reenviar nuevo correo
           </button>
           <button type="button" onclick="navigate('login')" class="text-on-surface-variant hover:underline">
             ← Cambiar de cuenta
@@ -641,7 +639,7 @@
       </div>
 
       <!-- Footer -->
-      <div class="bg-surface-container-high p-md text-center border-t border-outline-variant">
+      <div class="bg-surface-container-high p-sm text-center border-t border-outline-variant">
         <p class="font-mono text-micro text-on-surface-variant uppercase tracking-wider">
           Diseñado y desarrollado por profesionales del área
         </p>
@@ -1649,11 +1647,13 @@
       }, 3800);
     }
     if (page === 'verificar-codigo') {
-      const disp = document.getElementById('dispOtpCode');
-      if (disp) disp.textContent = currentOtpCode;
+      const emailEl = document.getElementById('verifUserEmail');
+      const targetEmail = currentUser?.email || currentPerfil?.email || 'usuario@empresa.cl';
+      if (emailEl) emailEl.textContent = targetEmail;
       const inp = document.getElementById('otpInput');
       if (inp) {
         inp.value = '';
+        inp.classList.remove('border-error', 'ring-2', 'ring-error');
         setTimeout(() => inp.focus(), 150);
       }
     }
@@ -1671,9 +1671,8 @@
   // ==================== OTP 2FA VERIFICATION ====================
   window.regenerarCodigoOtp = function() {
     currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
-    const disp = document.getElementById('dispOtpCode');
-    if (disp) disp.textContent = currentOtpCode;
-    showToast(`✓ Nuevo código emitido a su correo: ${currentOtpCode}`, 3500);
+    const targetEmail = currentUser?.email || currentPerfil?.email || 'su correo';
+    showToast(`✓ Correo reenviado desde Gestión Urbana a ${targetEmail}. Revisa tu bandeja de entrada o spam.`, 4000);
   };
 
   document.getElementById('btnVerificarOtp')?.addEventListener('click', () => {
