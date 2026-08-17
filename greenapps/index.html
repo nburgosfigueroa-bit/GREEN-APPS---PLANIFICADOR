@@ -115,6 +115,22 @@
   </script>
 
   <style>
+    /* Keyframes y animaciones Stitch */
+    .animate-progress-fill {
+      animation: fillProgress 3.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes fillProgress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+    .animate-scale-in {
+      animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes scaleIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     /* Material Symbols defaults */
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -287,90 +303,88 @@
     <footer class="mt-lg text-center">
       <p class="font-mono text-label text-on-surface-variant">Diseñado para profesionales del área urbana</p>
     </footer>
-  </div><!-- /page-login -->
-
-
-  <!-- ================================================ -->
+   <!-- ================================================ -->
   <!-- PAGE: CREAR PERFIL                               -->
   <!-- ================================================ -->
   <div id="page-crear-perfil" class="page flex-col justify-center items-center min-h-screen p-md bg-surface">
     <main class="w-full max-w-[480px]">
       <div class="mb-lg flex flex-col items-center text-center">
-        <span class="material-symbols-outlined text-primary text-5xl mb-sm icon-fill">person_add</span>
-        <h1 class="font-headline text-headline-md md:text-headline-lg text-primary">Crear Nuevo Perfil</h1>
+        <span class="material-symbols-outlined text-primary text-[48px] mb-sm icon-fill">person_add</span>
+        <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight">Crear Nuevo Perfil</h1>
         <p class="font-body text-body text-on-surface-variant mt-xs">Ingrese los datos técnicos para registrar el nuevo usuario en el sistema.</p>
       </div>
 
-      <form id="crearPerfilForm" class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md shadow-sm flex flex-col gap-md" onsubmit="return false;">
-
-        <!-- Nombre -->
+      <form id="crearPerfilForm" class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0px_4px_12px_rgba(0,0,0,0.02)] flex flex-col gap-md" onsubmit="return false;">
+        
+        <!-- Nombre Completo -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpNombre">
-            <span class="material-symbols-outlined text-base">badge</span> Nombre Completo
+          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="fullName">
+            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">badge</span> Nombre Completo</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
           </label>
-          <input id="cpNombre" type="text" placeholder="Ej. Juan Pérez" required
+          <input id="fullName" name="fullName" type="text" placeholder="Ej. Juan Pérez" required
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
         </div>
 
         <!-- RUT -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpRut">
-            <span class="material-symbols-outlined text-base">id_card</span> RUT
+          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="rut">
+            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">id_card</span> RUT</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
           </label>
-          <input id="cpRut" type="text" placeholder="Ej. 12.345.678-9" required
+          <input id="rut" name="rut" type="text" placeholder="Ej. 12.345.678-9" required
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
         </div>
 
         <!-- Email -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpEmail">
-            <span class="material-symbols-outlined text-base">mail</span> Email
+          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="email">
+            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">mail</span> Correo Electrónico</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
           </label>
-          <input id="cpEmail" type="email" placeholder="correo@empresa.com" required
+          <input id="email" name="email" type="email" placeholder="correo@empresa.com" required
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
         </div>
 
         <!-- Password -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant flex items-center gap-xs uppercase" for="cpPass">
-            <span class="material-symbols-outlined text-base">lock</span> Contraseña
+          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="password">
+            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">lock</span> Contraseña</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
           </label>
-          <input id="cpPass" type="password" placeholder="••••••••" required
+          <input id="password" name="password" type="password" placeholder="••••••••" required
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
         </div>
 
         <!-- Rol Operativo -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="cpRol">
-            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-base">engineering</span> Rol que desempeñará</span>
-            <span class="text-micro text-primary font-semibold">Obligatorio</span>
+          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="role">
+            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">admin_panel_settings</span> Rol Operativo</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <div class="relative">
-            <select id="cpRol" required
+            <select id="role" name="role" required
               class="appearance-none bg-surface-container-low border border-outline-variant rounded-lg p-sm pr-10 font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all cursor-pointer font-medium">
-              <option value="" disabled selected>Seleccione el rol correspondiente...</option>
-              <option value="lider">👷 Líder de Equipo (Supervisores y Capataces de Terreno)</option>
-              <option value="encargado">📋 Encargado de Cierre (Fiscalizador / Aprobador de OTs)</option>
-              <option value="inspeccion">🔍 Inspección Técnica (ITO / Control Municipal)</option>
-              <option value="operador">🛠️ Operador / Maquinaria (Ejecución en Terreno)</option>
+              <option value="" disabled selected>Seleccione su rol...</option>
+              <option value="lider">👷 Líder de Equipo (Supervisores y Capataces)</option>
+              <option value="encargado">📋 Encargado de Cierre (Fiscalizador / Aprobador)</option>
+              <option value="inspeccion">🔍 Inspección Técnica (ITO Municipal)</option>
+              <option value="operador">🛠️ Operador / Maquinaria (Terreno)</option>
             </select>
             <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
           </div>
-          <p class="font-mono text-micro text-on-surface-variant/80">
-            * Nota: Los accesos de <strong>Moderador / Administrador</strong> son asignados por la administración central.
-          </p>
         </div>
 
         <!-- Contrato / Zona -->
         <div class="flex flex-col gap-xs">
-          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="cpContrato">
-            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-base">location_city</span> Contrato o Zona</span>
-            <span class="text-micro text-primary font-semibold">Obligatorio</span>
+          <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="contract">
+            <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">description</span> Seleccione su contrato</span>
+            <span class="text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <div class="relative">
-            <select id="cpContrato" required
+            <select id="contract" name="contract" required
               class="appearance-none bg-surface-container-low border border-outline-variant rounded-lg p-sm pr-10 font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all cursor-pointer font-medium">
-              <option value="" disabled selected>Seleccione la zona operativa...</option>
+              <option value="" disabled selected>Seleccione un contrato...</option>
               <option value="maipu_6" selected>Maipú Zona 6 (AKRO)</option>
               <option value="maipu_3">Maipú Zona 3 (AKRO)</option>
               <option value="maipu_7">Maipú Zona 7 (NÚCLEO)</option>
@@ -379,15 +393,15 @@
           </div>
         </div>
 
-        <!-- Botón -->
+        <!-- Botón Registrar -->
         <button type="button" id="btnCrearPerfil"
-          class="mt-sm bg-primary text-on-primary font-headline text-title rounded-full py-sm px-md w-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none">
-          <span class="material-symbols-outlined text-xl icon-fill">check_circle</span>
-          Crear Perfil
+          class="mt-sm bg-primary text-on-primary font-headline text-title rounded-full py-sm px-md w-full flex items-center justify-center gap-xs transition-all hover:bg-primary-container hover:text-on-primary-container active:scale-95 focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:outline-none cursor-pointer">
+          <span class="material-symbols-outlined text-[20px] icon-fill">check_circle</span>
+          <span>Crear Perfil</span>
         </button>
 
         <button type="button" onclick="navigate('login')"
-          class="text-center font-body text-body text-primary hover:underline">
+          class="text-center font-body text-body text-primary hover:underline cursor-pointer">
           ← Volver al inicio de sesión
         </button>
       </form>
@@ -398,33 +412,78 @@
   <!-- ================================================ -->
   <!-- PAGE: REGISTRO EXITOSO                           -->
   <!-- ================================================ -->
-  <div id="page-registro-exitoso" class="page flex-col justify-center items-center min-h-screen p-md bg-background">
-    <main class="w-full max-w-sm text-center flex flex-col items-center gap-md">
-      <div class="w-24 h-24 rounded-full bg-primary flex items-center justify-center shadow-lg">
-        <span class="material-symbols-outlined text-on-primary text-5xl icon-fill">check_circle</span>
+  <div id="page-registro-exitoso" class="page flex-col justify-center items-center min-h-screen p-md bg-surface relative overflow-hidden">
+    
+    <!-- Header Logo -->
+    <div class="mb-lg relative z-10">
+      <img src="https://lh3.googleusercontent.com/aida/AP1WRLuvzUHQbQrMlyhdPspRZA4xEJ5da3QwNg9Ev9Qi1rK2CihSwxzrC0f3wyCFHb6RSK_y6sg8TBUowcnstidxLCFT06QBZ7u60T1fOETRAUQFAnyL_JV7e7eZ5V9trPYFQE_j_NvB0euHcCLcGML8dxP958SI6RECYPnkc5aS-n6V1C9zxXF87EPlCK28X0UlejAjxKrRvLnxcix8SWjBLu41fq9_BQwjMpfLtDxCm3941kiZgqxp-AVdj48" alt="Logo Gestión Urbana" class="h-12 w-auto object-contain">
+    </div>
+
+    <!-- Decorative Background -->
+    <div class="absolute inset-0 pointer-events-none opacity-5" style="background-image: radial-gradient(var(--tw-colors-on-surface) 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+    <!-- Main Content Canvas -->
+    <main class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-xl p-md md:p-xl flex flex-col items-center text-center shadow-sm relative z-10 gap-sm">
+      
+      <!-- Success Icon -->
+      <div class="mb-sm h-24 w-24 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed animate-scale-in shadow-md">
+        <span class="material-symbols-outlined text-[64px] icon-fill text-primary">check_circle</span>
       </div>
-      <h1 class="font-headline text-headline-lg text-primary">¡Perfil Creado!</h1>
-      <p class="font-body text-body text-on-surface-variant">El nuevo usuario ha sido registrado exitosamente en el sistema.</p>
-      <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md w-full text-left flex flex-col gap-sm">
-        <div class="flex justify-between items-center">
+
+      <!-- Typography Cluster -->
+      <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight font-semibold">
+        ¡Registro Exitoso!
+      </h1>
+      <p class="font-body text-body text-on-surface-variant">
+        Tu perfil ha sido creado correctamente en el sistema de Gestión Urbana.
+      </p>
+
+      <!-- Resumen de Datos Registrados -->
+      <div class="bg-surface-container-low border border-outline-variant rounded-xl p-sm w-full text-left flex flex-col gap-xs my-xs">
+        <div class="flex justify-between items-center text-xs">
           <span class="font-mono text-label text-on-surface-variant uppercase">Nombre</span>
-          <span class="font-body text-body text-on-surface font-medium" id="resNombre">—</span>
+          <span class="font-body text-body text-on-surface font-semibold" id="resNombre">—</span>
         </div>
-        <div class="flex justify-between items-center">
-          <span class="font-mono text-label text-on-surface-variant uppercase">Rol</span>
-          <span class="font-body text-body text-on-surface font-medium" id="resRol">—</span>
+        <div class="flex justify-between items-center text-xs">
+          <span class="font-mono text-label text-on-surface-variant uppercase">Rol Asignado</span>
+          <span class="font-body text-body text-primary font-semibold" id="resRol">—</span>
         </div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center text-xs">
           <span class="font-mono text-label text-on-surface-variant uppercase">Contrato</span>
           <span class="font-body text-body text-on-surface font-medium" id="resContrato">—</span>
         </div>
       </div>
+
+      <!-- Redirection Status & Progress -->
+      <div class="w-full flex flex-col items-center space-y-sm mt-xs">
+        <!-- Linear Progress Bar -->
+        <div aria-label="Redirigiendo" class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden" role="progressbar">
+          <div class="h-full bg-primary rounded-full animate-progress-fill w-0"></div>
+        </div>
+
+        <!-- Status Text -->
+        <div class="flex items-center gap-2 text-on-surface-variant opacity-80">
+          <span class="material-symbols-outlined text-[16px] animate-spin">autorenew</span>
+          <p class="font-mono text-micro tracking-wide">
+            Te redireccionaremos a tu perfil en unos segundos...
+          </p>
+        </div>
+      </div>
+
+      <!-- Botón Manual -->
       <button onclick="navigate('dashboard')"
-        class="w-full bg-primary text-on-primary font-headline text-title py-sm rounded-full flex items-center justify-center gap-sm hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all">
-        <span>Ir al Dashboard</span>
-        <span class="material-symbols-outlined">dashboard</span>
+        class="w-full bg-primary text-on-primary font-headline text-body py-2.5 rounded-full flex items-center justify-center gap-sm hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all mt-xs cursor-pointer">
+        <span>Ir al Dashboard ahora</span>
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
       </button>
     </main>
+
+    <!-- Footer Credits -->
+    <footer class="mt-lg text-center px-md z-10">
+      <p class="font-mono text-micro text-on-surface-variant uppercase tracking-wider">
+        Diseñado y desarrollado por profesionales del área
+      </p>
+    </footer>
   </div><!-- /page-registro-exitoso -->
 
 
@@ -1383,6 +1442,12 @@
     if (page === 'dashboard') renderDashboard();
     if (page === 'cierre') renderCierre();
     if (page === 'administracion') renderAdminList();
+    if (page === 'registro-exitoso') {
+      if (window._redirTimer) clearTimeout(window._redirTimer);
+      window._redirTimer = setTimeout(() => {
+        navigate('dashboard');
+      }, 3800);
+    }
   }
 
   // ==================== TOAST ====================
@@ -1505,23 +1570,54 @@
     }, 300);
   };
 
-  // ==================== CREAR PERFIL (Supabase Auth) ====================
+  // ==================== CREAR PERFIL (Supabase Auth con Validación Total) ====================
   document.getElementById('btnCrearPerfil').addEventListener('click', async () => {
-    const nombre   = document.getElementById('cpNombre').value.trim();
-    const rut      = document.getElementById('cpRut').value.trim();
-    const email    = document.getElementById('cpEmail').value.trim();
-    const pass     = document.getElementById('cpPass').value;
-    const rolEl    = document.getElementById('cpRol');
-    const contrato = document.getElementById('cpContrato');
+    const nombreEl   = document.getElementById('fullName') || document.getElementById('cpNombre');
+    const rutEl      = document.getElementById('rut') || document.getElementById('cpRut');
+    const emailEl    = document.getElementById('email') || document.getElementById('cpEmail');
+    const passEl     = document.getElementById('password') || document.getElementById('cpPass');
+    const rolEl      = document.getElementById('role') || document.getElementById('cpRol');
+    const contratoEl = document.getElementById('contract') || document.getElementById('cpContrato');
 
-    if (!nombre || !rut || !email || !pass || !rolEl.value || !contrato.value) {
-      showToast('⚠ Complete todos los campos'); return;
+    const nombre   = nombreEl ? nombreEl.value.trim() : '';
+    const rut      = rutEl ? rutEl.value.trim() : '';
+    const email    = emailEl ? emailEl.value.trim() : '';
+    const pass     = passEl ? passEl.value : '';
+
+    if (!nombre) {
+      nombreEl?.focus();
+      showToast('⚠ Celda obligatoria: Por favor ingrese su Nombre Completo');
+      return;
     }
-    if (pass.length < 6) { showToast('⚠ La contraseña debe tener al menos 6 caracteres'); return; }
+    if (!rut) {
+      rutEl?.focus();
+      showToast('⚠ Celda obligatoria: Por favor ingrese su RUT');
+      return;
+    }
+    if (!email) {
+      emailEl?.focus();
+      showToast('⚠ Celda obligatoria: Por favor ingrese su Correo Electrónico');
+      return;
+    }
+    if (!pass || pass.length < 6) {
+      passEl?.focus();
+      showToast('⚠ Contraseña obligatoria: Debe contener al menos 6 caracteres');
+      return;
+    }
+    if (!rolEl || !rolEl.value) {
+      rolEl?.focus();
+      showToast('⚠ Celda obligatoria: Por favor seleccione su Rol');
+      return;
+    }
+    if (!contratoEl || !contratoEl.value) {
+      contratoEl?.focus();
+      showToast('⚠ Celda obligatoria: Por favor seleccione su Contrato/Zona');
+      return;
+    }
 
     const btn = document.getElementById('btnCrearPerfil');
     const orig = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined spin">hourglass_top</span><span>Registrando...</span>';
+    btn.innerHTML = '<span class="material-symbols-outlined spin text-xl">hourglass_top</span><span>Registrando en Sistema...</span>';
     btn.disabled = true;
 
     // Registrar en Supabase Auth con metadatos
@@ -1530,7 +1626,7 @@
         email,
         password: pass,
         options: {
-          data: { nombre, rut, rol: rolEl.value, contrato: contrato.value }
+          data: { nombre, rut, rol: rolEl.value, contrato: contratoEl.value }
         }
       });
     } catch (err) {
@@ -1542,7 +1638,7 @@
 
     // Crear y registrar el perfil en memoria y en la lista de usuarios
     const rolTexto = rolEl.options[rolEl.selectedIndex].text;
-    const contratoTexto = contrato.options[contrato.selectedIndex].text;
+    const contratoTexto = contratoEl.options[contratoEl.selectedIndex].text;
 
     const nuevoUsuario = {
       nombre,
@@ -1562,11 +1658,17 @@
     updateUIWithProfile();
 
     // Mostrar confirmación
-    document.getElementById('resNombre').textContent   = nombre;
-    document.getElementById('resRol').textContent      = rolTexto;
-    document.getElementById('resContrato').textContent = contratoTexto;
-    document.getElementById('crearPerfilForm').reset();
-    showToast('✓ Perfil configurado y activado con éxito', 3000);
+    const resNom = document.getElementById('resNombre');
+    const resRol = document.getElementById('resRol');
+    const resCon = document.getElementById('resContrato');
+    if (resNom) resNom.textContent = nombre;
+    if (resRol) resRol.textContent = rolTexto;
+    if (resCon) resCon.textContent = contratoTexto;
+
+    const form = document.getElementById('crearPerfilForm');
+    if (form) form.reset();
+
+    showToast('✓ Perfil registrado exitosamente', 3000);
     navigate('registro-exitoso');
   });
 
