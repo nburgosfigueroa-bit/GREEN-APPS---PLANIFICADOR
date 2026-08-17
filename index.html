@@ -141,8 +141,15 @@
     }
 
     /* SPA page transitions */
-    .page { display: none; }
-    .page.active { display: flex; }
+    .page {
+      display: none !important;
+      width: 100%;
+      min-height: 100vh;
+    }
+    .page.active {
+      display: flex !important;
+      flex-direction: column !important;
+    }
 
     /* Scrollbar hide */
     ::-webkit-scrollbar { width: 0; background: transparent; }
