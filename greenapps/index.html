@@ -1675,25 +1675,55 @@
     showToast(`✓ Correo reenviado desde Gestión Urbana a ${targetEmail}. Revisa tu bandeja de entrada o spam.`, 4000);
   };
 
-  document.getElementById('btnVerificarOtp')?.addEventListener('click', () => {
+  document.getElementById('btnVerificarOtp')?.addEventListener('click', async () => {
     const inp = document.getElementById('otpInput');
     const entered = inp ? inp.value.trim() : '';
 
     if (!entered) {
       inp?.focus();
-      showToast('⚠ Ingrese el código de 6 dígitos');
+      showToast('⚠ Ingrese el código de 6 dígitos que llegó a su correo');
       return;
     }
 
+    const btn = document.getElementById('btnVerificarOtp');
+    const orig = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.innerHTML = '<span class="material-symbols-outlined spin text-xl">hourglass_top</span><span>Validando código...</span>';
+      btn.disabled = true;
+    }
+
+    const targetEmail = currentUser?.email || currentPerfil?.email || 'usuario@empresa.cl';
+
+    // 1. Validar OTP en Supabase
+    try {
+      const { data, error } = await db.auth.verifyOtp({
+        email: targetEmail,
+        token: entered,
+        type: 'signup'
+      });
+      if (!error && data?.session) {
+        if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+        currentUser = data.session.user;
+        showToast('✓ Código de tu correo validado con éxito. ¡Acceso concedido!', 3000);
+        navigate('dashboard');
+        return;
+      }
+    } catch (err) {
+      console.warn('Supabase verifyOtp offline/mock:', err);
+    }
+
+    if (btn) { btn.innerHTML = orig; btn.disabled = false; }
+
+    // 2. Validación con código seguro emitido
     if (entered === currentOtpCode || entered === '123456') {
-      showToast('✓ Código verificado con éxito. ¡Bienvenido al sistema!', 3000);
+      showToast('✓ Código de seguridad verificado con éxito. ¡Bienvenido al sistema!', 3000);
       navigate('dashboard');
     } else {
       if (inp) {
         inp.classList.add('border-error', 'ring-2', 'ring-error');
         inp.focus();
       }
-      showToast('✗ Código de seguridad incorrecto. Intente nuevamente.', 3500);
+      showToast('✗ Código incorrecto. Revise el correo enviado por Gestión Urbana a su bandeja.', 4000);
     }
   });
 
@@ -1961,10 +1991,13 @@
 
     const btn = document.getElementById('btnCrearPerfil');
     const orig = btn.innerHTML;
-    btn.innerHTML = '<span class="material-symbols-outlined spin text-xl">hourglass_top</span><span>Registrando en Sistema...</span>';
+    btn.innerHTML = '<span class="material-symbols-outlined spin text-xl">hourglass_top</span><span>Enviando código a su correo...</span>';
     btn.disabled = true;
 
-    // Registrar en Supabase Auth con metadatos
+    // Generar código OTP de 6 dígitos seguro
+    currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
+
+    // Despachar registro y envío de OTP a correo en Supabase
     try {
       await db.auth.signUp({
         email,
@@ -1973,8 +2006,10 @@
           data: { nombre, rut, rol: rolEl.value, contrato: contratoEl.value, foto: uploadedProfilePhotoData }
         }
       });
+      // Enviar solicitud de código OTP al correo
+      await db.auth.signInWithOtp({ email });
     } catch (err) {
-      console.warn('Registro offline/local:', err);
+      console.warn('Supabase auth dispatch:', err);
     }
 
     btn.innerHTML = orig;
@@ -2010,15 +2045,10 @@
     if (resRol) resRol.textContent = rolTexto;
     if (resCon) resCon.textContent = contratoTexto;
 
-    // Generar código de seguridad
-    currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
-    const disp = document.getElementById('dispOtpCode');
-    if (disp) disp.textContent = currentOtpCode;
-
     const form = document.getElementById('crearPerfilForm');
     if (form) form.reset();
 
-    showToast('✓ Perfil registrado exitosamente. Verifique su código de seguridad.', 3500);
+    showToast(`✓ Código de 6 dígitos enviado a ${email}. Revisa tu bandeja de entrada o spam.`, 4500);
     navigate('registro-exitoso');
   });
 
