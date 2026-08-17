@@ -964,15 +964,24 @@
 
     <header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex px-md py-sm z-40">
       <div class="flex items-center justify-between w-full max-w-container mx-auto">
-        <div class="flex items-center gap-sm">
-          <div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex items-center justify-center">
-            <span class="material-symbols-outlined text-on-surface-variant">person</span>
+        <div class="flex items-center gap-sm cursor-pointer" onclick="navigate('perfil')">
+          <div class="globalUserAvatar w-10 h-10 rounded-full bg-primary text-on-primary border border-outline-variant font-headline text-body flex items-center justify-center font-bold shadow-sm overflow-hidden flex-shrink-0">
+            NB
           </div>
-          <h1 class="font-headline text-headline-md text-primary tracking-tight">Gestión Urbana</h1>
+          <div>
+            <h1 class="globalUserName font-headline text-title text-on-surface font-semibold tracking-tight leading-tight">Nicolás Burgos</h1>
+            <p class="globalUserRole font-mono text-micro text-on-surface-variant flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+              <span>Líder • Maipú Zona 6</span>
+            </p>
+          </div>
         </div>
-        <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high text-primary transition-colors">
-          <span class="material-symbols-outlined">location_on</span>
-        </button>
+        <div class="flex items-center gap-2">
+          <button onclick="navigate('perfil')" title="Mi Perfil" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant flex items-center gap-1 font-mono text-label bg-surface-container-low border border-outline-variant px-3 py-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-lg">person</span>
+            <span class="hidden sm:inline">Mi Perfil</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -1190,37 +1199,25 @@
   <div id="page-multimedia" class="page flex-col min-h-screen bg-surface pb-20 md:pb-0">
 
     <!-- Header -->
-    <header class="w-full sticky top-0 bg-surface z-40 border-b border-outline-variant">
-      <div class="md:hidden flex px-md py-sm w-full items-center justify-between">
-        <h1 class="font-headline text-headline-md text-primary font-bold tracking-tight">Gestión Urbana</h1>
-        <div class="flex items-center gap-sm">
-          <span class="material-symbols-outlined text-on-surface-variant">location_on</span>
-          <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center">
-            <span class="material-symbols-outlined text-on-surface-variant text-base">person</span>
+    <header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex px-md py-sm z-40">
+      <div class="flex items-center justify-between w-full max-w-container mx-auto">
+        <div class="flex items-center gap-sm cursor-pointer" onclick="navigate('perfil')">
+          <div class="globalUserAvatar w-10 h-10 rounded-full bg-primary text-on-primary border border-outline-variant font-headline text-body flex items-center justify-center font-bold shadow-sm overflow-hidden flex-shrink-0">
+            NB
+          </div>
+          <div>
+            <h1 class="globalUserName font-headline text-title text-on-surface font-semibold tracking-tight leading-tight">Nicolás Burgos</h1>
+            <p class="globalUserRole font-mono text-micro text-on-surface-variant flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+              <span>Líder • Maipú Zona 6</span>
+            </p>
           </div>
         </div>
-      </div>
-      <div class="hidden md:flex flex-row px-lg py-md w-full max-w-container mx-auto items-center justify-between">
-        <div class="flex items-center gap-xl">
-          <h1 class="font-headline text-headline-lg text-primary tracking-tight">Gestión Urbana</h1>
-          <nav class="flex items-center gap-md">
-            <a onclick="navigate('tareas')" class="font-headline text-title text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Formulario</a>
-            <a onclick="navigate('dashboard')" class="font-headline text-title text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Dashboard</a>
-            <a class="font-headline text-title text-primary flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-xl cursor-pointer">
-              <span class="material-symbols-outlined icon-fill">perm_media</span>
-              Multimedia
-            </a>
-            <a onclick="navigate('perfil')" class="font-headline text-title text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Ajustes</a>
-          </nav>
-        </div>
-        <div class="flex items-center gap-md">
-          <div class="flex items-center gap-2 text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full">
-            <span class="material-symbols-outlined text-lg">location_on</span>
-            <span class="font-mono text-label">Sector Norte</span>
-          </div>
-          <div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center">
-            <span class="material-symbols-outlined text-on-surface-variant">person</span>
-          </div>
+        <div class="flex items-center gap-2">
+          <button onclick="navigate('perfil')" title="Mi Perfil" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant flex items-center gap-1 font-mono text-label bg-surface-container-low border border-outline-variant px-3 py-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-lg">person</span>
+            <span class="hidden sm:inline">Mi Perfil</span>
+          </button>
         </div>
       </div>
     </header>
@@ -1275,84 +1272,15 @@
         <section class="lg:col-span-2 flex flex-col gap-sm">
           <h3 class="font-headline text-title text-on-surface-variant flex items-center gap-2 uppercase tracking-wider">
             <span class="material-symbols-outlined">photo_library</span>
-            Galería Reciente
+            Galería Reciente de Terreno
           </h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-sm">
-
-            <!-- Card urgente -->
-            <div class="bg-surface-container-lowest border border-l-4 border-outline-variant border-l-error rounded-2xl overflow-hidden flex flex-col relative group sm:col-span-2 lg:col-span-1">
-              <div class="h-48 w-full relative bg-surface-container-highest">
-                <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80" alt="Árbol caído en vía">
-                <div class="absolute top-2 right-2 bg-error text-on-error px-2 py-1 rounded font-mono text-label flex items-center gap-1 shadow-sm">
-                  <span class="material-symbols-outlined text-base">error</span> Urgente
-                </div>
-              </div>
-              <div class="p-4 flex flex-col gap-xs">
-                <div class="flex justify-between items-start">
-                  <span class="font-headline text-title text-on-surface">Despeje de Vía</span>
-                  <span class="font-mono text-label text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-055</span>
-                </div>
-                <div class="flex flex-wrap gap-x-4 gap-y-1 text-on-surface-variant font-mono text-label">
-                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">calendar_today</span> Hoy, 08:00</span>
-                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> Acceso Norte</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card mantenido -->
-            <div class="bg-surface-container-lowest border border-l-4 border-outline-variant border-l-primary rounded-2xl overflow-hidden flex flex-col relative group">
-              <div class="h-48 w-full relative">
-                <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80" alt="Poda altura">
-                <div class="absolute top-2 right-2 bg-surface/90 backdrop-blur-sm px-2 py-1 rounded text-primary font-mono text-label flex items-center gap-1">
-                  <span class="material-symbols-outlined text-base">check_circle</span> Mantenido
-                </div>
-              </div>
-              <div class="p-4 flex flex-col gap-xs">
-                <div class="flex justify-between items-start">
-                  <span class="font-headline text-title text-on-surface">Poda de Altura</span>
-                  <span class="font-mono text-label text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-104</span>
-                </div>
-                <div class="flex flex-wrap gap-x-4 gap-y-1 text-on-surface-variant font-mono text-label">
-                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">calendar_today</span> 24 Oct, 09:30</span>
-                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> Plaza Central</span>
-                </div>
-              </div>
-              <div class="absolute inset-0 bg-inverse-surface/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                <button class="bg-surface text-primary rounded-full p-3 shadow-lg pointer-events-auto hover:scale-105 transition-transform">
-                  <span class="material-symbols-outlined icon-fill">zoom_in</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Card pendiente (video) -->
-            <div class="bg-surface-container-lowest border border-l-4 border-outline-variant border-l-secondary-container rounded-2xl overflow-hidden flex flex-col relative group">
-              <div class="h-48 w-full relative bg-surface-container-highest flex items-center justify-center">
-                <img class="w-full h-full object-cover opacity-80" src="https://images.unsplash.com/photo-1525904097878-94fb15835963?w=600&q=80" alt="Sistema riego">
-                <div class="absolute inset-0 bg-tertiary/20"></div>
-                <button class="absolute bg-surface/90 text-on-surface rounded-full p-4 shadow-lg flex items-center justify-center hover:scale-105 transition-transform z-10">
-                  <span class="material-symbols-outlined icon-fill text-4xl">play_arrow</span>
-                </button>
-                <div class="absolute top-2 right-2 bg-surface/90 backdrop-blur-sm px-2 py-1 rounded text-on-secondary-container font-mono text-label flex items-center gap-1">
-                  <span class="material-symbols-outlined text-base">warning</span> Pendiente
-                </div>
-                <div class="absolute bottom-2 right-2 bg-tertiary/80 text-on-tertiary font-mono text-micro px-2 py-0.5 rounded">0:45</div>
-              </div>
-              <div class="p-4 flex flex-col gap-xs">
-                <div class="flex justify-between items-start">
-                  <span class="font-headline text-title text-on-surface">Falla Sistema Riego</span>
-                  <span class="font-mono text-label text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">AV-209</span>
-                </div>
-                <div class="flex flex-wrap gap-x-4 gap-y-1 text-on-surface-variant font-mono text-label">
-                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">calendar_today</span> 23 Oct, 14:15</span>
-                  <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">location_on</span> Parque Lineal</span>
-                </div>
-              </div>
-            </div>
-
+          <div id="multimediaGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-sm">
+            <!-- Renderizado dinámico desde JS con datos reales de las OTs -->
           </div>
           <button onclick="navigate('tareas')"
-            class="mt-2 w-full py-3 border border-outline text-on-surface font-headline text-title rounded-xl hover:bg-surface-container-low transition-colors">
-            Cargar Más Archivos
+            class="mt-2 w-full py-3 bg-primary/10 border border-primary/20 text-primary font-headline text-title rounded-xl hover:bg-primary/20 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+            <span class="material-symbols-outlined">add_a_photo</span>
+            <span>Adjuntar Nueva Fotografía en Terreno</span>
           </button>
         </section>
 
@@ -1360,59 +1288,40 @@
         <aside class="flex flex-col gap-sm">
           <h3 class="font-headline text-title text-on-surface-variant flex items-center gap-2 uppercase tracking-wider">
             <span class="material-symbols-outlined">folder_open</span>
-            Reportes Generados
+            Exportaciones y Bases
           </h3>
-          <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl flex flex-col overflow-hidden">
-            <!-- Fila 1 -->
-            <div class="flex items-center justify-between p-4 border-b border-surface-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl flex flex-col overflow-hidden shadow-sm">
+            <!-- Bases Técnicas -->
+            <div onclick="window.open('../BASES_TÉCNICAS_ZONA_6.pdf', '_blank')" class="flex items-center justify-between p-4 border-b border-surface-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
-                  <span class="material-symbols-outlined">description</span>
+                <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined">menu_book</span>
                 </div>
                 <div class="flex flex-col">
-                  <span class="font-headline text-title text-on-surface leading-tight">Acta_Semanal_AV104.pdf</span>
-                  <span class="font-mono text-label text-on-surface-variant mt-1">2.4 MB • 24 Oct 2023</span>
+                  <span class="font-headline text-title text-on-surface leading-tight">Bases_Tecnicas_Zona6.pdf</span>
+                  <span class="font-mono text-micro text-on-surface-variant mt-0.5">Documento Oficial • Licitación Maipú</span>
                 </div>
               </div>
-              <button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container">
-                <span class="material-symbols-outlined">download</span>
-              </button>
+              <span class="material-symbols-outlined text-primary">open_in_new</span>
             </div>
-            <!-- Fila 2 -->
-            <div class="flex items-center justify-between p-4 border-b border-surface-variant hover:bg-surface-container-low transition-colors group cursor-pointer">
+            <!-- Catálogo AVs -->
+            <div onclick="exportarAreasVerdesExcel()" class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors group cursor-pointer">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
-                  <span class="material-symbols-outlined">description</span>
+                <div class="w-10 h-10 rounded-xl bg-secondary-container/30 text-on-secondary-container flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined">table_view</span>
                 </div>
                 <div class="flex flex-col">
-                  <span class="font-headline text-title text-on-surface leading-tight">Inventario_Riego_Q3.pdf</span>
-                  <span class="font-mono text-label text-on-surface-variant mt-1">5.1 MB • 20 Oct 2023</span>
+                  <span class="font-headline text-title text-on-surface leading-tight">Catalogo_436_AVs_Zona6.xlsx</span>
+                  <span class="font-mono text-micro text-on-surface-variant mt-0.5">Planilla Excel • Registro Oficial</span>
                 </div>
               </div>
-              <button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container">
-                <span class="material-symbols-outlined">download</span>
-              </button>
-            </div>
-            <!-- Fila 3 -->
-            <div class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors group cursor-pointer">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
-                  <span class="material-symbols-outlined">description</span>
-                </div>
-                <div class="flex flex-col">
-                  <span class="font-headline text-title text-on-surface leading-tight">Incidente_Emergencia_001.pdf</span>
-                  <span class="font-mono text-label text-on-surface-variant mt-1">1.2 MB • 18 Oct 2023</span>
-                </div>
-              </div>
-              <button class="text-primary opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-full hover:bg-primary-container">
-                <span class="material-symbols-outlined">download</span>
-              </button>
+              <span class="material-symbols-outlined text-primary">download</span>
             </div>
           </div>
           <div class="p-4 bg-surface-container-high rounded-2xl border border-surface-variant">
             <p class="font-mono text-label text-on-surface-variant flex items-start gap-2">
-              <span class="material-symbols-outlined text-base mt-0.5">info</span>
-              Los reportes se retienen 30 días antes de ser archivados en la nube central.
+              <span class="material-symbols-outlined text-base mt-0.5 text-primary">verified</span>
+              Las evidencias fotográficas quedan vinculadas y georreferenciadas a la base de datos central.
             </p>
           </div>
         </aside>
@@ -1447,15 +1356,26 @@
   <!-- ================================================ -->
   <div id="page-cierre" class="page flex-col min-h-screen bg-background pb-20 md:pb-0">
 
-    <header class="bg-surface w-full sticky top-0 border-b border-outline-variant z-40">
-      <div class="flex px-md py-sm w-full container mx-auto justify-between items-center">
-        <div class="flex items-center gap-sm">
-          <div class="w-10 h-10 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center">
-            <span class="material-symbols-outlined text-on-surface-variant">person</span>
+    <header class="w-full sticky top-0 border-b border-outline-variant bg-surface flex px-md py-sm z-40">
+      <div class="flex items-center justify-between w-full max-w-container mx-auto">
+        <div class="flex items-center gap-sm cursor-pointer" onclick="navigate('perfil')">
+          <div class="globalUserAvatar w-10 h-10 rounded-full bg-primary text-on-primary border border-outline-variant font-headline text-body flex items-center justify-center font-bold shadow-sm overflow-hidden flex-shrink-0">
+            NB
           </div>
-          <h1 class="font-headline text-headline-md text-primary font-bold tracking-tight">Gestión Urbana</h1>
+          <div>
+            <h1 class="globalUserName font-headline text-title text-on-surface font-semibold tracking-tight leading-tight">Nicolás Burgos</h1>
+            <p class="globalUserRole font-mono text-micro text-on-surface-variant flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+              <span>Líder • Maipú Zona 6</span>
+            </p>
+          </div>
         </div>
-        <span class="material-symbols-outlined text-primary text-2xl">location_on</span>
+        <div class="flex items-center gap-2">
+          <button onclick="navigate('perfil')" title="Mi Perfil" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant flex items-center gap-1 font-mono text-label bg-surface-container-low border border-outline-variant px-3 py-1.5 cursor-pointer">
+            <span class="material-symbols-outlined text-lg">person</span>
+            <span class="hidden sm:inline">Mi Perfil</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -1556,37 +1476,39 @@
       <!-- Estadísticas rápidas -->
       <div class="grid grid-cols-3 gap-sm">
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-primary" id="perfilOTs">142</span>
+          <span class="font-headline text-headline-lg text-primary" id="perfilOTs">0</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">OTs Total</p>
         </div>
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-primary">128</span>
+          <span class="font-headline text-headline-lg text-primary" id="perfilAprobadas">0</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Aprobadas</p>
         </div>
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-error">14</span>
+          <span class="font-headline text-headline-lg text-error" id="perfilPendientes">0</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Pendientes</p>
         </div>
       </div>
 
       <!-- Acciones de Gestión -->
       <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
-        <button onclick="navigate('crear-perfil')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left cursor-pointer">
-          <span class="material-symbols-outlined text-primary">person_add</span>
-          <div>
-            <span class="font-body text-body text-on-surface font-medium block">Registrar Nuevo Usuario</span>
-            <span class="font-mono text-micro text-on-surface-variant">Asignar rol y cuadrilla a nuevo personal</span>
-          </div>
-          <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
-        </button>
-        <button onclick="navigate('administracion')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left cursor-pointer">
-          <span class="material-symbols-outlined text-primary">manage_accounts</span>
-          <div>
-            <span class="font-body text-body text-on-surface font-medium block">Administración de Perfiles y Roles</span>
-            <span class="font-mono text-micro text-on-surface-variant">Ver y moderar todos los usuarios registrados</span>
-          </div>
-          <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
-        </button>
+        <div id="adminProfileActions" class="hidden flex-col">
+          <button onclick="navigate('crear-perfil')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left cursor-pointer">
+            <span class="material-symbols-outlined text-primary">person_add</span>
+            <div>
+              <span class="font-body text-body text-on-surface font-medium block">Registrar Nuevo Usuario</span>
+              <span class="font-mono text-micro text-on-surface-variant">Asignar rol y cuadrilla a nuevo personal</span>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
+          </button>
+          <button onclick="navigate('administracion')" class="w-full flex items-center gap-md p-md border-b border-outline-variant hover:bg-surface-container-low transition-colors text-left cursor-pointer">
+            <span class="material-symbols-outlined text-primary">manage_accounts</span>
+            <div>
+              <span class="font-body text-body text-on-surface font-medium block">Administración de Perfiles y Roles</span>
+              <span class="font-mono text-micro text-on-surface-variant">Ver y moderar todos los usuarios registrados</span>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant ml-auto">chevron_right</span>
+          </button>
+        </div>
         <button onclick="showToast('Soporte técnico AKRO — contacto directo activo')" class="w-full flex items-center gap-md p-md hover:bg-surface-container-low transition-colors text-left cursor-pointer">
           <span class="material-symbols-outlined text-on-surface-variant">help_outline</span>
           <span class="font-body text-body text-on-surface">Ayuda y Documentación</span>
@@ -2247,9 +2169,10 @@
 
     USUARIOS.unshift(nuevoUsuario);
 
-    // Asignar sesión activa
+    // Asignar sesión activa y persistir perfil
     currentUser = { id: 'usr-' + Date.now(), email };
     currentPerfil = nuevoUsuario;
+    try { localStorage.setItem('greenapps_cached_perfil', JSON.stringify(nuevoUsuario)); } catch(e) {}
     updateUIWithProfile();
 
     // Actualizar datos de confirmación en la pantalla de aviso
@@ -2268,6 +2191,12 @@
     showToast(`✓ Perfil creado. Revisa tu correo ${email} para confirmar tu acceso.`, 4500);
     navigate('registro-exitoso');
   });
+
+  // ==================== REFERENCIAS DE DASHBOARD ====================
+  const dashNameEl   = document.getElementById('dashUserName');
+  const dashRoleEl   = document.getElementById('dashUserRoleText');
+  const dashAvatarEl = document.getElementById('dashUserAvatar');
+  const dashModBadge = document.getElementById('dashModeradorBadge');
 
   // ==================== DASHBOARD (Métricas Reales) ====================
   function renderDashboard() {
@@ -2423,72 +2352,6 @@
         });
       }
     }
-  }
-
-  function approveTask(idx) {
-    if (!REVIEWS[idx]) return;
-    HISTORIAL_CIERRES.unshift({ tipo:'ok', texto: REVIEWS[idx].titulo, detalle:`Aprobado por ti – ahora` });
-    REVIEWS.splice(idx, 1);
-    renderCierre();
-    showToast('✓ Trabajo aprobado y cerrado');
-  }
-
-  function rejectTask(idx) {
-    if (!REVIEWS[idx]) return;
-    HISTORIAL_CIERRES.unshift({ tipo:'err', texto: REVIEWS[idx].titulo, detalle:`Rechazado – requiere corrección` });
-    REVIEWS.splice(idx, 1);
-    renderCierre();
-    showToast('✗ Trabajo rechazado');
-  }
-
-  // ==================== ADMIN (Exclusivo Administradores) ====================
-  function renderAdminList() {
-    const email = currentUser?.email || currentPerfil?.email || '';
-    const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase()) || currentPerfil?.esAdmin;
-
-    if (!isAdmin) {
-      showToast('⚠ Acceso restringido: Solo el Administrador General puede acceder a la gestión de usuarios.');
-      navigate('perfil');
-      return;
-    }
-
-    const totalEl = document.getElementById('adminTotalUsers');
-    const actEl = document.getElementById('adminActiveUsers');
-    const inactEl = document.getElementById('adminInactiveUsers');
-
-    const total = USUARIOS.length;
-    const activos = USUARIOS.filter(u => u.activo).length;
-    const inactivos = total - activos;
-
-    if (totalEl) totalEl.textContent = `${total}`;
-    if (actEl) actEl.textContent = `${activos}`;
-    if (inactEl) inactEl.textContent = `${inactivos}`;
-
-    const list = document.getElementById('userList');
-    if (!list) return;
-    list.innerHTML = '';
-    USUARIOS.forEach((u, i) => {
-      const isLast = i === USUARIOS.length - 1;
-      const avatarHtml = u.foto 
-        ? `<img src="${u.foto}" class="w-full h-full object-cover rounded-full">`
-        : u.nombre.charAt(0);
-      list.innerHTML += `
-        <div class="flex items-center justify-between p-md ${isLast?'':'border-b border-outline-variant'} hover:bg-surface-container-low transition-colors group cursor-pointer">
-          <div class="flex items-center gap-sm">
-            <div class="w-10 h-10 rounded-full ${u.activo ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'} flex items-center justify-center flex-shrink-0 font-headline text-title overflow-hidden">
-              ${avatarHtml}
-            </div>
-            <div>
-              <p class="font-headline text-title text-on-surface">${u.nombre} ${u.esAdmin ? '<span class="text-xs text-primary font-mono font-bold bg-primary/10 px-1.5 py-0.5 rounded ml-1">👑 Admin</span>' : ''}</p>
-              <p class="font-mono text-label text-on-surface-variant">${u.rol} • ${u.contrato}</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-sm">
-            <span class="font-mono text-label px-2 py-0.5 rounded-full ${u.activo ? 'bg-primary/10 text-primary' : 'bg-error/10 text-error'}">${u.activo ? 'Activo' : 'Inactivo'}</span>
-            <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
-          </div>
-        </div>`;
-    });
   }
 
   // ==================== EXPORTACIÓN A EXCEL (.XLSX) ====================
@@ -2861,11 +2724,22 @@
     const partes = nombre.trim().split(' ');
     const iniciales = partes.length >= 2 ? (partes[0][0] + partes[1][0]).toUpperCase() : nombre.substring(0, 2).toUpperCase();
 
-    // Actualizar Dashboard Top Bar
-    const dashNameEl = document.getElementById('dashUserName');
-    const dashRoleEl = document.getElementById('dashUserRoleText');
-    const dashAvatarEl = document.getElementById('dashUserAvatar');
-    const dashModBadge = document.getElementById('dashModeradorBadge');
+    // Actualizar todos los avatars globales en todos los headers
+    document.querySelectorAll('.globalUserAvatar').forEach(el => {
+      if (foto) {
+        el.innerHTML = `<img src="${foto}" alt="${nombre}" class="w-full h-full object-cover rounded-full">`;
+      } else {
+        el.textContent = iniciales;
+      }
+    });
+
+    document.querySelectorAll('.globalUserName').forEach(el => {
+      el.textContent = nombre;
+    });
+
+    document.querySelectorAll('.globalUserRole').forEach(el => {
+      el.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span><span>${rol} • ${contrato}</span>`;
+    });
 
     if (dashNameEl) dashNameEl.textContent = nombre;
     if (dashRoleEl) dashRoleEl.textContent = `${rol} • ${contrato}`;
@@ -2900,6 +2774,31 @@
         pAva.textContent = iniciales;
       }
     }
+
+    // Acciones de Administración en Perfil (Sólo visible para Administradores)
+    const adminActions = document.getElementById('adminProfileActions');
+    if (adminActions) {
+      if (isAdmin) {
+        adminActions.classList.remove('hidden');
+        adminActions.classList.add('flex');
+      } else {
+        adminActions.classList.add('hidden');
+        adminActions.classList.remove('flex');
+      }
+    }
+
+    // Actualizar Métricas Reales en Perfil
+    const totalOTs = ACTIVIDADES.length;
+    const aprobadasOTs = ACTIVIDADES.filter(a => a.estado === 'completado').length;
+    const pendientesOTs = ACTIVIDADES.filter(a => a.estado === 'pendiente').length;
+
+    const pTotal = document.getElementById('perfilOTs');
+    const pAprob = document.getElementById('perfilAprobadas');
+    const pPend  = document.getElementById('perfilPendientes');
+
+    if (pTotal) pTotal.textContent = `${totalOTs}`;
+    if (pAprob) pAprob.textContent = `${aprobadasOTs}`;
+    if (pPend)  pPend.textContent  = `${pendientesOTs}`;
 
     // Configurar acceso dinámico a Administración en la barra de navegación
     const navAdminBtn = document.getElementById('navBtnAdmin');
@@ -3044,10 +2943,22 @@
 
   // ==================== ADMINISTRACIÓN DE USUARIOS ====================
   async function renderAdminList() {
+    const email = currentUser?.email || currentPerfil?.email || '';
+    const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase()) || currentPerfil?.esAdmin;
+
+    if (!isAdmin) {
+      showToast('⚠ Acceso restringido: Solo el Administrador General puede acceder a la gestión de usuarios.');
+      navigate('perfil');
+      return;
+    }
+
     const list = document.getElementById('userList');
     list.innerHTML = '<div class="p-md text-center font-mono text-label text-on-surface-variant">Cargando usuarios...</div>';
 
-    // Intentar cargar desde Supabase si hay sesión
+    const totalEl = document.getElementById('adminTotalUsers');
+    const actEl = document.getElementById('adminActiveUsers');
+    const inactEl = document.getElementById('adminInactiveUsers');
+
     let usuarios = USUARIOS;
     if (currentUser) {
       const { data, error } = await db.from('perfiles').select('*').order('created_at', { ascending: false });
@@ -3082,6 +2993,13 @@
           </div>
         </div>`;
     });
+
+    const total = usuarios.length;
+    const activos = usuarios.filter(u => u.activo).length;
+    const inactivos = total - activos;
+    if (totalEl) totalEl.textContent = `${total}`;
+    if (actEl) actEl.textContent = `${activos}`;
+    if (inactEl) inactEl.textContent = `${inactivos}`;
   }
 
 
@@ -3126,7 +3044,16 @@
 
   populateAreasVerdes();
   // ==================== INIT ====================
+  try {
+    const cached = localStorage.getItem('greenapps_cached_perfil');
+    if (cached) {
+      currentPerfil = JSON.parse(cached);
+      updateUIWithProfile();
+    }
+  } catch(e) {}
+
   renderDashboard();
+  renderMultimedia();
   
   // Activar página inicial de inmediato
   const initialHash = window.location.hash.replace('#', '');
@@ -3143,10 +3070,9 @@
       if (session?.user) {
         currentUser = session.user;
         const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
-        currentPerfil = perfil;
+        if (perfil) currentPerfil = perfil;
         updateUIWithProfile();
         await loadOTsFromSupabase();
-        navigate('dashboard');
       }
     } catch(err) {
       console.warn('Session check offline:', err);
