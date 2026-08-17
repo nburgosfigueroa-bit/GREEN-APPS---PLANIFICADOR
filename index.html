@@ -1538,20 +1538,39 @@
     { nombre: 'Javiera Rojas',    rut: '14.666.777-8', rol: 'Líder de Equipo',        contrato: 'Maipú Zona 6',        email: 'javiera.r@akro.cl',        activo: true },
   ];
 
-  // ==================== ROUTER ====================
+  // ==================== ROUTER BLINDADO ====================
   let currentPage = 'login';
   let currentOtpCode = '123456';
 
   function navigate(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    if (!page) page = 'login';
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active');
+      p.style.setProperty('display', 'none', 'important');
+    });
     const target = document.getElementById('page-' + page);
     if (target) {
       target.classList.add('active');
+      target.style.setProperty('display', 'flex', 'important');
       window.scrollTo(0, 0);
       currentPage = page;
-      onPageEnter(page);
+      if (window.location.hash !== '#' + page) {
+        window.location.hash = page;
+      }
+      try {
+        onPageEnter(page);
+      } catch (err) {
+        console.error('Error onPageEnter:', err);
+      }
     }
   }
+
+  window.addEventListener('hashchange', () => {
+    const p = window.location.hash.replace('#', '');
+    if (p && document.getElementById('page-' + p) && p !== currentPage) {
+      navigate(p);
+    }
+  });
 
   function onPageEnter(page) {
     if (page === 'dashboard') renderDashboard();
@@ -1577,6 +1596,7 @@
   // ==================== TOAST ====================
   function showToast(msg, duration = 2500) {
     const t = document.getElementById('toast');
+    if (!t) return;
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), duration);
@@ -1601,7 +1621,7 @@
     }
 
     if (entered === currentOtpCode || entered === '123456') {
-      showToast('✓ Código verificado con éxito. Acceso concedido.', 3000);
+      showToast('✓ Código verificado con éxito. ¡Bienvenido al sistema!', 3000);
       navigate('dashboard');
     } else {
       if (inp) {
@@ -1620,7 +1640,7 @@
   });
 
   // ==================== LOGIN (Supabase Auth + Acceso Directo) ====================
-  document.getElementById('btnLogin').addEventListener('click', async () => {
+  document.getElementById('btnLogin')?.addEventListener('click', async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pass  = document.getElementById('loginPass').value;
     const cap   = document.getElementById('captcha').checked;
@@ -1685,50 +1705,34 @@
 
   // ==================== ACCESO GOOGLE (Inicio Directo Administrador) ====================
   window.loginWithGoogle = function() {
-    const btn = document.getElementById('btnGoogleLogin');
-    if (btn) {
-      btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Iniciando con Google...</span>';
-      btn.disabled = true;
-    }
-
-    setTimeout(() => {
-      currentUser = { id: 'admin-google-nburgos', email: 'nburgosfigueroa@gmail.com' };
-      currentPerfil = {
-        id: 'admin-google-nburgos',
-        nombre: 'Nicolás Burgos',
-        email: 'nburgosfigueroa@gmail.com',
-        rol: 'Administrador General',
-        contrato: 'Maipú Zona 6 (AKRO)',
-        activo: true
-      };
-      updateUIWithProfile();
-      showToast('✓ Sesión iniciada con Google: nburgosfigueroa@gmail.com (Administrador)', 3500);
-      navigate('dashboard');
-    }, 200);
+    currentUser = { id: 'admin-google-nburgos', email: 'nburgosfigueroa@gmail.com' };
+    currentPerfil = {
+      id: 'admin-google-nburgos',
+      nombre: 'Nicolás Burgos',
+      email: 'nburgosfigueroa@gmail.com',
+      rol: 'Administrador General',
+      contrato: 'Maipú Zona 6 (AKRO)',
+      activo: true
+    };
+    updateUIWithProfile();
+    showToast('✓ Sesión iniciada con Google: nburgosfigueroa@gmail.com (Administrador)', 2500);
+    navigate('dashboard');
   };
 
   // ==================== ACCESO MICROSOFT (Inicio Directo Corporativo AKRO) ====================
   window.loginWithMicrosoft = function() {
-    const btn = document.getElementById('btnMicrosoftLogin');
-    if (btn) {
-      btn.innerHTML = '<span class="material-symbols-outlined spin text-primary">hourglass_top</span><span>Iniciando con Microsoft...</span>';
-      btn.disabled = true;
-    }
-
-    setTimeout(() => {
-      currentUser = { id: 'admin-akro-nburgos', email: 'nburgos@akro.cl' };
-      currentPerfil = {
-        id: 'admin-akro-nburgos',
-        nombre: 'Nicolás Burgos',
-        email: 'nburgos@akro.cl',
-        rol: 'Administrador General',
-        contrato: 'Maipú Zona 6 (AKRO)',
-        activo: true
-      };
-      updateUIWithProfile();
-      showToast('✓ Sesión iniciada con Microsoft: nburgos@akro.cl (Administrador)', 3500);
-      navigate('dashboard');
-    }, 200);
+    currentUser = { id: 'admin-akro-nburgos', email: 'nburgos@akro.cl' };
+    currentPerfil = {
+      id: 'admin-akro-nburgos',
+      nombre: 'Nicolás Burgos',
+      email: 'nburgos@akro.cl',
+      rol: 'Administrador General',
+      contrato: 'Maipú Zona 6 (AKRO)',
+      activo: true
+    };
+    updateUIWithProfile();
+    showToast('✓ Sesión iniciada con Microsoft: nburgos@akro.cl (Administrador)', 2500);
+    navigate('dashboard');
   };
 
   // ==================== FOTO DE PERFIL EN REGISTRO ====================
@@ -2505,17 +2509,29 @@
   populateAreasVerdes();
   // ==================== INIT ====================
   renderDashboard();
+  
+  // Activar página inicial de inmediato
+  const initialHash = window.location.hash.replace('#', '');
+  if (initialHash && document.getElementById('page-' + initialHash)) {
+    navigate(initialHash);
+  } else {
+    navigate('login');
+  }
+
   // Verificar sesión activa al cargar
   (async () => {
-    const { data: { session } } = await db.auth.getSession();
-    if (session?.user) {
-      currentUser = session.user;
-      const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
-      currentPerfil = perfil;
-      updateUIWithProfile();
-      await loadOTsFromSupabase();
-      // Si hay sesión activa, ir directo al dashboard
-      navigate('dashboard');
+    try {
+      const { data: { session } } = await db.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
+        currentPerfil = perfil;
+        updateUIWithProfile();
+        await loadOTsFromSupabase();
+        navigate('dashboard');
+      }
+    } catch(err) {
+      console.warn('Session check offline:', err);
     }
   })();
   </script>
