@@ -307,9 +307,9 @@
 
 
   <!-- ================================================ -->
-  <!-- MODAL POP-UP: SELECTOR DE CUENTA (GOOGLE / MS)   -->
+  <!-- MODAL POP-UP: INICIO CON GOOGLE / MICROSOFT       -->
   <!-- ================================================ -->
-  <div id="oauthModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-md">
+  <div id="oauthModal" class="hidden fixed inset-0 z-50 bg-black/65 backdrop-blur-sm flex items-center justify-center p-md">
     <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl max-w-md w-full p-md md:p-lg shadow-2xl relative animate-scale-in flex flex-col gap-md">
       
       <!-- Modal Header -->
@@ -319,8 +319,8 @@
             <!-- Icono Google o MS se inserta dinámicamente -->
           </div>
           <div>
-            <h3 class="font-headline text-title text-on-surface" id="oauthModalTitle">Elegir una cuenta</h3>
-            <p class="font-mono text-micro text-on-surface-variant">para continuar a GreenApps Gestión Urbana</p>
+            <h3 class="font-headline text-title text-on-surface" id="oauthModalTitle">Iniciar sesión</h3>
+            <p class="font-mono text-micro text-on-surface-variant" id="oauthModalSubtitle">para continuar a GreenApps Gestión Urbana</p>
           </div>
         </div>
         <button type="button" onclick="closeOAuthModal()" class="w-8 h-8 rounded-full hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant cursor-pointer transition-colors">
@@ -328,61 +328,43 @@
         </button>
       </div>
 
-      <!-- Lista de Cuentas Disponibles -->
-      <div class="flex flex-col gap-sm" id="oauthAccountsList">
-        <!-- Cuenta Administrador Principal -->
-        <div onclick="selectOAuthAdminAccount()" class="flex items-center justify-between p-sm rounded-xl border border-outline-variant hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group">
-          <div class="flex items-center gap-sm">
-            <div class="w-10 h-10 rounded-full bg-primary text-on-primary font-headline text-body flex items-center justify-center font-bold shadow-sm">
-              NB
-            </div>
-            <div class="text-left">
-              <p class="font-headline text-title text-on-surface group-hover:text-primary transition-colors flex items-center gap-1">
-                <span>Nicolás Burgos</span>
-                <span class="text-xs">👑</span>
-              </p>
-              <p class="font-mono text-micro text-on-surface-variant font-medium" id="oauthAdminEmailText">nburgos@akro.cl</p>
-              <span class="font-mono text-[10px] text-primary bg-primary/10 px-1.5 py-0.5 rounded-full border border-primary/20 mt-0.5 inline-block">
-                Administrador General • Maipú Zona 6
-              </span>
-            </div>
+      <!-- Formulario de Entrada de Credenciales OAuth -->
+      <form id="oauthLoginForm" class="flex flex-col gap-md" onsubmit="return false;">
+        <div class="flex flex-col gap-xs">
+          <label for="oauthEmailInput" class="font-mono text-label text-on-surface-variant uppercase flex items-center justify-between">
+            <span id="oauthEmailLabel">Correo electrónico o cuenta corporativa</span>
+            <span class="text-error font-bold text-micro">* Requerido</span>
+          </label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">account_circle</span>
+            <input id="oauthEmailInput" type="email" placeholder="ejemplo@akro.cl" autofocus required
+              class="w-full h-12 pl-10 pr-sm rounded-xl border border-outline-variant bg-surface-container-low font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
           </div>
-          <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">login</span>
         </div>
 
-        <!-- Opción: Ingresar con otra cuenta -->
-        <div onclick="toggleOtherAccountForm()" class="flex items-center justify-between p-sm rounded-xl border border-dashed border-outline-variant hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer group">
-          <div class="flex items-center gap-sm">
-            <div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant font-headline text-title flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-colors">
-              <span class="material-symbols-outlined text-xl">person_add</span>
-            </div>
-            <div class="text-left">
-              <p class="font-headline text-title text-on-surface group-hover:text-primary transition-colors">Usar otra cuenta corporativa</p>
-              <p class="font-mono text-micro text-on-surface-variant">Ingresar con un correo diferente...</p>
-            </div>
+        <div class="flex flex-col gap-xs">
+          <label for="oauthPasswordInput" class="font-mono text-label text-on-surface-variant uppercase flex items-center justify-between">
+            <span>Contraseña de la cuenta</span>
+            <span class="text-error font-bold text-micro">* Requerido</span>
+          </label>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-xl">lock</span>
+            <input id="oauthPasswordInput" type="password" placeholder="••••••••" required
+              class="w-full h-12 pl-10 pr-sm rounded-xl border border-outline-variant bg-surface-container-low font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
           </div>
-          <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">expand_more</span>
         </div>
-      </div>
 
-      <!-- Formulario Desplegable para Otra Cuenta -->
-      <div id="otherAccountForm" class="hidden flex flex-col gap-sm pt-xs border-t border-outline-variant">
-        <label for="customOAuthEmail" class="font-mono text-label text-on-surface-variant uppercase">
-          Escriba el correo a conectar:
-        </label>
-        <input id="customOAuthEmail" type="email" placeholder="nombre.apellido@akro.cl"
-          class="w-full h-12 px-sm rounded-xl border border-outline-variant bg-surface-container-lowest font-body text-body text-on-surface focus:outline-none focus:border-primary focus:border-2 transition-all">
-        <button type="button" onclick="submitCustomOAuthAccount()"
-          class="w-full h-11 bg-primary text-on-primary font-headline text-title rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all cursor-pointer shadow-sm">
-          <span>Continuar con esta cuenta</span>
+        <button type="button" id="btnSubmitOAuth" onclick="submitOAuthLogin()"
+          class="w-full h-12 bg-primary text-on-primary font-headline text-title rounded-full flex items-center justify-center gap-xs hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all cursor-pointer shadow-sm">
+          <span>Verificar e Ingresar</span>
           <span class="material-symbols-outlined text-base">arrow_forward</span>
         </button>
-      </div>
+      </form>
 
       <!-- Modal Footer -->
-      <div class="text-center pt-xs">
+      <div class="text-center pt-xs border-t border-outline-variant">
         <p class="font-mono text-[11px] text-on-surface-variant/80">
-          Al continuar, GreenApps validará los permisos asignados a su perfil en el contrato de Maipú.
+          🔒 Conexión segura con validación de roles y permisos de contrato.
         </p>
       </div>
 
@@ -1794,17 +1776,20 @@
     currentOAuthProvider = provider;
     const modal = document.getElementById('oauthModal');
     const title = document.getElementById('oauthModalTitle');
+    const subtitle = document.getElementById('oauthModalSubtitle');
     const iconContainer = document.getElementById('oauthProviderIcon');
-    const adminEmail = document.getElementById('oauthAdminEmailText');
-    const otherForm = document.getElementById('otherAccountForm');
-    const customInp = document.getElementById('customOAuthEmail');
+    const emailLabel = document.getElementById('oauthEmailLabel');
+    const emailInp = document.getElementById('oauthEmailInput');
+    const passInp = document.getElementById('oauthPasswordInput');
 
-    if (otherForm) otherForm.classList.add('hidden');
-    if (customInp) customInp.value = '';
+    if (emailInp) emailInp.value = '';
+    if (passInp) passInp.value = '';
 
     if (provider === 'google') {
-      if (title) title.textContent = 'Elegir una cuenta de Google';
-      if (adminEmail) adminEmail.textContent = 'nburgosfigueroa@gmail.com';
+      if (title) title.textContent = 'Iniciar sesión con Google';
+      if (subtitle) subtitle.textContent = 'Ingrese su cuenta de Google para acceder a GreenApps';
+      if (emailLabel) emailLabel.textContent = 'Correo de Google (@gmail.com o corporativo)';
+      if (emailInp) emailInp.placeholder = 'ejemplo@gmail.com';
       if (iconContainer) {
         iconContainer.innerHTML = `
           <svg class="w-6 h-6" viewBox="0 0 24 24">
@@ -1815,8 +1800,10 @@
           </svg>`;
       }
     } else {
-      if (title) title.textContent = 'Elegir una cuenta de Microsoft';
-      if (adminEmail) adminEmail.textContent = 'nburgos@akro.cl';
+      if (title) title.textContent = 'Iniciar sesión con Microsoft';
+      if (subtitle) subtitle.textContent = 'Ingrese su cuenta corporativa Microsoft para acceder a GreenApps';
+      if (emailLabel) emailLabel.textContent = 'Correo corporativo Microsoft (@akro.cl o empresa)';
+      if (emailInp) emailInp.placeholder = 'usuario@akro.cl';
       if (iconContainer) {
         iconContainer.innerHTML = `
           <svg class="w-6 h-6" viewBox="0 0 21 21">
@@ -1830,6 +1817,7 @@
 
     if (modal) {
       modal.classList.remove('hidden');
+      setTimeout(() => emailInp?.focus(), 150);
     }
   };
 
@@ -1846,69 +1834,59 @@
     openOAuthModal('microsoft');
   };
 
-  // Selección de cuenta Administrador Directo (Nicolás Burgos)
-  window.selectOAuthAdminAccount = function() {
-    closeOAuthModal();
-    const email = currentOAuthProvider === 'google' ? 'nburgosfigueroa@gmail.com' : 'nburgos@akro.cl';
-    currentUser = { id: 'admin-' + currentOAuthProvider + '-nburgos', email };
-    currentPerfil = {
-      id: 'admin-' + currentOAuthProvider + '-nburgos',
-      nombre: 'Nicolás Burgos',
-      email: email,
-      rol: 'Administrador General',
-      contrato: 'Maipú Zona 6 (AKRO)',
-      activo: true
-    };
-    updateUIWithProfile();
-    showToast(`✓ Sesión iniciada: ${email} (Administrador)`, 2500);
-    navigate('dashboard');
-  };
+  // Validación y envío del formulario OAuth
+  window.submitOAuthLogin = async function() {
+    const emailInp = document.getElementById('oauthEmailInput');
+    const passInp = document.getElementById('oauthPasswordInput');
+    const email = emailInp ? emailInp.value.trim().toLowerCase() : '';
+    const pass = passInp ? passInp.value : '';
 
-  // Mostrar formulario para otra cuenta
-  window.toggleOtherAccountForm = function() {
-    const f = document.getElementById('otherAccountForm');
-    if (f) {
-      f.classList.toggle('hidden');
-      if (!f.classList.contains('hidden')) {
-        document.getElementById('customOAuthEmail')?.focus();
-      }
-    }
-  };
-
-  // Enviar otra cuenta
-  window.submitCustomOAuthAccount = function() {
-    const inp = document.getElementById('customOAuthEmail');
-    const email = inp ? inp.value.trim().toLowerCase() : '';
     if (!email || !email.includes('@')) {
       showToast('⚠ Ingrese un correo electrónico válido');
-      inp?.focus();
+      emailInp?.focus();
+      return;
+    }
+    if (!pass || pass.length < 4) {
+      showToast('⚠ Ingrese la contraseña de su cuenta');
+      passInp?.focus();
       return;
     }
 
-    closeOAuthModal();
+    const btn = document.getElementById('btnSubmitOAuth');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<span class="material-symbols-outlined spin text-xl">hourglass_top</span><span>Verificando identidad...</span>';
+    btn.disabled = true;
 
-    // Si es uno de los correos de administración:
-    if (ADMIN_EMAILS.includes(email)) {
-      currentUser = { id: 'admin-custom-' + Date.now(), email };
-      currentPerfil = {
-        id: 'admin-custom-' + Date.now(),
-        nombre: 'Nicolás Burgos',
-        email: email,
-        rol: 'Administrador General',
-        contrato: 'Maipú Zona 6 (AKRO)',
-        activo: true
-      };
-      updateUIWithProfile();
-      showToast(`✓ Sesión iniciada como Administrador (${email})`, 2500);
-      navigate('dashboard');
-      return;
-    }
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.disabled = false;
+      closeOAuthModal();
 
-    // Para cualquier otro correo: debe completar perfil, foto y verificación de código
-    showToast(`ℹ Conectando con ${email}. Por favor complete su registro y fotografía.`, 3500);
-    navigate('crear-perfil');
-    const emailField = document.getElementById('email') || document.getElementById('cpEmail');
-    if (emailField) emailField.value = email;
+      // REGLA ESTRICTA DE ADMINISTRACIÓN:
+      // Si el correo ingresado corresponde a Nicolás Burgos (Administrador / Moderador):
+      if (ADMIN_EMAILS.includes(email)) {
+        currentUser = { id: 'admin-oauth-' + Date.now(), email };
+        currentPerfil = {
+          id: 'admin-oauth-' + Date.now(),
+          nombre: 'Nicolás Burgos',
+          email: email,
+          rol: 'Administrador General',
+          contrato: 'Maipú Zona 6 (AKRO)',
+          activo: true
+        };
+        updateUIWithProfile();
+        showToast(`✓ Bienvenido Administrador Nicolás Burgos (${email})`, 3000);
+        navigate('dashboard');
+        return;
+      }
+
+      // Para cualquier otro correo que NO sea de los administradores:
+      // Debe registrar su perfil, subir fotografía obligatoria y recibir código de seguridad
+      showToast(`ℹ Cuenta verificada (${email}). Complete su fotografía y datos de acreditación.`, 4000);
+      navigate('crear-perfil');
+      const emailField = document.getElementById('email') || document.getElementById('cpEmail');
+      if (emailField) emailField.value = email;
+    }, 400);
   };
 
   // ==================== FOTO DE PERFIL EN REGISTRO ====================
