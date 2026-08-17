@@ -558,27 +558,29 @@
       <img src="https://lh3.googleusercontent.com/aida/AP1WRLuvzUHQbQrMlyhdPspRZA4xEJ5da3QwNg9Ev9Qi1rK2CihSwxzrC0f3wyCFHb6RSK_y6sg8TBUowcnstidxLCFT06QBZ7u60T1fOETRAUQFAnyL_JV7e7eZ5V9trPYFQE_j_NvB0euHcCLcGML8dxP958SI6RECYPnkc5aS-n6V1C9zxXF87EPlCK28X0UlejAjxKrRvLnxcix8SWjBLu41fq9_BQwjMpfLtDxCm3941kiZgqxp-AVdj48" alt="Logo Gestión Urbana" class="h-12 w-auto object-contain">
     </div>
 
-    <!-- Decorative Background -->
-    <div class="absolute inset-0 pointer-events-none opacity-5" style="background-image: radial-gradient(var(--tw-colors-on-surface) 1px, transparent 1px); background-size: 24px 24px;"></div>
-
     <!-- Main Content Canvas -->
-    <main class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-xl p-md md:p-xl flex flex-col items-center text-center shadow-sm relative z-10 gap-sm">
+    <main class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-2xl p-md md:p-xl flex flex-col items-center text-center shadow-lg relative z-10 gap-md">
       
       <!-- Success Icon -->
-      <div class="mb-sm h-24 w-24 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed animate-scale-in shadow-md">
-        <span class="material-symbols-outlined text-[64px] icon-fill text-primary">check_circle</span>
+      <div class="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center text-primary animate-scale-in shadow-sm">
+        <span class="material-symbols-outlined text-[48px] icon-fill">mark_email_read</span>
       </div>
 
       <!-- Typography Cluster -->
-      <h1 class="font-headline text-headline-lg-mobile md:text-headline-lg text-primary tracking-tight font-semibold">
-        ¡Registro Exitoso!
-      </h1>
-      <p class="font-body text-body text-on-surface-variant font-medium">
-        ¡Tu perfil ha sido creado! Revisa tu mail y comparte la contraseña que te enviamos para completar el ingreso.
-      </p>
+      <div>
+        <h1 class="font-headline text-headline-md text-primary font-bold">
+          ¡Revisa tu Correo Electrónico!
+        </h1>
+        <p class="font-body text-body text-on-surface-variant mt-1 text-sm">
+          Hemos enviado un correo de confirmación de acceso a:
+        </p>
+        <p id="resEmail" class="font-mono font-bold text-primary text-sm mt-2 bg-surface-container py-1.5 px-3 rounded-lg inline-block border border-outline-variant">
+          usuario@correo.com
+        </p>
+      </div>
 
       <!-- Resumen de Datos Registrados -->
-      <div class="bg-surface-container-low border border-outline-variant rounded-xl p-sm w-full text-left flex flex-col gap-xs my-xs">
+      <div class="bg-surface-container-low border border-outline-variant rounded-xl p-sm w-full text-left flex flex-col gap-xs">
         <div class="flex justify-between items-center text-xs">
           <span class="font-mono text-label text-on-surface-variant uppercase">Nombre</span>
           <span class="font-body text-body text-on-surface font-semibold" id="resNombre">—</span>
@@ -593,28 +595,25 @@
         </div>
       </div>
 
-      <!-- Redirection Status & Progress -->
-      <div class="w-full flex flex-col items-center space-y-sm mt-xs">
-        <!-- Linear Progress Bar -->
-        <div aria-label="Redirigiendo" class="w-full h-1.5 bg-surface-variant rounded-full overflow-hidden" role="progressbar">
-          <div class="h-full bg-primary rounded-full animate-progress-fill w-0"></div>
-        </div>
-
-        <!-- Status Text -->
-        <div class="flex items-center gap-2 text-on-surface-variant opacity-80">
-          <span class="material-symbols-outlined text-[16px] animate-spin">autorenew</span>
-          <p class="font-mono text-micro tracking-wide">
-            Redireccionando a la pantalla de verificación de código...
-          </p>
-        </div>
+      <!-- Instructions -->
+      <div class="p-3 bg-primary/5 rounded-xl border border-primary/20 text-left text-xs text-on-surface flex items-start gap-2.5">
+        <span class="material-symbols-outlined text-primary text-lg flex-shrink-0 mt-0.5">touch_app</span>
+        <span>Abre el mensaje de <strong>Supabase Auth</strong> en tu correo y presiona el enlace <strong>"Confirm email address"</strong> para activar tu sesión.</span>
       </div>
 
-      <!-- Botón Manual -->
-      <button onclick="navigate('verificar-codigo')"
-        class="w-full bg-primary text-on-primary font-headline text-body py-2.5 rounded-full flex items-center justify-center gap-sm hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all mt-xs cursor-pointer">
-        <span>Ingresar Código de Seguridad</span>
-        <span class="material-symbols-outlined text-sm">vpn_key</span>
-      </button>
+      <!-- Botones de Acción -->
+      <div class="w-full flex flex-col gap-sm">
+        <button onclick="navigate('dashboard')"
+          class="w-full bg-primary text-on-primary font-headline text-body py-3 rounded-full flex items-center justify-center gap-sm hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all cursor-pointer shadow-md">
+          <span class="material-symbols-outlined text-lg">check_circle</span>
+          <span>Ya confirmé mi correo / Ir al Dashboard</span>
+        </button>
+
+        <button onclick="navigate('login')"
+          class="w-full text-center text-on-surface-variant hover:text-primary font-body text-sm py-1 transition-colors">
+          ← Volver al inicio de sesión
+        </button>
+      </div>
     </main>
 
     <!-- Footer Credits -->
@@ -1774,21 +1773,9 @@
     if (page === 'cierre') renderCierre();
     if (page === 'administracion') renderAdminList();
     if (page === 'registro-exitoso') {
-      if (window._redirTimer) clearTimeout(window._redirTimer);
-      window._redirTimer = setTimeout(() => {
-        navigate('verificar-codigo');
-      }, 3800);
-    }
-    if (page === 'verificar-codigo') {
-      const emailEl = document.getElementById('verifUserEmail');
-      const targetEmail = currentUser?.email || currentPerfil?.email || 'usuario@empresa.cl';
+      const emailEl = document.getElementById('resEmail');
+      const targetEmail = currentUser?.email || currentPerfil?.email || 'su correo';
       if (emailEl) emailEl.textContent = targetEmail;
-      const inp = document.getElementById('otpInput');
-      if (inp) {
-        inp.value = '';
-        inp.classList.remove('border-error', 'ring-2', 'ring-error');
-        setTimeout(() => inp.focus(), 150);
-      }
     }
   }
 
@@ -2754,15 +2741,24 @@
     navigate('login');
   };
 
-  // ==================== ESCUCHAR CAMBIOS DE SESIÓN ====================
+  // ==================== ESCUCHAR CAMBIOS DE SESIÓN (Confirmación de Correo) ====================
   db.auth.onAuthStateChange(async (event, session) => {
     if (session?.user) {
       currentUser = session.user;
       const { data: perfil } = await db.from('perfiles').select('*').eq('id', currentUser.id).single();
-      currentPerfil = perfil;
+      currentPerfil = perfil || currentPerfil || {
+        nombre: currentUser.user_metadata?.nombre || currentUser.email,
+        rol: currentUser.user_metadata?.rol || 'Líder de Equipo',
+        contrato: currentUser.user_metadata?.contrato || 'Maipú Zona 6 (AKRO)',
+        email: currentUser.email,
+        activo: true
+      };
       updateUIWithProfile();
-      // Cargar OTs reales en dashboard
       await loadOTsFromSupabase();
+      if (currentPage === 'login' || currentPage === 'registro-exitoso' || currentPage === 'crear-perfil') {
+        showToast('✓ ¡Correo confirmado con éxito! Bienvenido al sistema.', 3500);
+        navigate('dashboard');
+      }
     } else {
       currentUser   = null;
       currentPerfil = null;
