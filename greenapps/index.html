@@ -14,6 +14,9 @@
   <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- SheetJS CDN para Exportación y Gestión de Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
   <!-- Google Fonts: Stitch design system -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -818,6 +821,10 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
+          <button onclick="exportarOTsAExcel()" title="Descargar Reporte en Excel" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-primary flex items-center gap-1 font-mono text-micro bg-primary/10 border border-primary/20 px-3 py-1.5 cursor-pointer font-bold">
+            <span class="material-symbols-outlined text-base">file_download</span>
+            <span class="hidden sm:inline">Descargar Excel</span>
+          </button>
           <button onclick="navigate('perfil')" title="Mi Perfil" class="p-2 rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant flex items-center gap-1 font-mono text-label bg-surface-container-low border border-outline-variant px-3 py-1.5 cursor-pointer">
             <span class="material-symbols-outlined text-lg">person</span>
             <span class="hidden sm:inline">Mi Perfil</span>
@@ -845,12 +852,12 @@
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md flex flex-col justify-between shadow-sm">
           <span class="font-mono text-label text-on-surface-variant uppercase">Productividad</span>
           <div class="mt-sm flex items-end gap-xs">
-            <span class="font-headline text-display text-primary leading-none">84</span>
+            <span class="font-headline text-display text-primary leading-none" id="kpiProductividad">0</span>
             <span class="font-headline text-title text-primary mb-1">%</span>
           </div>
-          <div class="mt-xs flex items-center gap-1 text-primary-fixed-dim">
-            <span class="material-symbols-outlined text-base">trending_up</span>
-            <span class="font-mono text-label">+12% vs sem ant.</span>
+          <div class="mt-xs flex items-center gap-1 text-on-surface-variant">
+            <span class="material-symbols-outlined text-base">monitoring</span>
+            <span class="font-mono text-label">En tiempo real</span>
           </div>
         </div>
 
@@ -858,7 +865,7 @@
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md flex flex-col justify-between shadow-sm">
           <span class="font-mono text-label text-on-surface-variant uppercase">Intervenciones</span>
           <div class="mt-sm flex items-end gap-xs">
-            <span class="font-headline text-display text-on-surface leading-none" id="kpiTotal">142</span>
+            <span class="font-headline text-display text-on-surface leading-none" id="kpiTotal">0</span>
           </div>
           <div class="mt-xs font-mono text-label text-on-surface-variant">Total completadas</div>
         </div>
@@ -867,11 +874,11 @@
         <div class="bg-gradient-to-br from-primary-container to-primary text-on-primary-container rounded-2xl p-md flex flex-col justify-between shadow-sm col-span-2 relative overflow-hidden">
           <div class="relative z-10">
             <span class="font-mono text-label text-primary-fixed-dim uppercase">Alerta del Sistema</span>
-            <h3 class="font-headline text-headline-md text-on-primary mt-xs mb-sm">2 Zonas Críticas</h3>
-            <button class="bg-secondary-container text-on-secondary-container font-headline text-label px-4 py-2 rounded-full inline-flex items-center gap-2 hover:bg-secondary hover:text-on-secondary transition-colors"
+            <h3 class="font-headline text-headline-md text-on-primary mt-xs mb-sm" id="kpiCriticas">0 Zonas Críticas</h3>
+            <button class="bg-secondary-container text-on-secondary-container font-headline text-label px-4 py-2 rounded-full inline-flex items-center gap-2 hover:bg-secondary hover:text-on-secondary transition-colors cursor-pointer"
               onclick="navigate('cierre')">
-              <span class="material-symbols-outlined text-lg">warning</span>
-              Revisar Ahora
+              <span class="material-symbols-outlined text-lg">visibility</span>
+              Ver Estado
             </button>
           </div>
           <span class="material-symbols-outlined absolute -right-4 -bottom-8 text-[120px] opacity-10 text-on-primary icon-fill">nature</span>
@@ -1659,15 +1666,15 @@
       <!-- Resumen rápido -->
       <div class="grid grid-cols-3 gap-sm">
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-primary">12</span>
+          <span class="font-headline text-headline-lg text-primary" id="adminTotalUsers">2</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Total</p>
         </div>
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-primary">9</span>
+          <span class="font-headline text-headline-lg text-primary" id="adminActiveUsers">2</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Activos</p>
         </div>
         <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-md text-center shadow-sm">
-          <span class="font-headline text-headline-lg text-error">3</span>
+          <span class="font-headline text-headline-lg text-error" id="adminInactiveUsers">0</span>
           <p class="font-mono text-label text-on-surface-variant mt-xs uppercase">Inactivos</p>
         </div>
       </div>
@@ -1710,36 +1717,17 @@
   let currentUser    = null;   // sesión activa
   let currentPerfil  = null;   // datos de public.perfiles
 
-  // ==================== DATOS LOCALES (fallback/demo) ====================
-  const ACTIVIDADES = [
-    { tipo: 'Poda',          hora: 'Hoy, 09:30 AM',        lugar: 'Sector Norte – Parque Central',   desc: 'Poda de mantenimiento en línea de árboles perimetrales.',  estado: 'completado' },
-    { tipo: 'Irrigación',    hora: 'Programado: 14:00 PM', lugar: 'Plaza de los Fundadores',          desc: 'Revisión de aspersores sector B.',                           estado: 'pendiente'  },
-    { tipo: 'Infraestructura', hora: 'Atrasado 2 días',    lugar: 'Ciclovía Este – Tramo 3',          desc: 'Reparación de luminaria vandalizada.',                       estado: 'atrasado'   },
-    { tipo: 'Mobiliario',    hora: 'Hoy, 11:00 AM',        lugar: 'Parque Bicentenario Sur',          desc: 'Instalación de bancas y señalética.',                        estado: 'completado' },
-  ];
-
-  const REVIEWS = [
-    { id: '#TRB-4928', titulo: 'Reparación de luminaria sector norte', operador: 'Carlos G.', hace: 'Hace 2h',
-      fotos: ['https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=200&q=80','https://images.unsplash.com/photo-1505673542670-a5e3ff5b14a3?w=200&q=80'] },
-    { id: '#TRB-4925', titulo: 'Poda de árboles av. principal', operador: 'Luis M.', hace: 'Hace 5h', fotos: [] },
-  ];
-
-  const HISTORIAL_CIERRES = [
-    { tipo: 'ok',  texto: 'Mantenimiento bomba riego',  detalle: 'Aprobado por ti – 10:30 AM' },
-    { tipo: 'err', texto: 'Limpieza desagüe pluvial',   detalle: 'Rechazado – Faltan fotos'   },
-    { tipo: 'ok',  texto: 'Poda plaza principal',        detalle: 'Aprobado por ti – Ayer'     },
-  ];
+  // ==================== DATOS DEL SISTEMA (Tablas Reales) ====================
+  const ACTIVIDADES = [];
+  const REVIEWS = [];
+  const HISTORIAL_CIERRES = [];
+  const MULTIMEDIA_ITEMS = [];
 
   const ADMIN_EMAILS = ['nburgos@akro.cl', 'nburgosfigueroa@gmail.com'];
 
   const USUARIOS = [
-    { nombre: 'Nicolás Burgos',   rut: '12.345.678-9', rol: 'Administrador General', contrato: 'Maipú Zona 6 (AKRO)', email: 'nburgos@akro.cl',           activo: true, esAdmin: true },
-    { nombre: 'Nicolás Burgos',   rut: '12.345.678-9', rol: 'Administrador / Moderador', contrato: 'Maipú Zona 6 (AKRO)', email: 'nburgosfigueroa@gmail.com', activo: true, esAdmin: true },
-    { nombre: 'Carlos González',  rut: '12.345.678-9', rol: 'Líder de Equipo',        contrato: 'Maipú Zona 6',        email: 'carlos.g@akro.cl',         activo: true },
-    { nombre: 'Ana Martínez',     rut: '11.222.333-4', rol: 'Supervisora Terreno',    contrato: 'Maipú Zona 3',        email: 'ana.m@akro.cl',            activo: true },
-    { nombre: 'Luis Morales',     rut: '13.444.555-6', rol: 'Encargado (Cierre)',      contrato: 'Maipú Zona 6',        email: 'luis.m@akro.cl',           activo: true },
-    { nombre: 'Pedro Fuentes',    rut: '10.111.222-3', rol: 'Insp. Técnica',           contrato: 'Maipú Zona 7',        email: 'pedro.f@akro.cl',          activo: false },
-    { nombre: 'Javiera Rojas',    rut: '14.666.777-8', rol: 'Líder de Equipo',        contrato: 'Maipú Zona 6',        email: 'javiera.r@akro.cl',        activo: true },
+    { nombre: 'Nicolás Burgos', rut: '12.345.678-9', rol: 'Administrador General', contrato: 'Maipú Zona 6 (AKRO)', email: 'nburgos@akro.cl', activo: true, esAdmin: true },
+    { nombre: 'planificadorgreenapps', rut: '12.345.678-9', rol: 'Líder de Equipo', contrato: 'Maipú Zona 6 (AKRO)', email: 'planificadorgreenapps@gmail.com', activo: true, esAdmin: false }
   ];
 
   // ==================== ROUTER BLINDADO ====================
@@ -2281,10 +2269,37 @@
     navigate('registro-exitoso');
   });
 
-  // ==================== DASHBOARD ====================
+  // ==================== DASHBOARD (Métricas Reales) ====================
   function renderDashboard() {
+    const total = ACTIVIDADES.length;
+    const completadas = ACTIVIDADES.filter(a => a.estado === 'completado').length;
+    const pct = total > 0 ? Math.round((completadas / total) * 100) : 0;
+    const criticas = ACTIVIDADES.filter(a => a.estado === 'atrasado' || a.prioridad === '0').length;
+
+    const prodEl = document.getElementById('kpiProductividad');
+    if (prodEl) prodEl.textContent = `${pct}`;
+    const kpiTot = document.getElementById('kpiTotal');
+    if (kpiTot) kpiTot.textContent = `${completadas}`;
+    const kpiCrit = document.getElementById('kpiCriticas');
+    if (kpiCrit) kpiCrit.textContent = `${criticas} Zonas Críticas`;
+
     const list = document.getElementById('actividadesList');
+    if (!list) return;
     list.innerHTML = '';
+
+    if (ACTIVIDADES.length === 0) {
+      list.innerHTML = `
+        <div class="p-8 text-center bg-surface-container-lowest border border-outline-variant rounded-2xl text-on-surface-variant flex flex-col items-center gap-2">
+          <span class="material-symbols-outlined text-4xl text-primary/40">assignment_add</span>
+          <p class="font-headline font-semibold text-on-surface text-base">No hay actividades registradas aún</p>
+          <p class="text-xs text-on-surface-variant max-w-sm">Crea una nueva Orden de Trabajo para ver las intervenciones reflejadas en tiempo real en este panel.</p>
+          <button onclick="navigate('tareas')" class="mt-2 px-4 py-2 bg-primary text-on-primary rounded-xl font-headline text-body text-xs flex items-center gap-1 shadow-sm hover:bg-primary-container cursor-pointer">
+            <span class="material-symbols-outlined text-sm">add_circle</span> Crear Primera Orden
+          </button>
+        </div>`;
+      return;
+    }
+
     ACTIVIDADES.forEach(a => {
       const borderCol = a.estado === 'completado' ? 'border-l-primary'
                       : a.estado === 'pendiente'  ? 'border-l-secondary-container'
@@ -2309,23 +2324,61 @@
     });
   }
 
+  // ==================== MULTIMEDIA ====================
+  function renderMultimedia() {
+    const grid = document.getElementById('multimediaGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    if (MULTIMEDIA_ITEMS.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full p-8 text-center bg-surface-container-lowest border border-outline-variant rounded-2xl text-on-surface-variant flex flex-col items-center gap-2">
+          <span class="material-symbols-outlined text-4xl text-primary/40">photo_library</span>
+          <p class="font-headline font-semibold text-on-surface text-base">Galería Multimedia en Limpio</p>
+          <p class="text-xs text-on-surface-variant max-w-sm">Las fotografías y videos que adjuntes en las Órdenes de Trabajo de terreno aparecerán catalogadas aquí por Área Verde.</p>
+          <button onclick="navigate('tareas')" class="mt-2 px-4 py-2 bg-primary text-on-primary rounded-xl font-headline text-body text-xs flex items-center gap-1 shadow-sm hover:bg-primary-container cursor-pointer">
+            <span class="material-symbols-outlined text-sm">add_a_photo</span> Adjuntar Evidencia en OT
+          </button>
+        </div>`;
+      return;
+    }
+
+    MULTIMEDIA_ITEMS.forEach((m, idx) => {
+      grid.innerHTML += `
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm flex flex-col group cursor-pointer">
+          <div class="relative w-full aspect-video bg-black/5 overflow-hidden">
+            <img src="${m.url}" alt="${m.titulo}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            <span class="absolute top-2 left-2 font-mono text-micro px-2 py-0.5 rounded-full bg-black/60 text-white">${m.codigoAV || 'AV-Zona 6'}</span>
+          </div>
+          <div class="p-3">
+            <h4 class="font-headline text-body font-semibold text-on-surface truncate">${m.titulo}</h4>
+            <p class="font-mono text-micro text-on-surface-variant mt-0.5">${m.fecha} • ${m.operador}</p>
+          </div>
+        </div>`;
+    });
+  }
+
   // ==================== CIERRE ====================
   function renderCierre() {
-    // Tarjetas de revisión
     const reviewList = document.getElementById('reviewList');
+    if (!reviewList) return;
     reviewList.innerHTML = '';
-    REVIEWS.forEach((r, idx) => {
-      const fotosHtml = r.fotos.map(f => `
-        <div class="w-32 h-24 flex-shrink-0 rounded-xl bg-surface-variant border border-outline-variant overflow-hidden relative group/img">
-          <img src="${f}" alt="Evidencia" class="w-full h-full object-cover">
-          <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 bg-surface/50 transition-opacity cursor-pointer">
-            <span class="material-symbols-outlined text-on-surface">zoom_in</span>
-          </div>
-        </div>`).join('');
-      reviewList.innerHTML += `
-        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden flex flex-col relative ${idx>0?'opacity-80':''}">
-          <div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-container rounded-l-2xl"></div>
-          <div class="p-md pl-5">
+
+    if (REVIEWS.length === 0) {
+      reviewList.innerHTML = `
+        <div class="p-8 text-center bg-surface-container-lowest border border-outline-variant rounded-2xl text-on-surface-variant flex flex-col items-center gap-2">
+          <span class="material-symbols-outlined text-4xl text-primary/40">task_alt</span>
+          <p class="font-headline font-semibold text-on-surface text-base">Sin Tareas Pendientes de Cierre</p>
+          <p class="text-xs text-on-surface-variant max-w-sm">Las órdenes que completen los operarios aparecerán aquí para tu fiscalización y aprobación.</p>
+        </div>`;
+    } else {
+      REVIEWS.forEach((r, idx) => {
+        const fotosHtml = r.fotos.map(f => `
+          <div class="w-32 h-24 flex-shrink-0 rounded-xl bg-surface-variant border border-outline-variant overflow-hidden relative group/img">
+            <img src="${f}" alt="Evidencia" class="w-full h-full object-cover">
+          </div>`).join('');
+        reviewList.innerHTML += `
+          <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden flex flex-col relative p-md pl-5">
             <div class="flex justify-between items-start mb-sm">
               <div>
                 <span class="inline-flex items-center px-2 py-1 rounded-lg bg-secondary-container text-on-secondary-container font-mono text-label mb-2">Para Revisión</span>
@@ -2334,75 +2387,99 @@
               </div>
               <span class="font-mono text-label text-on-surface-variant whitespace-nowrap">${r.hace}</span>
             </div>
-            ${r.fotos.length ? `
-            <div class="mb-md">
-              <p class="font-mono text-label text-on-surface-variant mb-2">Evidencia Adjunta:</p>
-              <div class="flex gap-sm overflow-x-auto pb-2">${fotosHtml}</div>
-            </div>` : ''}
+            ${r.fotos.length ? `<div class="mb-md"><div class="flex gap-sm overflow-x-auto pb-2">${fotosHtml}</div></div>` : ''}
             <div class="flex flex-col sm:flex-row gap-sm pt-sm border-t border-outline-variant">
-              <button onclick="approveTask(${idx})"
-                class="flex-1 bg-primary text-on-primary font-headline text-title py-3 px-4 rounded-xl hover:bg-surface-tint transition-colors flex items-center justify-center gap-2 active:scale-95">
-                <span class="material-symbols-outlined icon-fill">check_circle</span>
-                Aprobar y Cerrar
+              <button onclick="approveTask(${idx})" class="flex-1 bg-primary text-on-primary font-headline text-title py-3 px-4 rounded-xl hover:bg-primary-container transition-colors flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+                <span class="material-symbols-outlined icon-fill">check_circle</span> Aprobar y Cerrar
               </button>
-              <button onclick="rejectTask(${idx})"
-                class="flex-1 bg-surface border-2 border-outline text-on-surface font-headline text-title py-3 px-4 rounded-xl hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2 active:scale-95">
-                <span class="material-symbols-outlined">cancel</span>
-                Rechazar
+              <button onclick="rejectTask(${idx})" class="flex-1 bg-surface border border-outline text-on-surface font-headline text-title py-3 px-4 rounded-xl hover:bg-surface-container transition-colors flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+                <span class="material-symbols-outlined">cancel</span> Rechazar
               </button>
             </div>
-          </div>
-        </div>`;
-    });
+          </div>`;
+      });
+    }
 
     // Historial
     const hist = document.getElementById('closureHistory');
-    hist.innerHTML = '';
-    HISTORIAL_CIERRES.forEach(c => {
-      const bgIcon = c.tipo === 'ok' ? 'bg-primary-container text-on-primary-container' : 'bg-error-container text-on-error-container';
-      const icon   = c.tipo === 'ok' ? 'check' : 'close';
-      hist.innerHTML += `
-        <li class="py-sm border-b border-outline-variant last:border-b-0 flex items-start gap-sm">
-          <div class="w-8 h-8 rounded-lg ${bgIcon} flex items-center justify-center flex-shrink-0 mt-1">
-            <span class="material-symbols-outlined text-sm icon-fill">${icon}</span>
-          </div>
-          <div>
-            <p class="font-mono text-label text-on-surface">${c.texto}</p>
-            <p class="font-mono text-label text-on-surface-variant mt-1">${c.detalle}</p>
-          </div>
-        </li>`;
-    });
+    if (hist) {
+      hist.innerHTML = '';
+      if (HISTORIAL_CIERRES.length === 0) {
+        hist.innerHTML = '<li class="py-sm text-center text-xs text-on-surface-variant">No hay historial reciente de cierres</li>';
+      } else {
+        HISTORIAL_CIERRES.forEach(c => {
+          const bgIcon = c.tipo === 'ok' ? 'bg-primary-container text-on-primary-container' : 'bg-error-container text-on-error-container';
+          const icon   = c.tipo === 'ok' ? 'check' : 'close';
+          hist.innerHTML += `
+            <li class="py-sm border-b border-outline-variant last:border-b-0 flex items-start gap-sm">
+              <div class="w-8 h-8 rounded-lg ${bgIcon} flex items-center justify-center flex-shrink-0 mt-1">
+                <span class="material-symbols-outlined text-sm icon-fill">${icon}</span>
+              </div>
+              <div>
+                <p class="font-mono text-label text-on-surface">${c.texto}</p>
+                <p class="font-mono text-label text-on-surface-variant mt-1">${c.detalle}</p>
+              </div>
+            </li>`;
+        });
+      }
+    }
   }
 
   function approveTask(idx) {
+    if (!REVIEWS[idx]) return;
     HISTORIAL_CIERRES.unshift({ tipo:'ok', texto: REVIEWS[idx].titulo, detalle:`Aprobado por ti – ahora` });
     REVIEWS.splice(idx, 1);
     renderCierre();
     showToast('✓ Trabajo aprobado y cerrado');
-    document.getElementById('kpiTotal') && (document.getElementById('kpiTotal').textContent = parseInt(document.getElementById('kpiTotal').textContent)+1);
   }
 
   function rejectTask(idx) {
+    if (!REVIEWS[idx]) return;
     HISTORIAL_CIERRES.unshift({ tipo:'err', texto: REVIEWS[idx].titulo, detalle:`Rechazado – requiere corrección` });
     REVIEWS.splice(idx, 1);
     renderCierre();
     showToast('✗ Trabajo rechazado');
   }
 
-  // ==================== ADMIN ====================
+  // ==================== ADMIN (Exclusivo Administradores) ====================
   function renderAdminList() {
+    const email = currentUser?.email || currentPerfil?.email || '';
+    const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase()) || currentPerfil?.esAdmin;
+
+    if (!isAdmin) {
+      showToast('⚠ Acceso restringido: Solo el Administrador General puede acceder a la gestión de usuarios.');
+      navigate('perfil');
+      return;
+    }
+
+    const totalEl = document.getElementById('adminTotalUsers');
+    const actEl = document.getElementById('adminActiveUsers');
+    const inactEl = document.getElementById('adminInactiveUsers');
+
+    const total = USUARIOS.length;
+    const activos = USUARIOS.filter(u => u.activo).length;
+    const inactivos = total - activos;
+
+    if (totalEl) totalEl.textContent = `${total}`;
+    if (actEl) actEl.textContent = `${activos}`;
+    if (inactEl) inactEl.textContent = `${inactivos}`;
+
     const list = document.getElementById('userList');
+    if (!list) return;
     list.innerHTML = '';
     USUARIOS.forEach((u, i) => {
       const isLast = i === USUARIOS.length - 1;
+      const avatarHtml = u.foto 
+        ? `<img src="${u.foto}" class="w-full h-full object-cover rounded-full">`
+        : u.nombre.charAt(0);
       list.innerHTML += `
         <div class="flex items-center justify-between p-md ${isLast?'':'border-b border-outline-variant'} hover:bg-surface-container-low transition-colors group cursor-pointer">
           <div class="flex items-center gap-sm">
-            <div class="w-10 h-10 rounded-full ${u.activo ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'} flex items-center justify-center flex-shrink-0 font-headline text-title">
-              ${u.nombre.charAt(0)}
+            <div class="w-10 h-10 rounded-full ${u.activo ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'} flex items-center justify-center flex-shrink-0 font-headline text-title overflow-hidden">
+              ${avatarHtml}
             </div>
             <div>
-              <p class="font-headline text-title text-on-surface">${u.nombre}</p>
+              <p class="font-headline text-title text-on-surface">${u.nombre} ${u.esAdmin ? '<span class="text-xs text-primary font-mono font-bold bg-primary/10 px-1.5 py-0.5 rounded ml-1">👑 Admin</span>' : ''}</p>
               <p class="font-mono text-label text-on-surface-variant">${u.rol} • ${u.contrato}</p>
             </div>
           </div>
@@ -2413,6 +2490,47 @@
         </div>`;
     });
   }
+
+  // ==================== EXPORTACIÓN A EXCEL (.XLSX) ====================
+  window.exportarOTsAExcel = function() {
+    if (typeof XLSX === 'undefined') {
+      showToast('⚠ Librería Excel cargando...');
+      return;
+    }
+    const data = ACTIVIDADES.length > 0 ? ACTIVIDADES.map(a => ({
+      'Tipo de Trabajo': a.tipo,
+      'Fecha / Hora': a.hora,
+      'Ubicación / Área Verde': a.lugar,
+      'Descripción': a.desc,
+      'Estado': a.estado,
+      'Prioridad': a.prioridad || '3'
+    })) : [{
+      'Tipo de Trabajo': 'Sin registros aún',
+      'Fecha / Hora': '—',
+      'Ubicación / Área Verde': '—',
+      'Descripción': 'No hay OTs registradas',
+      'Estado': '—',
+      'Prioridad': '—'
+    }];
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Ordenes_Trabajo');
+    XLSX.writeFile(wb, `Reporte_OTs_Zona6_${new Date().toISOString().slice(0,10)}.xlsx`);
+    showToast('✓ Archivo Excel de Órdenes descargado');
+  };
+
+  window.exportarAreasVerdesExcel = function() {
+    if (typeof XLSX === 'undefined') {
+      showToast('⚠ Librería Excel cargando...');
+      return;
+    }
+    const ws = XLSX.utils.json_to_sheet(AREAS_VERDES_ZONA6);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Areas_Verdes_Zona6');
+    XLSX.writeFile(wb, `Catalogo_AVs_Maipu_Zona6_${new Date().toISOString().slice(0,10)}.xlsx`);
+    showToast('✓ Base de Datos de 436 Áreas Verdes exportada a Excel');
+  };
 
   // ==================== FORMULARIO OT ====================
   // Barra de color según tipo de trabajo
@@ -2631,34 +2749,71 @@
     }, 2200);
   });
 
-  // Fallback local si no hay sesión
+  // Guardado de OT y actualización en vivo del Dashboard y Multimedia
   function submitOTLocal() {
     const btn  = document.getElementById('btnSubmitTask');
     const text = document.getElementById('btnTaskText');
     const icon = btn.querySelector('.material-symbols-outlined');
     icon.textContent = 'hourglass_top';
     icon.classList.add('spin');
-    text.textContent = 'Guardando localmente...';
+    text.textContent = 'Registrando OT...';
     btn.disabled = true;
-    btn.classList.replace('bg-primary','bg-surface-tint');
+    
     setTimeout(() => {
       icon.classList.remove('spin');
       icon.textContent = 'check_circle';
-      text.textContent = '¡Registrado localmente!';
-      btn.classList.replace('bg-surface-tint','bg-[#1a4332]');
-      ACTIVIDADES.unshift({ tipo: 'Nueva OT', hora:'Ahora', lugar: document.getElementById('tDireccion').value, desc: document.getElementById('tDesc').value, estado:'pendiente' });
+      text.textContent = '¡OT Registrada!';
+      
+      const tipoMap = { mob: 'Mobiliario', poda: 'Poda', tolva: 'Camión Tolva', riego: 'Riego' };
+      const tipoVal = document.getElementById('tTipoTrabajo').value;
+      const areaVal = document.getElementById('tArea').value;
+      const dirVal  = document.getElementById('tDireccion').value;
+      const descVal = document.getElementById('tDesc').value;
+      const prioVal = document.getElementById('tPrioridad').value;
+      
+      const nuevaOT = {
+        tipo: tipoMap[tipoVal] || 'Mantenimiento',
+        hora: 'Recién registrada',
+        lugar: `${areaVal ? areaVal + ' — ' : ''}${dirVal}`,
+        desc: descVal,
+        estado: 'pendiente',
+        prioridad: prioVal
+      };
+
+      ACTIVIDADES.unshift(nuevaOT);
+
+      // Si subió fotos, registrarlas en MULTIMEDIA_ITEMS
+      if (window._pendingFiles && window._pendingFiles.length > 0) {
+        window._pendingFiles.forEach(f => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            MULTIMEDIA_ITEMS.unshift({
+              url: e.target.result,
+              titulo: nuevaOT.lugar,
+              fecha: 'Hoy',
+              operador: currentPerfil?.nombre || 'Líder Terreno',
+              codigoAV: areaVal || 'AV-Zona 6'
+            });
+            renderMultimedia();
+          };
+          reader.readAsDataURL(f);
+        });
+      }
+
+      renderDashboard();
+
       setTimeout(() => {
         document.getElementById('taskForm').reset();
         document.getElementById('uploadedFiles').innerHTML = '';
+        window._pendingFiles = [];
         document.getElementById('workTypeBar').style.width = '0';
         icon.textContent = 'cloud_upload';
         text.textContent = 'Registrar Tarea';
-        btn.classList.replace('bg-[#1a4332]','bg-primary');
         btn.disabled = false;
-        showToast('⚠ Guardado local – inicia sesión para sincronizar');
-        navigate('cierre');
-      }, 2000);
-    }, 1000);
+        showToast('✓ Orden de Trabajo registrada exitosamente');
+        navigate('dashboard');
+      }, 1000);
+    }, 800);
   }
 
   // ==================== FILTRO DASHBOARD ====================
@@ -2699,7 +2854,8 @@
     const contrato = currentPerfil.contrato || 'Maipú Zona 6 (AKRO)';
     const email  = currentUser?.email   || currentPerfil.email || '—';
     const rut    = currentPerfil.rut    || '12.345.678-9';
-    const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase()) || rol.toLowerCase().includes('admin');
+    const foto   = currentPerfil.foto   || null;
+    const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase()) || rol.toLowerCase().includes('admin') || currentPerfil.esAdmin;
 
     // Iniciales para el avatar
     const partes = nombre.trim().split(' ');
@@ -2713,13 +2869,15 @@
 
     if (dashNameEl) dashNameEl.textContent = nombre;
     if (dashRoleEl) dashRoleEl.textContent = `${rol} • ${contrato}`;
-    if (dashAvatarEl) dashAvatarEl.textContent = iniciales;
-    if (dashModBadge) {
-      if (isAdmin) {
-        dashModBadge.style.display = 'inline-flex';
+    if (dashAvatarEl) {
+      if (foto) {
+        dashAvatarEl.innerHTML = `<img src="${foto}" alt="${nombre}" class="w-full h-full object-cover rounded-full">`;
       } else {
-        dashModBadge.style.display = 'none';
+        dashAvatarEl.textContent = iniciales;
       }
+    }
+    if (dashModBadge) {
+      dashModBadge.style.display = isAdmin ? 'inline-flex' : 'none';
     }
 
     // Actualizar Página Mi Perfil
@@ -2735,7 +2893,29 @@
     if (pCon) pCon.textContent = contrato;
     if (pEma) pEma.textContent = email;
     if (pRut) pRut.textContent = rut;
-    if (pAva) pAva.textContent = iniciales;
+    if (pAva) {
+      if (foto) {
+        pAva.innerHTML = `<img src="${foto}" alt="${nombre}" class="w-full h-full object-cover rounded-full">`;
+      } else {
+        pAva.textContent = iniciales;
+      }
+    }
+
+    // Configurar acceso dinámico a Administración en la barra de navegación
+    const navAdminBtn = document.getElementById('navBtnAdmin');
+    const navAdminText = document.getElementById('navTextAdmin');
+    const navAdminIcon = document.getElementById('navIconAdmin');
+    if (navAdminBtn) {
+      if (isAdmin) {
+        navAdminBtn.setAttribute('onclick', "navigate('administracion')");
+        if (navAdminText) navAdminText.textContent = 'Ajustes';
+        if (navAdminIcon) navAdminIcon.textContent = 'settings';
+      } else {
+        navAdminBtn.setAttribute('onclick', "navigate('perfil')");
+        if (navAdminText) navAdminText.textContent = 'Mi Perfil';
+        if (navAdminIcon) navAdminIcon.textContent = 'account_circle';
+      }
+    }
   }
 
   // ==================== CERRAR SESIÓN ====================
