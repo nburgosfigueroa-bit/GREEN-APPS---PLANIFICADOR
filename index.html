@@ -661,9 +661,18 @@
           </p>
         </div>
 
-        <div class="p-3 bg-surface-container-low rounded-xl border border-outline-variant text-left text-xs text-on-surface-variant flex items-start gap-2">
-          <span class="material-symbols-outlined text-primary text-lg flex-shrink-0">info</span>
-          <span>Abre el mensaje de <strong>Gestión Urbana</strong> en tu bandeja de entrada o spam y copia el código de acceso.</span>
+        <div class="p-3 bg-surface-container-low rounded-xl border border-outline-variant text-left text-xs text-on-surface-variant flex flex-col gap-2">
+          <div class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-primary text-lg flex-shrink-0">mark_email_unread</span>
+            <span>Abre el mensaje de <strong>Gestión Urbana</strong> en tu bandeja de entrada o spam y copia el código de acceso.</span>
+          </div>
+          
+          <!-- Botón de Bandeja / Visor Directo de Correo para pruebas inmediatas -->
+          <button type="button" onclick="openEmailViewerModal()"
+            class="w-full py-2 px-3 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg font-mono text-micro font-bold flex items-center justify-center gap-1.5 transition-all border border-primary/20 cursor-pointer">
+            <span class="material-symbols-outlined text-sm">visibility</span>
+            <span>Abrir y Ver Correo Entrante de Gestión Urbana</span>
+          </button>
         </div>
 
         <!-- Formulario de Entrada de Código (El usuario debe ingresar lo recibido en su mail) -->
@@ -707,6 +716,73 @@
 
     </div>
   </div><!-- /page-verificar-codigo -->
+
+
+  <!-- ================================================ -->
+  <!-- MODAL: VISOR DE CORREO ENTRANTE (GESTIÓN URBANA) -->
+  <!-- ================================================ -->
+  <div id="emailViewerModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-md">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl max-w-lg w-full p-md md:p-lg shadow-2xl relative flex flex-col gap-md max-h-[90vh] overflow-y-auto">
+      
+      <!-- Mail Client Header -->
+      <div class="flex items-center justify-between pb-sm border-b border-outline-variant">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-2xl">mail</span>
+          <div>
+            <h3 class="font-headline text-title text-on-surface font-semibold">Bandeja de Entrada de Correo</h3>
+            <p class="font-mono text-micro text-on-surface-variant">Mensaje recibido de: <strong>Gestión Urbana (no-reply@greenapps.cl)</strong></p>
+          </div>
+        </div>
+        <button type="button" onclick="closeEmailViewerModal()" class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <!-- Renderizado Oficial del Correo Electrónico -->
+      <div class="rounded-xl border border-outline-variant overflow-hidden bg-white shadow-sm">
+        <div class="bg-[#1a4332] p-4 text-center text-white">
+          <div class="w-12 h-12 bg-[#002d1d] rounded-lg mx-auto mb-2 flex items-center justify-center p-1">
+            <img alt="GreenApps Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLuvzUHQbQrMlyhdPspRZA4xEJ5da3QwNg9Ev9Qi1rK2CihSwxzrC0f3wyCFHb6RSK_y6sg8TBUowcnstidxLCFT06QBZ7u60T1fOETRAUQFAnyL_JV7e7eZ5V9trPYFQE_j_NvB0euHcCLcGML8dxP958SI6RECYPnkc5aS-n6V1C9zxXF87EPlCK28X0UlejAjxKrRvLnxcix8SWjBLu41fq9_BQwjMpfLtDxCm3941kiZgqxp-AVdj48"/>
+          </div>
+          <h4 class="text-xl font-bold text-white">GreenApps</h4>
+          <p class="text-xs text-[#c0edd4] font-mono">Gestión Urbana • Contrato Maipú Zona 6</p>
+        </div>
+
+        <div class="p-6 text-center">
+          <div class="w-10 h-10 rounded-full bg-[#e1e3e4] text-[#002d1d] flex items-center justify-center mx-auto mb-2">
+            <span class="material-symbols-outlined text-2xl icon-fill">vpn_key</span>
+          </div>
+          <h5 class="text-lg font-bold text-[#002d1d]">Solicitud de Autenticación</h5>
+          <p class="text-sm text-[#414944] mt-1 max-w-sm mx-auto">
+            Has solicitado acceder al sistema de Gestión Urbana para tu cuenta. Tu código de acceso de un solo uso es:
+          </p>
+
+          <!-- Código de 6 dígitos en el correo -->
+          <div class="bg-[#edeeef] p-4 rounded-xl border border-[#c1c8c2] inline-block my-4">
+            <p id="modalMailOtpCode" class="font-mono text-4xl tracking-widest text-[#002d1d] font-bold select-all">
+              123456
+            </p>
+          </div>
+
+          <p class="text-xs text-[#717973] max-w-xs mx-auto">
+            Este código es de uso personal y válido por 5 minutos.
+          </p>
+        </div>
+
+        <div class="bg-[#e7e8e9] p-3 text-center text-[11px] text-[#717973] border-t border-[#c1c8c2]">
+          © 2024 GreenApps Gestión Urbana. Todos los derechos reservados.
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button type="button" onclick="copyAndUseOtpCode()"
+        class="w-full py-3 bg-primary text-on-primary rounded-xl font-headline text-body flex items-center justify-center gap-2 hover:bg-primary-container active:scale-95 transition-all shadow-md cursor-pointer">
+        <span class="material-symbols-outlined text-base">content_copy</span>
+        <span>Copiar Código y Pegar en la Casilla</span>
+      </button>
+
+    </div>
+  </div><!-- /emailViewerModal -->
 
 
   <!-- ================================================ -->
@@ -1725,11 +1801,34 @@
     setTimeout(() => t.classList.remove('show'), duration);
   }
 
+  // ==================== VISOR DE BANDEJA DE CORREO ENTRANTE ====================
+  window.openEmailViewerModal = function() {
+    const modal = document.getElementById('emailViewerModal');
+    const codeEl = document.getElementById('modalMailOtpCode');
+    if (codeEl) codeEl.textContent = currentOtpCode;
+    if (modal) modal.classList.remove('hidden');
+  };
+
+  window.closeEmailViewerModal = function() {
+    const modal = document.getElementById('emailViewerModal');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.copyAndUseOtpCode = function() {
+    const inp = document.getElementById('otpInput');
+    if (inp) inp.value = currentOtpCode;
+    closeEmailViewerModal();
+    showToast(`✓ Código ${currentOtpCode} copiado e ingresado. Verificando...`, 2500);
+    setTimeout(() => {
+      document.getElementById('btnVerificarOtp')?.click();
+    }, 300);
+  };
+
   // ==================== OTP 2FA VERIFICATION ====================
   window.regenerarCodigoOtp = function() {
     currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
     const targetEmail = currentUser?.email || currentPerfil?.email || 'su correo';
-    showToast(`✓ Correo reenviado desde Gestión Urbana a ${targetEmail}. Revisa tu bandeja de entrada o spam.`, 4000);
+    showToast(`✓ Correo reenviado desde Gestión Urbana a ${targetEmail}. Revisa tu bandeja de entrada o visor.`, 4000);
   };
 
   document.getElementById('btnVerificarOtp')?.addEventListener('click', async () => {
