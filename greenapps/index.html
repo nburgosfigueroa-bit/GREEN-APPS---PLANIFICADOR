@@ -1603,7 +1603,7 @@
     }
   });
 
-  // ==================== LOGIN (Supabase Auth + 2FA Mandatory) ====================
+  // ==================== LOGIN (Supabase Auth + Acceso Directo) ====================
   document.getElementById('btnLogin').addEventListener('click', async () => {
     const email = document.getElementById('loginEmail').value.trim();
     const pass  = document.getElementById('loginPass').value;
@@ -1636,9 +1636,8 @@
           currentPerfil.rol = 'Administrador General';
         }
         updateUIWithProfile();
-        currentOtpCode = String(Math.floor(100000 + Math.random() * 900000));
-        showToast('✓ Credenciales correctas. Ingrese el código de seguridad enviado.');
-        navigate('verificar-codigo');
+        showToast(`✓ Bienvenido ${currentPerfil.nombre} (${currentPerfil.rol})`);
+        navigate('dashboard');
         return;
       }
     } catch (err) {
@@ -1660,16 +1659,15 @@
         activo: true
       };
       updateUIWithProfile();
-      currentOtpCode = '123456';
-      showToast('✓ Credenciales de Administrador verificadas. Ingrese código OTP.');
-      navigate('verificar-codigo');
+      showToast('✓ Sesión iniciada como Administrador / Moderador Principal', 3000);
+      navigate('dashboard');
       return;
     }
 
     showToast('✗ Credenciales incorrectas o usuario no registrado en Supabase', 3500);
   });
 
-  // ==================== ACCESO GOOGLE (Inicio Directo con 2FA) ====================
+  // ==================== ACCESO GOOGLE (Inicio Directo Administrador) ====================
   window.loginWithGoogle = function() {
     const btn = document.getElementById('btnGoogleLogin');
     if (btn) {
@@ -1688,13 +1686,12 @@
         activo: true
       };
       updateUIWithProfile();
-      currentOtpCode = '123456';
-      showToast('✓ Acceso Google verificado. Complete con el código de seguridad.');
-      navigate('verificar-codigo');
-    }, 300);
+      showToast('✓ Sesión iniciada con Google: nburgosfigueroa@gmail.com (Administrador)', 3500);
+      navigate('dashboard');
+    }, 200);
   };
 
-  // ==================== ACCESO MICROSOFT (Inicio Directo con 2FA) ====================
+  // ==================== ACCESO MICROSOFT (Inicio Directo Corporativo AKRO) ====================
   window.loginWithMicrosoft = function() {
     const btn = document.getElementById('btnMicrosoftLogin');
     if (btn) {
@@ -1713,10 +1710,9 @@
         activo: true
       };
       updateUIWithProfile();
-      currentOtpCode = '123456';
-      showToast('✓ Acceso Microsoft AKRO verificado. Complete con el código de seguridad.');
-      navigate('verificar-codigo');
-    }, 300);
+      showToast('✓ Sesión iniciada con Microsoft: nburgos@akro.cl (Administrador)', 3500);
+      navigate('dashboard');
+    }, 200);
   };
 
   // ==================== CREAR PERFIL (Supabase Auth con Validación Total) ====================
