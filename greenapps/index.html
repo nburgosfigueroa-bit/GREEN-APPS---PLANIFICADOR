@@ -387,22 +387,43 @@
         
         <!-- Foto de Perfil / Acreditación en Terreno -->
         <div class="flex flex-col items-center gap-xs py-xs">
-          <div id="avatarPreviewBox" class="w-24 h-24 rounded-full bg-surface-container-high border-2 border-dashed border-primary/40 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative group hover:border-primary transition-all">
-            <img id="avatarPreviewImg" class="hidden w-full h-full object-cover" src="" alt="Foto de Perfil">
-            <div id="avatarPlaceholder" class="flex flex-col items-center justify-center text-on-surface-variant group-hover:text-primary">
-              <span class="material-symbols-outlined text-3xl">add_a_photo</span>
-              <span class="font-mono text-micro font-bold mt-1">Tomar Foto</span>
-            </div>
-            <input type="file" id="userPhotoInput" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+          <div class="flex items-center justify-between w-full px-1">
+            <span class="font-mono text-label text-on-surface-variant uppercase flex items-center gap-xs">
+              <span class="material-symbols-outlined text-[16px]">photo_camera</span> Foto de Credencial
+            </span>
+            <span id="err-photo" class="field-error hidden text-error font-bold text-micro">* Obligatorio: Tome o suba su foto</span>
           </div>
-          <span class="font-mono text-micro text-on-surface-variant">Foto de perfil obligatoria para credencial en terreno</span>
+
+          <div id="avatarPreviewBox" class="w-28 h-28 rounded-full bg-surface-container-high border-2 border-dashed border-primary/40 flex flex-col items-center justify-center overflow-hidden relative shadow-inner">
+            <img id="avatarPreviewImg" class="hidden w-full h-full object-cover" src="" alt="Foto de Perfil">
+            <div id="avatarPlaceholder" class="flex flex-col items-center justify-center text-on-surface-variant">
+              <span class="material-symbols-outlined text-3xl text-primary">add_a_photo</span>
+              <span class="font-mono text-micro font-bold mt-1 text-center">Foto Obligatoria</span>
+            </div>
+          </div>
+
+          <!-- Botones de Acción de Foto: Cámara y Archivo -->
+          <div class="flex items-center gap-sm mt-xs">
+            <button type="button" onclick="openCameraModal()"
+              class="px-3 py-1.5 bg-primary text-on-primary rounded-lg font-mono text-micro font-bold flex items-center gap-1 hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all cursor-pointer shadow-sm">
+              <span class="material-symbols-outlined text-sm">photo_camera</span>
+              <span>Tomar con Cámara</span>
+            </button>
+            <label for="userPhotoInput"
+              class="px-3 py-1.5 bg-surface-container border border-outline-variant text-on-surface rounded-lg font-mono text-micro font-bold flex items-center gap-1 hover:bg-surface-container-high active:scale-95 transition-all cursor-pointer shadow-sm">
+              <span class="material-symbols-outlined text-sm">upload_file</span>
+              <span>Subir Archivo</span>
+            </label>
+            <input type="file" id="userPhotoInput" accept="image/*" capture="user" class="hidden">
+          </div>
+          <span class="font-mono text-micro text-on-surface-variant">Fotografía nítida del rostro para la credencial en terreno</span>
         </div>
 
         <!-- Nombre Completo -->
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="fullName">
             <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">badge</span> Nombre Completo</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-fullName" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <input id="fullName" name="fullName" type="text" placeholder="Ej. Juan Pérez" required
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
@@ -412,7 +433,7 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="rut">
             <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">id_card</span> RUT</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-rut" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <input id="rut" name="rut" type="text" placeholder="Ej. 12.345.678-9" required
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
@@ -422,7 +443,7 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="email">
             <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">mail</span> Correo Electrónico</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-email" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <input id="email" name="email" type="email" placeholder="correo@empresa.com" required
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
@@ -432,7 +453,7 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="password">
             <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">lock</span> Contraseña</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-password" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <input id="password" name="password" type="password" placeholder="••••••••" required
             class="bg-surface-container-low border border-outline-variant rounded-lg p-sm font-body text-body text-on-surface w-full focus:outline-none focus:border-primary focus:border-2 transition-all">
@@ -442,7 +463,7 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="role">
             <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">admin_panel_settings</span> Rol Operativo</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-role" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <div class="relative">
             <select id="role" name="role" required
@@ -461,7 +482,7 @@
         <div class="flex flex-col gap-xs">
           <label class="font-mono text-label text-on-surface-variant flex items-center justify-between uppercase" for="contract">
             <span class="flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">description</span> Seleccione su contrato</span>
-            <span class="text-error font-bold text-micro">* Obligatorio</span>
+            <span id="err-contract" class="field-error hidden text-error font-bold text-micro">* Obligatorio</span>
           </label>
           <div class="relative">
             <select id="contract" name="contract" required
@@ -489,6 +510,42 @@
       </form>
     </main>
   </div><!-- /page-crear-perfil -->
+
+
+  <!-- ================================================ -->
+  <!-- MODAL: CAPTURAR FOTO CON CÁMARA                  -->
+  <!-- ================================================ -->
+  <div id="cameraModal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-md">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl max-w-md w-full p-md shadow-2xl relative flex flex-col gap-md">
+      <div class="flex items-center justify-between pb-xs border-b border-outline-variant">
+        <h3 class="font-headline text-title text-on-surface flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-primary">photo_camera</span>
+          <span>Tomar Fotografía de Perfil</span>
+        </h3>
+        <button type="button" onclick="closeCameraModal()" class="w-8 h-8 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <!-- Visor de Cámara -->
+      <div class="relative w-full aspect-square bg-black rounded-xl overflow-hidden flex items-center justify-center shadow-inner">
+        <video id="cameraVideo" autoplay playsinline class="w-full h-full object-cover"></video>
+        <canvas id="cameraCanvas" class="hidden"></canvas>
+        <div class="absolute inset-0 border-2 border-dashed border-white/40 rounded-full pointer-events-none m-6"></div>
+      </div>
+
+      <div class="flex items-center justify-between gap-sm">
+        <button type="button" onclick="closeCameraModal()"
+          class="flex-1 py-2.5 px-4 bg-surface-container text-on-surface rounded-xl font-headline text-body hover:bg-surface-container-high active:scale-95 transition-all cursor-pointer">
+          Cancelar
+        </button>
+        <button type="button" onclick="captureCameraPhoto()"
+          class="flex-1 py-2.5 px-4 bg-primary text-on-primary rounded-xl font-headline text-body flex items-center justify-center gap-1 hover:bg-primary-container active:scale-95 transition-all cursor-pointer shadow-md">
+          <span class="material-symbols-outlined">camera</span>
+          <span>Capturar</span>
+        </button>
+      </div>
+  </div><!-- /cameraModal -->
 
 
   <!-- ================================================ -->
@@ -1918,7 +1975,67 @@
     }, 400);
   };
 
-  // ==================== FOTO DE PERFIL EN REGISTRO ====================
+  // ==================== CÁMARA EN VIVO / FOTO DE PERFIL ====================
+  let cameraStream = null;
+
+  window.openCameraModal = async function() {
+    const modal = document.getElementById('cameraModal');
+    const video = document.getElementById('cameraVideo');
+    if (modal) modal.classList.remove('hidden');
+
+    try {
+      cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 640 } },
+        audio: false
+      });
+      if (video) {
+        video.srcObject = cameraStream;
+      }
+    } catch (err) {
+      console.warn('Cámara no disponible, usando selector de archivos:', err);
+      showToast('ℹ Cámara directa no disponible en este dispositivo. Seleccione archivo de imagen.');
+      closeCameraModal();
+      document.getElementById('userPhotoInput')?.click();
+    }
+  };
+
+  window.closeCameraModal = function() {
+    const modal = document.getElementById('cameraModal');
+    if (modal) modal.classList.add('hidden');
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(t => t.stop());
+      cameraStream = null;
+    }
+  };
+
+  window.captureCameraPhoto = function() {
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.getElementById('cameraCanvas');
+    if (!video || !canvas) return;
+
+    canvas.width = video.videoWidth || 480;
+    canvas.height = video.videoHeight || 480;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    uploadedProfilePhotoData = canvas.toDataURL('image/jpeg', 0.85);
+
+    const img = document.getElementById('avatarPreviewImg');
+    const placeholder = document.getElementById('avatarPlaceholder');
+    if (img && placeholder) {
+      img.src = uploadedProfilePhotoData;
+      img.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    }
+
+    document.getElementById('err-photo')?.classList.add('hidden');
+    document.getElementById('avatarPreviewBox')?.classList.remove('border-error', 'ring-2', 'ring-error');
+
+    closeCameraModal();
+    showToast('✓ Fotografía capturada con éxito');
+  };
+
+  // ==================== FOTO DE PERFIL DESDE ARCHIVO ====================
   let uploadedProfilePhotoData = null;
   document.getElementById('userPhotoInput')?.addEventListener('change', (e) => {
     const file = e.target.files?.[0];
@@ -1933,61 +2050,79 @@
           img.classList.remove('hidden');
           placeholder.classList.add('hidden');
         }
+        document.getElementById('err-photo')?.classList.add('hidden');
+        document.getElementById('avatarPreviewBox')?.classList.remove('border-error', 'ring-2', 'ring-error');
         showToast('✓ Fotografía de perfil cargada');
       };
       reader.readAsDataURL(file);
     }
   });
 
-  // ==================== CREAR PERFIL (Validación Estricta + Foto + OTP) ====================
-  document.getElementById('btnCrearPerfil').addEventListener('click', async () => {
-    const nombreEl   = document.getElementById('fullName') || document.getElementById('cpNombre');
-    const rutEl      = document.getElementById('rut') || document.getElementById('cpRut');
-    const emailEl    = document.getElementById('email') || document.getElementById('cpEmail');
-    const passEl     = document.getElementById('password') || document.getElementById('cpPass');
-    const rolEl      = document.getElementById('role') || document.getElementById('cpRol');
-    const contratoEl = document.getElementById('contract') || document.getElementById('cpContrato');
+  // Auto-ocultar badges de '* Obligatorio' al escribir o seleccionar
+  ['fullName', 'rut', 'email', 'password', 'role', 'contract'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const clearError = () => {
+        if (el.value && el.value.trim() !== '') {
+          document.getElementById('err-' + id)?.classList.add('hidden');
+          el.classList.remove('border-error', 'ring-2', 'ring-error');
+        }
+      };
+      el.addEventListener('input', clearError);
+      el.addEventListener('change', clearError);
+    }
+  });
 
-    const nombre   = nombreEl ? nombreEl.value.trim() : '';
-    const rut      = rutEl ? rutEl.value.trim() : '';
-    const email    = emailEl ? emailEl.value.trim() : '';
-    const pass     = passEl ? passEl.value : '';
+  // ==================== CREAR PERFIL (Validación Estricta + Foto + OTP) ====================
+  document.getElementById('btnCrearPerfil')?.addEventListener('click', async () => {
+    const nombreEl   = document.getElementById('fullName');
+    const rutEl      = document.getElementById('rut');
+    const emailEl    = document.getElementById('email');
+    const passEl     = document.getElementById('password');
+    const rolEl      = document.getElementById('role');
+    const contratoEl = document.getElementById('contract');
+
+    let hasErrors = false;
 
     if (!uploadedProfilePhotoData) {
+      document.getElementById('err-photo')?.classList.remove('hidden');
       document.getElementById('avatarPreviewBox')?.classList.add('border-error', 'ring-2', 'ring-error');
-      showToast('⚠ Fotografía obligatoria: Debe tomarse o subir una foto para su credencial');
+      hasErrors = true;
+    } else {
+      document.getElementById('err-photo')?.classList.add('hidden');
+      document.getElementById('avatarPreviewBox')?.classList.remove('border-error', 'ring-2', 'ring-error');
+    }
+
+    const checkField = (el, errId) => {
+      const val = el ? el.value.trim() : '';
+      if (!val) {
+        document.getElementById(errId)?.classList.remove('hidden');
+        el?.classList.add('border-error', 'ring-2', 'ring-error');
+        hasErrors = true;
+        return false;
+      } else {
+        document.getElementById(errId)?.classList.add('hidden');
+        el?.classList.remove('border-error', 'ring-2', 'ring-error');
+        return true;
+      }
+    };
+
+    checkField(nombreEl, 'err-fullName');
+    checkField(rutEl, 'err-rut');
+    checkField(emailEl, 'err-email');
+    checkField(passEl, 'err-password');
+    checkField(rolEl, 'err-role');
+    checkField(contratoEl, 'err-contract');
+
+    if (hasErrors) {
+      showToast('⚠ Complete las celdas obligatorias marcadas en rojo');
       return;
     }
-    if (!nombre) {
-      nombreEl?.focus();
-      showToast('⚠ Celda obligatoria: Por favor ingrese su Nombre Completo');
-      return;
-    }
-    if (!rut) {
-      rutEl?.focus();
-      showToast('⚠ Celda obligatoria: Por favor ingrese su RUT');
-      return;
-    }
-    if (!email) {
-      emailEl?.focus();
-      showToast('⚠ Celda obligatoria: Por favor ingrese su Correo Electrónico');
-      return;
-    }
-    if (!pass || pass.length < 6) {
-      passEl?.focus();
-      showToast('⚠ Contraseña obligatoria: Debe contener al menos 6 caracteres');
-      return;
-    }
-    if (!rolEl || !rolEl.value) {
-      rolEl?.focus();
-      showToast('⚠ Celda obligatoria: Por favor seleccione su Rol');
-      return;
-    }
-    if (!contratoEl || !contratoEl.value) {
-      contratoEl?.focus();
-      showToast('⚠ Celda obligatoria: Por favor seleccione su Contrato/Zona');
-      return;
-    }
+
+    const nombre   = nombreEl.value.trim();
+    const rut      = rutEl.value.trim();
+    const email    = emailEl.value.trim();
+    const pass     = passEl.value;
 
     const btn = document.getElementById('btnCrearPerfil');
     const orig = btn.innerHTML;
