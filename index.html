@@ -2256,11 +2256,21 @@
     currentPerfil = nuevoUsuario;
     updateUIWithProfile();
 
+    // Actualizar datos de confirmación en la pantalla de aviso
+    const resNom = document.getElementById('resNombre');
+    const resRol = document.getElementById('resRol');
+    const resCon = document.getElementById('resContrato');
+    const resEmail = document.getElementById('resEmail');
+    if (resNom) resNom.textContent = nombre;
+    if (resRol) resRol.textContent = rolTexto;
+    if (resCon) resCon.textContent = contratoTexto;
+    if (resEmail) resEmail.textContent = email;
+
     const form = document.getElementById('crearPerfilForm');
     if (form) form.reset();
 
-    showToast(`✓ ¡Bienvenido ${nombre}! Has sido registrado como ${rolTexto}`, 4000);
-    navigate('dashboard');
+    showToast(`✓ Perfil creado. Revisa tu correo ${email} para confirmar tu acceso.`, 4500);
+    navigate('registro-exitoso');
   });
 
   // ==================== DASHBOARD ====================
